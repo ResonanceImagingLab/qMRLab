@@ -1,0 +1,94 @@
+function M_return = blochSimAdiabaticPulse( rf_pulse, Trf, PulseOpt, delta)
+%% Sim Adiabatic Pulse
+
+% 'rf_pulse' is a 1xnSamples vector that stores the B1 in microtesla over
+%            time
+% 'Trf' is the pulse duration in seconds
+% 'PulseOpt' contains pulse details. Only PulseOpt.nSamples is needed here
+% 'delta' is used to see the offset frequency to do a frequency sweep 
+
+% Want to do over a range of B1 and B0 effects.
+nSamples = PulseOpt.nSamples;
+
+
+% Follow equations in Murase 2011
+M0b = 0.10;
+M0a = 1;
+R2a = 1000/80; % 80 ms
+R2b = 1/12e-6; % 12 us
+R1a = 1; % 1000 ms
+R1b = 1; % 1000 ms
+
+R = 30;
+kr = R*M0a;
+kf = R*M0b;
+
+Mt = zeros(6, nSamples+1);
+I = eye(6); % identity matrix      
+B = [0 0 0 0 M0a M0b]'; %, Params.R1b*Params.M0b, 0
+Mt(:,1) = B; % start mag
+
+dt = Trf/nSamples;
+
+for t = 1:nSamples
+
+    w1 = 2*pi *42.577478518 * rf_pulse(t);  % assume B1 is in microTesla, and drop the 10^6 from gamma. w1 in rad/s
+
+    A_rf =[ -(R2a+kf),          kr, -2*pi*delta,          0, -imag(w1),        0; ...       % Water X
+                   kf,   -(R2b+kr),          0, -2*pi*delta,       0,  -imag(w1); ...       % Bound X
+          2*pi*delta,           0,  -(R2a+kf),         kr, -real(w1),        0;...        % Water Y
+                    0, 2*pi*delta,         kf,  -(R2b+kr),       0,  -real(w1);...        % Bound Y
+            imag(w1),           0,  real(w1),          0, -(R1a+kf),    kr;...        % Water Z
+                    0,   imag(w1),          0,  real(w1),      kf,  -(R1b+kr)];        % Bound Z 
+
+
+    % Apply
+    AExp = expm(A_rf*dt);
+    AEnd = (AExp - I)* (A_rf\B);
+    Mt(:,t+1) = pagemtimes(AExp, Mt(:,t)) + AEnd;
+end
+
+M_return = Mt(:,end);
+return;
+
+% figure; tiledlayout(1,2); nexttile;
+% plot(0:dt:Trf, Mt(5,:), 'LineWidth',3); 
+% xlabel('Time(s)'); ylabel('M_z Water'); ax = gca; ax.FontSize = 20;
+% nexttile;
+% plot(0:dt:Trf, Mt(6,:), 'LineWidth',3); 
+% xlabel('Time(s)'); ylabel('M_z Bound'); ax = gca; ax.FontSize = 20;
+% set(gcf,'Position',[100 100 800 500])
+% 
+% % Proportion saturation
+% disp(['Relative Sat on MTpool from Inversion Pulse:', num2str(Mt(6,end)/Mt(6,1))]);
+
+
+%% If you wanted to do single pool:
+% Mt = zeros(3, nSamples+1);
+% Mt(3,1) = 1; % start mag = [0 0 1];
+% I = eye(3); % identity matrix      
+% B = [0 0 1]'; %, Params.R1b*Params.M0b, 0
+% 
+% % We will numerically evaluate this over time 
+% 
+% dt = Trf/nSamples;
+% R2a = 1000/80; % 80 ms
+% R1a = 1; % 1000 ms
+% delta = 0;
+% 
+% for t = 1:nSamples
+% 
+%     w1 = 2*pi *42.577478518 * rf_pulse(t);  % assume B1 is in microTesla, and drop the 10^6 from gamma. w1 in rad/s
+%     % Generate RF matrix
+%     A_rf =[ -R2a,   -2*pi*delta, -imag(w1); ...       % Water X
+%             2*pi*delta,    -R2a, -real(w1);...        % Water Y
+%             imag(w1),  real(w1), -R1a];   %  Water Z
+%     % Apply
+%     AExp = expm(A_rf*dt);
+%     AEnd = (AExp - I)* (A_rf\B);
+%     Mt(:,t+1) = pagemtimes(AExp, Mt(:,t)) + AEnd;
+% 
+% end
+% figure; plot(0:dt:Trf, Mt(3,:), 'LineWidth',3)
+
+
