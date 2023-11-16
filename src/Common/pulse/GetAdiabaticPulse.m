@@ -1,6 +1,10 @@
-function Pulse = GetPulse(alpha, delta, Trf, shape, PulseOpt)
-%GETPULSE Generate an RF pulse structure.
-%   Pulse = GetPulse(alpha, delta, Trf, shape, PulseOpt)
+function Pulse = GetAdiabaticPulse(alpha, delta, Trf, shape, PulseOpt)
+%GetAdiabaticPulse Generate an RF pulse structure.
+%   Pulse = GetAdiabaticPulse(alpha, delta, Trf, shape, PulseOpt)
+%
+%   A note on adiabatic pulses:
+%   B1(t) = A(t) * exp( -1i *integral(omega1(t')) dt' )
+%   where A(t) is the envelope, omega1 is the frequency sweep
 %
 %   --args--
 %   alpha: Flip angle (in degrees).
@@ -31,13 +35,13 @@ if (nargin < 5)
 end
 
 switch shape
-    case 'hard';      pulse_fcn = @hard_pulse;  
-    case 'sinc';      pulse_fcn = @sinc_pulse;        
-    case 'sinchann';  pulse_fcn = @sinchann_pulse;        
-    case 'sincgauss'; pulse_fcn = @sincgauss_pulse;        
-    case 'gaussian';  pulse_fcn = @gaussian_pulse;        
-    case 'gausshann'; pulse_fcn = @gausshann_pulse;    
-    case 'fermi';     pulse_fcn = @fermi_pulse;
+    % case 'hard';      pulse_fcn = @hard_pulse;  
+    % case 'sinc';      pulse_fcn = @sinc_pulse;        
+    % case 'sinchann';  pulse_fcn = @sinchann_pulse;        
+    % case 'sincgauss'; pulse_fcn = @sincgauss_pulse;        
+    % case 'gaussian';  pulse_fcn = @gaussian_pulse;        
+    % case 'gausshann'; pulse_fcn = @gausshann_pulse;    
+    % case 'fermi';     pulse_fcn = @fermi_pulse;
     case 'hsn';       pulse_fcn = @hyperbolicSecant_pulse;
 end
 
