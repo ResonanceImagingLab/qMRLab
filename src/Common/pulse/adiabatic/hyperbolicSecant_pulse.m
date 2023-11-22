@@ -1,4 +1,4 @@
-function [A_t, PulseOpt] = hyperbolicSecant_pulse(t, Trf, PulseOpt)
+function [rf_pulse, PulseOpt] = hyperbolicSecant_pulse( Trf, PulseOpt, dispFigure)
 
 %   hyperbolicSecant_pulse Adiabatic hyperbolic secant RF pulse function.
 %   pulse = hyperbolicSecant_pulse(t, Trf, PulseOpt)
@@ -31,19 +31,21 @@ function [A_t, PulseOpt] = hyperbolicSecant_pulse(t, Trf, PulseOpt)
 %              Tannús, A. and M. Garwood (1997). "Adiabatic pulses." 
 %              NMR in Biomedicine 10(8): 423-434.
 %
-%   See also GETPULSE, VIEWPULSE.
 %
 % To be used with qMRlab
 % Written by Christopher Rowley 2023
 
-if (nargin < 3); PulseOpt = struct; end
+if (nargin < 2); PulseOpt = struct; end
+
+if ~exist('dispFigure','var') || isempty(dispFigure) || ~isfinite(dispFigure)
+    dispFigure = 0;      
+end
+
 
 % Function to fill default values;
 PulseOpt = defaultHyperbolicSecParams(PulseOpt);
 
-
-% PulseOpt.A0 = 12;
-nSamples = pulseOpt.nSamples;  
+nSamples = PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);
 
 % Amplitude
@@ -52,7 +54,7 @@ A_t((t < 0 | t>Trf)) = 0;
 disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
 
 
-% Frequency modmodulation function 
+% Frequency modulation function 
 % Carrier frequency modulation function w(t):
 omega1 = -PulseOpt.mu.*PulseOpt.beta .* ...
             tanh(PulseOpt.beta .* (t - Trf/2))./(2*pi); % 2pi to convert from rad/s to Hz
@@ -64,39 +66,44 @@ phi = PulseOpt.mu .* log(sech(PulseOpt.beta .* (t - Trf/2)) );
 rf_pulse = A_t .* exp(1i .* phi);
 
 
-%% Bloch Sim to get inversion profile
-b1Rel = linspace(0.5, 1.5, 10);
-freqOff = -2000:200:2000;
-[b1m, freqm] = ndgrid(b1Rel, freqOff);
 
-Mza = zeros(size(b1m));
-Mzb = zeros(size(b1m));
-
-for i = 1:length(b1Rel)
-    for j = 1:length(freqOff)
-
-        M_return = blochSimAdiabaticPulse( b1Rel(i)* rf_pulse,...
-            Trf, PulseOpt, freqOff(j));
-
-        Mza(i,j) = M_return(5);
-        Mzb(i,j) = M_return(6);
+%% Can do Bloch Sim to get inversion profile and display figure if interested:
+if dispFigure
+    b1Rel = linspace(0.5, 1.5, 10);
+    freqOff = -2000:200:2000;
+    [b1m, freqm] = ndgrid(b1Rel, freqOff);
+    
+    Mza = zeros(size(b1m));
+    Mzb = zeros(size(b1m));
+    
+    for i = 1:length(b1Rel)
+        for j = 1:length(freqOff)
+    
+            M_return = blochSimAdiabaticPulse( b1Rel(i)* rf_pulse,...
+                Trf, PulseOpt, freqOff(j));
+    
+            Mza(i,j) = M_return(5);
+            Mzb(i,j) = M_return(6);
+        end
     end
+
+    figure; tiledlayout(2,2)
+    nexttile; plot(t*1000, A_t, 'LineWidth', 3); 
+    xlabel('Time(ms)'); ylabel('B_1 (μT)')
+    title('Amplitude Function');ax = gca; ax.FontSize = 20;
+    
+    nexttile; plot(t*1000, omega1, 'LineWidth', 3);
+    xlabel('Time(ms)'); ylabel('Frequency (Hz)');
+    title('Frequency Modulation function');ax = gca; ax.FontSize = 20;
+    
+    nexttile; surf(b1m, freqm, Mza);
+    xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{za}');ax = gca; ax.FontSize = 20;
+    
+    nexttile; surf(b1m, freqm, Mzb);
+    xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{zb}');ax = gca; ax.FontSize = 20;
+    
+    set(gcf,'Position',[100 100 1200 1000])
 end
-
-figure; tiledlayout(2,2)
-nexttile; plot(t, A_t, 'LineWidth', 3); 
-title('Amplitude Function');ax = gca; ax.FontSize = 20;
-
-nexttile; plot(t, omega1, 'LineWidth', 3);
-title('Frequency Modulation function');ax = gca; ax.FontSize = 20;
-
-nexttile; surf(b1m, freqm, Mza);
-xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{za}');ax = gca; ax.FontSize = 20;
-
-nexttile; surf(b1m, freqm, Mzb);
-xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{zb}');ax = gca; ax.FontSize = 20;
-
-set(gcf,'Position',[100 100 1200 1000])
 
 return; 
 

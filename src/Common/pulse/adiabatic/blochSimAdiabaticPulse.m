@@ -1,4 +1,5 @@
-function M_return = blochSimAdiabaticPulse( rf_pulse, Trf, PulseOpt, delta)
+function M_return = blochSimAdiabaticPulse( rf_pulse, Trf, PulseOpt, delta,...
+                                            Params, M_start, B)
 %% Sim Adiabatic Pulse
 
 % 'rf_pulse' is a 1xnSamples vector that stores the B1 in microtesla over
@@ -6,49 +7,53 @@ function M_return = blochSimAdiabaticPulse( rf_pulse, Trf, PulseOpt, delta)
 % 'Trf' is the pulse duration in seconds
 % 'PulseOpt' contains pulse details. Only PulseOpt.nSamples is needed here
 % 'delta' is used to see the offset frequency to do a frequency sweep 
+%  'M_start' is the magnetization vector just before the start of the pulse
+%            (6x1)
+%  'B' is the thermal equilibrium magnetization vector (6x1)
+%
+% Written by Christopher Rowley 2023
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Want to do over a range of B1 and B0 effects.
-nSamples = PulseOpt.nSamples;
-
-
-% Follow equations in Murase 2011
-M0b = 0.10;
-M0a = 1;
-R2a = 1000/80; % 80 ms
-R2b = 1/12e-6; % 12 us
-R1a = 1; % 1000 ms
-R1b = 1; % 1000 ms
-
-R = 30;
-kr = R*M0a;
-kf = R*M0b;
-
-Mt = zeros(6, nSamples+1);
-I = eye(6); % identity matrix      
-B = [0 0 0 0 M0a M0b]'; %, Params.R1b*Params.M0b, 0
-Mt(:,1) = B; % start mag
-
-dt = Trf/nSamples;
-
-for t = 1:nSamples
-
-    w1 = 2*pi *42.577478518 * rf_pulse(t);  % assume B1 is in microTesla, and drop the 10^6 from gamma. w1 in rad/s
-
-    A_rf =[ -(R2a+kf),          kr, -2*pi*delta,          0, -imag(w1),        0; ...       % Water X
-                   kf,   -(R2b+kr),          0, -2*pi*delta,       0,  -imag(w1); ...       % Bound X
-          2*pi*delta,           0,  -(R2a+kf),         kr, -real(w1),        0;...        % Water Y
-                    0, 2*pi*delta,         kf,  -(R2b+kr),       0,  -real(w1);...        % Bound Y
-            imag(w1),           0,  real(w1),          0, -(R1a+kf),    kr;...        % Water Z
-                    0,   imag(w1),          0,  real(w1),      kf,  -(R1b+kr)];        % Bound Z 
-
-
-    % Apply
-    AExp = expm(A_rf*dt);
-    AEnd = (AExp - I)* (A_rf\B);
-    Mt(:,t+1) = pagemtimes(AExp, Mt(:,t)) + AEnd;
-end
-
-M_return = Mt(:,end);
+    if ~exist('B','var') || isempty(B)
+        B = [0, 0, 0, 0, Params.M0a, Params.M0b]';    
+    end
+    
+    nSamples = PulseOpt.nSamples;
+    
+    % Follow equations in Murase 2011 - Pull values from Params struct
+    R2a = 1/Params.T2a; % 80 ms
+    R2b = 1/Params.T2b; % 12 us
+    R1a = Params.Ra; % 1000 ms
+    R1b = Params.R1b; % 1000 ms
+    kr = Params.kr;
+    kf = Params.kf;
+    
+    Mt = zeros(6, nSamples+1);
+    I = eye(6); % identity matrix      
+    
+    Mt(:,1) = M_start; % start mag
+    
+    dt = Trf/nSamples;
+    
+    for t = 1:nSamples
+    
+        w1 = 2*pi *42.577478518 * rf_pulse(t);  % assume B1 is in microTesla, and drop the 10^6 from gamma. w1 in rad/s
+    
+        A_rf =[ -(R2a+kf),          kr, -2*pi*delta,          0, -imag(w1),        0; ...       % Water X
+                       kf,   -(R2b+kr),          0, -2*pi*delta,       0,  -imag(w1); ...       % Bound X
+              2*pi*delta,           0,  -(R2a+kf),         kr, -real(w1),        0;...        % Water Y
+                        0, 2*pi*delta,         kf,  -(R2b+kr),       0,  -real(w1);...        % Bound Y
+                imag(w1),           0,  real(w1),          0, -(R1a+kf),    kr;...        % Water Z
+                        0,   imag(w1),          0,  real(w1),      kf,  -(R1b+kr)];        % Bound Z 
+    
+    
+        % Apply
+        AExp = expm(A_rf*dt);
+        AEnd = (AExp - I)* (A_rf\B);
+        Mt(:,t+1) = pagemtimes(AExp, Mt(:,t)) + AEnd;
+    end
+    
+    M_return = Mt(:,end);
 return;
 
 % figure; tiledlayout(1,2); nexttile;

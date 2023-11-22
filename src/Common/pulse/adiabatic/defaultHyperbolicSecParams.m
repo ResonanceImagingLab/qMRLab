@@ -20,7 +20,7 @@ end
 
 if(~isfield(PulseOpt,'A0') || isempty(PulseOpt.A0) || ~isfinite(PulseOpt.A0))
     % Peak B1 of the pulse in microTesla
-    PulseOpt.A0 = 17.525;       
+    PulseOpt.A0 = 17.5;       
 end
 
 if(~isfield(PulseOpt,'nSamples') || isempty(PulseOpt.nSamples) || ~isfinite(PulseOpt.nSamples))
