@@ -1,11 +1,14 @@
-function M_return = blochSimAdiabaticPulse( rf_pulse, Trf, PulseOpt, delta,...
+function M_return = blochSimAdiabaticPulse( rf_pulse, PulseParams, delta,...
                                             Params, M_start, B)
 %% Sim Adiabatic Pulse
 
 % 'rf_pulse' is a 1xnSamples vector that stores the B1 in microtesla over
 %            time
-% 'Trf' is the pulse duration in seconds
-% 'PulseOpt' contains pulse details. Only PulseOpt.nSamples is needed here
+% PulseParams structure containing:
+%   Trf -> is the pulse duration in seconds
+%   nSamples -> number of samples in the pulse. Typically 512 (or multiple
+%               of 256)
+% 'Params' stores the tissue parameters for the simluation
 % 'delta' is used to see the offset frequency to do a frequency sweep 
 %  'M_start' is the magnetization vector just before the start of the pulse
 %            (6x1)
@@ -15,10 +18,17 @@ function M_return = blochSimAdiabaticPulse( rf_pulse, Trf, PulseOpt, delta,...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     if ~exist('B','var') || isempty(B)
-        B = [0, 0, 0, 0, Params.M0a, Params.M0b]';    
+        B = [0, 0, 0, 0, Params.Ra*Params.M0a, Params.R1b*Params.M0b]';    
     end
     
-    nSamples = PulseOpt.nSamples;
+    if ~isfield(Params,'kf')
+        Params.kf = (Params.R*Params.M0b); 
+    end
+    if ~isfield(Params,'kr')
+        Params.kr = (Params.R*Params.M0a);
+    end
+
+    nSamples = PulseParams.nSamples;
     
     % Follow equations in Murase 2011 - Pull values from Params struct
     R2a = 1/Params.T2a; % 80 ms
@@ -33,7 +43,7 @@ function M_return = blochSimAdiabaticPulse( rf_pulse, Trf, PulseOpt, delta,...
     
     Mt(:,1) = M_start; % start mag
     
-    dt = Trf/nSamples;
+    dt = PulseParams.Trf/nSamples;
     
     for t = 1:nSamples
     
@@ -48,9 +58,8 @@ function M_return = blochSimAdiabaticPulse( rf_pulse, Trf, PulseOpt, delta,...
     
     
         % Apply
-        AExp = expm(A_rf*dt);
-        AEnd = (AExp - I)* (A_rf\B);
-        Mt(:,t+1) = pagemtimes(AExp, Mt(:,t)) + AEnd;
+        Mt(:,t+1) = expm(A_rf*dt) * Mt(:,t) + (expm(A_rf*dt) - I)* (A_rf\B);
+
     end
     
     M_return = Mt(:,end);
@@ -67,33 +76,5 @@ return;
 % % Proportion saturation
 % disp(['Relative Sat on MTpool from Inversion Pulse:', num2str(Mt(6,end)/Mt(6,1))]);
 
-
-%% If you wanted to do single pool:
-% Mt = zeros(3, nSamples+1);
-% Mt(3,1) = 1; % start mag = [0 0 1];
-% I = eye(3); % identity matrix      
-% B = [0 0 1]'; %, Params.R1b*Params.M0b, 0
-% 
-% % We will numerically evaluate this over time 
-% 
-% dt = Trf/nSamples;
-% R2a = 1000/80; % 80 ms
-% R1a = 1; % 1000 ms
-% delta = 0;
-% 
-% for t = 1:nSamples
-% 
-%     w1 = 2*pi *42.577478518 * rf_pulse(t);  % assume B1 is in microTesla, and drop the 10^6 from gamma. w1 in rad/s
-%     % Generate RF matrix
-%     A_rf =[ -R2a,   -2*pi*delta, -imag(w1); ...       % Water X
-%             2*pi*delta,    -R2a, -real(w1);...        % Water Y
-%             imag(w1),  real(w1), -R1a];   %  Water Z
-%     % Apply
-%     AExp = expm(A_rf*dt);
-%     AEnd = (AExp - I)* (A_rf\B);
-%     Mt(:,t+1) = pagemtimes(AExp, Mt(:,t)) + AEnd;
-% 
-% end
-% figure; plot(0:dt:Trf, Mt(3,:), 'LineWidth',3)
 
 

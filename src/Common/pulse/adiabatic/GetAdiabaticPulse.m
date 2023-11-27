@@ -1,4 +1,4 @@
-function [rf_pulse, PulseOpt] = GetAdiabaticPulse( Trf, shape, dispFig, PulseOpt)
+function [rf_pulse, Params] = GetAdiabaticPulse( Trf, shape, dispFig, Params)
 
 % This need to take in parameter related to the adiabatic pulse, and return
 % the B1. 
@@ -36,7 +36,10 @@ function [rf_pulse, PulseOpt] = GetAdiabaticPulse( Trf, shape, dispFig, PulseOpt
 
 
 if (nargin < 4)
-    PulseOpt = struct;
+    Params.PulseOpt = struct;
+    Params.M0a = 1;
+    Params.M0b = 0.1;
+    Params.Ra = 1;
 end
 
 switch shape
@@ -48,7 +51,7 @@ switch shape
     % case 'gausshann'; pulse_fcn = @gausshann_pulse;    
     % case 'fermi';     pulse_fcn = @fermi_pulse;
     case 'hsn'       
-        [rf_pulse, PulseOpt] = hyperbolicSecant_pulse( Trf, PulseOpt, dispFig);
+        [rf_pulse, Params] = hyperbolicSecant_pulse( Trf, Params, dispFig);
 end
 
 

@@ -38,7 +38,6 @@ switch shape
     case 'gaussian';  pulse_fcn = @gaussian_pulse;        
     case 'gausshann'; pulse_fcn = @gausshann_pulse;    
     case 'fermi';     pulse_fcn = @fermi_pulse;
-    case 'hsn';       pulse_fcn = @hyperbolicSecant_pulse;
 end
 
 b1     =  @(t) pulse_fcn(t,Trf,PulseOpt);
