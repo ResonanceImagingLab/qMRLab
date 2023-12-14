@@ -68,7 +68,7 @@ rf_pulse = A_t .* exp(1i .* phi);
 
 if dispFigure
     M_start = [0, 0, 0, 0, Params.M0a, Params.M0b]';
-    b1Rel = linspace(0.5, 1.5, 10);
+    b1Rel = 0.5:0.1:1.5;
     freqOff = -2000:200:2000;
     [b1m, freqm] = ndgrid(b1Rel, freqOff);
     
@@ -78,7 +78,7 @@ if dispFigure
     for i = 1:length(b1Rel)
         for j = 1:length(freqOff)
         
-            M_return = blochSimAdiabaticPulse( b1Rel(i)*rf_pulse, Trf,  ...
+            M_return = blochSimAdiabaticPulse( b1Rel(i)*rf_pulse, Params.Inv,  ...
                             freqOff(j), Params, M_start, []);
 
             Mza(i,j) = M_return(5);
