@@ -12,8 +12,6 @@ function M_return = blochSimAdiabaticPulse_1pool( rf_pulse, Trf, delta,...
 %  'B' is the thermal equilibrium magnetization vector (3x1)
 %
 % Written by Christopher Rowley 2023
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
     if ~exist('B','var') || isempty(B)
         B = [0, 0, Params.Ra*Params.M0a]';    
     end
@@ -51,3 +49,5 @@ function M_return = blochSimAdiabaticPulse_1pool( rf_pulse, Trf, delta,...
     legend('M_z', 'M_x', 'M_y');
 
 return;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
