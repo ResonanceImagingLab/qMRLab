@@ -57,7 +57,6 @@ A_t((t < 0 | t>Trf)) = 0;
 omega1 = -Params.PulseOpt.mu.*Params.PulseOpt.beta .* ...
             tanh(Params.PulseOpt.beta .* (t - Trf/2))./(2*pi); % 2pi to convert from rad/s to Hz
 
-
 % Phase modulation function phi(t):
 phi = Params.PulseOpt.mu .* log(sech(Params.PulseOpt.beta .* (t - Trf/2)) );
 
