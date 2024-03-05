@@ -35,7 +35,7 @@ function [rf_pulse, Params] = GetAdiabaticPulse( Trf, shape, Params)
 %
 
 % 
-if (nargin < 3)
+if (nargin < 3) 
     Params.PulseOpt = struct;
 end
 
