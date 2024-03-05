@@ -1,4 +1,4 @@
-function M_return = blochSimAdiabaticPulse( rf_pulse, PulseParams, delta,...
+function M_return = blochSimAdiabaticPulse_2pool( rf_pulse, PulseParams, delta,...
                                             Params, M_start, B)
 %% Sim Adiabatic Pulse
 
@@ -72,7 +72,7 @@ return;
 % plot(0:dt:Trf, Mt(6,:), 'LineWidth',3); 
 % xlabel('Time(s)'); ylabel('M_z Bound'); ax = gca; ax.FontSize = 20;
 % set(gcf,'Position',[100 100 800 500])
- 
+% 
 % % Proportion saturation
 % disp(['Relative Sat on MTpool from Inversion Pulse:', num2str(Mt(6,end)/Mt(6,1))]);
 

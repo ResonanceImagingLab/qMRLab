@@ -1,4 +1,4 @@
-function [rf_pulse, Params] = hyperbolicSecant_pulse( Trf, Params, dispFigure)
+function [rf_pulse, Params, omega1] = hyperbolicSecant_pulse(Trf, Params)
 
 %   hyperbolicSecant_pulse Adiabatic hyperbolic secant RF pulse function.
 %   pulse = hyperbolicSecant_pulse(t, Trf, PulseOpt)
@@ -24,7 +24,6 @@ function [rf_pulse, Params] = hyperbolicSecant_pulse( Trf, Params, dispFigure)
 %   PulseOpt: Struct. Contains optional parameters for pulse shapes.
 %   PulseOpt.Beta: frequency modulation parameter
 %   PulseOpt.n: time modulation - Typical 4 for non-selective, 1 for slab
-% 
 %   Reference: Matt A. Bernstein, Kevin F. Kink and Xiaohong Joe Zhou.
 %              Handbook of MRI Pulse Sequences, pp. 110, Eq. 4.10, (2004)
 %
@@ -48,7 +47,7 @@ nSamples = Params.PulseOpt.nSamples;
 t = linspace(0, Trf, nSamples);
 
 % Amplitude
-A_t =  Params.PulseOpt.A0* sech(Params.PulseOpt.beta* ( (t - Trf/2)).^Params.PulseOpt.n);
+A_t =  Params.PulseOpt.A0* sech(Params.PulseOpt.beta* ( (t - Trf /2)).^Params.PulseOpt.n);
 A_t((t < 0 | t>Trf)) = 0;
 % disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
 
@@ -58,6 +57,7 @@ A_t((t < 0 | t>Trf)) = 0;
 omega1 = -Params.PulseOpt.mu.*Params.PulseOpt.beta .* ...
             tanh(Params.PulseOpt.beta .* (t - Trf/2))./(2*pi); % 2pi to convert from rad/s to Hz
 
+
 % Phase modulation function phi(t):
 phi = Params.PulseOpt.mu .* log(sech(Params.PulseOpt.beta .* (t - Trf/2)) );
 
@@ -66,45 +66,49 @@ rf_pulse = A_t .* exp(1i .* phi);
 
 %% Can do Bloch Sim to get inversion profile and display figure if interested:
 
-if dispFigure
-    M_start = [0, 0, 0, 0, Params.M0a, Params.M0b]';
-    b1Rel = 0.5:0.1:1.5;
-    freqOff = -2000:200:2000;
-    [b1m, freqm] = ndgrid(b1Rel, freqOff);
-    
-    Mza = zeros(size(b1m));
-    Mzb = zeros(size(b1m));
-    
-    for i = 1:length(b1Rel)
-        for j = 1:length(freqOff)
-        
-            M_return = blochSimAdiabaticPulse( b1Rel(i)*rf_pulse, Params.Inv,  ...
-                            freqOff(j), Params, M_start, []);
+% Params.NumPools = 1;
+% BlochSimCallFunction(Params, rf_pulse, t, A_t, omega1);
 
-            Mza(i,j) = M_return(5);
-            Mzb(i,j) = M_return(6);
-        end
-    end
-
-    figure; tiledlayout(2,2)
-    nexttile; plot(t*1000, A_t, 'LineWidth', 3); 
-    xlabel('Time(ms)'); ylabel('B_1 (μT)')
-    title('Amplitude Function');ax = gca; ax.FontSize = 20;
-    
-    nexttile; plot(t*1000, omega1, 'LineWidth', 3);
-    xlabel('Time(ms)'); ylabel('Frequency (Hz)');
-    title('Frequency Modulation function');ax = gca; ax.FontSize = 20;
-    
-    nexttile; surf(b1m, freqm, Mza);
-    xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{za}');ax = gca; ax.FontSize = 20;
-    
-    nexttile; surf(b1m, freqm, Mzb);
-    xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{zb}');ax = gca; ax.FontSize = 20;
-    
-    set(gcf,'Position',[100 100 1200 1000])
-end
-
-return; 
+%     M_start = [0, 0, Params.M0a, Params.M0b]';
+%     b1Rel = 0.5:0.1:1.5;
+%     freqOff = -2000:200:2000;
+%     [b1m, freqm] = ndgrid(b1Rel, freqOff);
+% 
+%     Mza = zeros(size(b1m));
+%     Mzb = zeros(size(b1m));
+% 
+%  for i = 1:length(b1Rel)
+%     for j = 1:length(freqOff)
+%         if dispFigure
+% 
+%             M_return = blochSimAdiabaticPulse( b1Rel(i)*rf_pulse, Params.Inv,  ...
+%                             freqOff(j), Params, M_start, []);
+% 
+%             Mza(i,j) = M_return(5);
+%             Mzb(i,j) = M_return(6);
+%         end
+%     end
+% 
+%     figure ('Name', 'Hyperbolic Secant', 'NumberTitle', 'off'); 
+%     tiledlayout(2,2)
+%     nexttile; plot(t*1000, A_t, 'LineWidth', 3); 
+%     xlabel('Time(ms)'); ylabel('B_1 (μT)')
+%     title('Amplitude Function');ax = gca; ax.FontSize = 20;
+% 
+%     nexttile; plot(t*1000, omega1, 'LineWidth', 3);
+%     xlabel('Time(ms)'); ylabel('Frequency (Hz)');
+%     title('Frequency Modulation function');ax = gca; ax.FontSize = 20;
+% 
+%     nexttile; surf(b1m, freqm, Mza);
+%     xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{za}');ax = gca; ax.FontSize = 20;
+% 
+%     nexttile; surf(b1m, freqm, Mzb);
+%     xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{zb}');ax = gca; ax.FontSize = 20;
+% 
+%     set(gcf,'Position',[100 100 1200 1000])
+% end
+% 
+% return; 
 
 
 

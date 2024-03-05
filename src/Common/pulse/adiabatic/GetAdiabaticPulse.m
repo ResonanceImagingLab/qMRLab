@@ -1,4 +1,4 @@
-function [rf_pulse, Params] = GetAdiabaticPulse( Trf, shape, dispFig, Params)
+function [rf_pulse, Params] = GetAdiabaticPulse( Trf, shape, Params)
 
 % This need to take in parameter related to the adiabatic pulse, and return
 % the B1. 
@@ -28,18 +28,15 @@ function [rf_pulse, Params] = GetAdiabaticPulse( Trf, shape, dispFig, Params)
 %           'sincgauss'
 %
 %   --optional args--
-%   PulseOpt: Struct. Contains optional parameters for pulse shapes. See
-%             pulse shape objective function files for more information.
+%   Params: Struct. Contains optional parameters for pulse shapes. Need
+%   Params.x as in adiabaticExample. 
 %
 %   See also VIEWPULSE.
 %
 
-
-if (nargin < 4)
+% 
+if (nargin < 3)
     Params.PulseOpt = struct;
-    Params.M0a = 1;
-    Params.M0b = 0.1;
-    Params.Ra = 1;
 end
 
 switch shape
@@ -51,7 +48,10 @@ switch shape
     % case 'gausshann'; pulse_fcn = @gausshann_pulse;    
     % case 'fermi';     pulse_fcn = @fermi_pulse;
     case 'hsn'       
-        [rf_pulse, Params] = hyperbolicSecant_pulse( Trf, Params, dispFig);
+        [rf_pulse, Params] = hyperbolicSecant_pulse( Trf, Params);
+    case 'lorentz'
+        [rf_pulse, Params] = Lorentz_pulse( Trf, Params);
+
 end
 
 

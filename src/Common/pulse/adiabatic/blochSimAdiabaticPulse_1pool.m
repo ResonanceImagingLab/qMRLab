@@ -15,7 +15,7 @@ function M_return = blochSimAdiabaticPulse_1pool( rf_pulse, Trf, delta,...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     if ~exist('B','var') || isempty(B)
-        B = [0, 0, 0, 0, Params.M0a, Params.M0b]';    
+        B = [0, 0, Params.Ra*Params.M0a]';    
     end
     
     nSamples = Params.PulseOpt.nSamples;
