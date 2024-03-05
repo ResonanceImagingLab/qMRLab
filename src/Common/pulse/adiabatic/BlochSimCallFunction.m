@@ -1,6 +1,8 @@
 function BlochSimCallFunction(Params, rf_pulse, t, A_t, omega1)
 %% Can do Bloch Sim to get inversion profile and display figure if interested:
 
+
+
 if Params.NumPools == 1
     M_start = [0, 0, Params.M0a]';
     b1Rel = 0.5:0.1:1.5;
