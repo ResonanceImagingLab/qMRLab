@@ -6,6 +6,9 @@ function [rf_pulse, omega1, A_t, Params] = hyperbolicSecant_pulse(Trf, Params)
 %   B1(t) = A(t) * exp( -1i *integral(omega1(t')) dt' )
 %   where A(t) is the envelope, omega1 is the frequency sweep
 %
+%   Phase modulation is found from taking the integral of omega1(t)
+%   Frequency modulation is time derivative of phi(t)
+%
 %   For the case of a hyperbolic secant pulse:
 %   A(t) = A0 * sech(Beta*t)
 %   omega1(t) = -mu*Beta*tanh(Beta*t)
