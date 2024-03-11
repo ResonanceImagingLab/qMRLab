@@ -12,8 +12,7 @@ function M_return = blochSimAdiabaticPulse_1pool( rf_pulse, Trf, delta,...
 %  'B' is the thermal equilibrium magnetization vector (3x1)
 %
 % Written by Christopher Rowley 2023
-    if ~exist('B','var') || isempty(B)
-        %B = [0, 0, Params.M0a]';   % deleted Params.Ra multiplication b/c it was making a 2x1 vector and not a 3x1 vector 
+    if ~exist('B','var') || isempty(B) 
         B = [0,0,Params.Ra*Params.M0a]';
     end
 
@@ -36,7 +35,6 @@ function M_return = blochSimAdiabaticPulse_1pool( rf_pulse, Trf, delta,...
    
     dt = Params.Inv.Trf/nSamples;
     
-
     R2a = 1/Params.T2a; %1000/80; % 80 ms
     R1a = Params.Ra; % 1; % 1000 ms
   
@@ -46,19 +44,10 @@ function M_return = blochSimAdiabaticPulse_1pool( rf_pulse, Trf, delta,...
         % 42.477 = gyromagnetic ratio of H
 
         % Generate RF matrix
-         % disp(R2a)
-         % disp(delta)
-         % disp(w1)
-
-        % disp(['Size of rf_pulse: ', num2str(size(rf_pulse))]);
-        % disp(['Size of delta: ', num2str(size(delta))]);
-        % disp(['Size of B: ', num2str(size(B))]);
 
         A_rf =[ -R2a,   -2*pi*delta, -imag(w1); ...       % Water X
                 2*pi*delta,    -R2a, real(w1);...        % Water Y
                 imag(w1),  -real(w1), -R1a];   %  Water Z
-
-        % disp(['Size of A_rf: ', num2str(size(A_rf))]);
 
         % Apply
         AExp = expm(A_rf*dt);
