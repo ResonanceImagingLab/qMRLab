@@ -51,8 +51,10 @@ switch shape
         [rf_pulse, Params] = hyperbolicSecant_pulse(Trf, Params);
     case 'lorentz'
         [rf_pulse, Params] = Lorentz_pulse(Trf, Params);
-    case 'gaussc'
-        [rf_pulse, Params] = GaussC_pulse(Trf, Params);
+    case 'gauss'
+        [rf_pulse, Params] = Gauss_pulse(Trf, Params);
+    case 'hanning'
+        [rf_pulse, Params] = Hanning_pulse(Trf, Params);
 
 end
 
