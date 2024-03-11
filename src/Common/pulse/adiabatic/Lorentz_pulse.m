@@ -1,4 +1,4 @@
-function [rf_pulse, Params] = Lorentz_pulse( Trf, Params, dispFigure)
+function [rf_pulse, omega1, A_t, Params] = Lorentz_pulse( Trf, Params)
 
 %   Lorentz_pulse Adiabatic Lorentz RF pulse function.
 %   pulse = Lorentz_pulse(t, Trf, PulseOpt)
@@ -40,8 +40,7 @@ function [rf_pulse, Params] = Lorentz_pulse( Trf, Params, dispFigure)
 %
 %
 % To be used with qMRlab
-% Written by Christopher Rowley 2023
-Trf = 1; 
+% Written by Christopher Rowley 2023 
 
 
 if ~exist('dispFigure','var') || isempty(dispFigure) || ~isfinite(dispFigure)
@@ -56,7 +55,7 @@ nSamples = Params.PulseOpt.nSamples;
 t = linspace(0, Trf, nSamples);
 
 % Amplitude
-A_t = Params.PulseOpt.A0/(1+Params.PulseOpt.beta .*(((2*t/Trf)-1).^2));
+A_t = (Params.PulseOpt.A0)./(1+Params.PulseOpt.beta .*(((2*t/Trf)-1).^2));
 A_t((t < 0 | t>Trf)) = 0;
 % disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
 

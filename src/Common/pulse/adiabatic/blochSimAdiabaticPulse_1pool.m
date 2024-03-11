@@ -13,40 +13,66 @@ function M_return = blochSimAdiabaticPulse_1pool( rf_pulse, Trf, delta,...
 %
 % Written by Christopher Rowley 2023
     if ~exist('B','var') || isempty(B)
-        B = [0, 0, Params.Ra*Params.M0a]';    
+        %B = [0, 0, Params.M0a]';   % deleted Params.Ra multiplication b/c it was making a 2x1 vector and not a 3x1 vector 
+        B = [0,0,Params.Ra*Params.M0a]';
     end
-    
-    nSamples = Params.PulseOpt.nSamples;
+
+    % if ~isnumeric(Trf) || ~isnumeric(Params.PulseOpt.nsamples)
+    %     error('Trf and nSamples must be numeric.')
+    % end
+    % 
+    %nSamples = Params.PulseOpt.nSamples;
+  
+ 
        
     %% If you wanted to do single pool:
+    nSamples = Params.Inv.nSamples;
+   
     Mt = zeros(3, nSamples+1);
     Mt(:,1) = M_start; % start mag = [0 0 1];
-    I = eye(3); % identity matrix      
-    
+    I = eye(3); % identity matrix
+
     % We will numerically evaluate this over time 
-    dt = Trf/nSamples;
-    R2a = Params.R2a; %1000/80; % 80 ms
-    R1a = Params.Ra; % 1; % 1000 ms
+   
+    dt = Params.Inv.Trf/nSamples;
     
+
+    R2a = 1/Params.T2a; %1000/80; % 80 ms
+    R1a = Params.Ra; % 1; % 1000 ms
+  
     for t = 1:nSamples
     
         w1 = 2*pi *42.577478518 * rf_pulse(t);  % assume B1 is in microTesla, and drop the 10^6 from gamma. w1 in rad/s
+        % 42.477 = gyromagnetic ratio of H
+
         % Generate RF matrix
+         % disp(R2a)
+         % disp(delta)
+         % disp(w1)
+
+        % disp(['Size of rf_pulse: ', num2str(size(rf_pulse))]);
+        % disp(['Size of delta: ', num2str(size(delta))]);
+        % disp(['Size of B: ', num2str(size(B))]);
+
         A_rf =[ -R2a,   -2*pi*delta, -imag(w1); ...       % Water X
-                2*pi*delta,    -R2a, -real(w1);...        % Water Y
-                imag(w1),  real(w1), -R1a];   %  Water Z
+                2*pi*delta,    -R2a, real(w1);...        % Water Y
+                imag(w1),  -real(w1), -R1a];   %  Water Z
+
+        % disp(['Size of A_rf: ', num2str(size(A_rf))]);
+
         % Apply
         AExp = expm(A_rf*dt);
         AEnd = (AExp - I)* (A_rf\B);
         Mt(:,t+1) = pagemtimes(AExp, Mt(:,t)) + AEnd;
     
     end
+
     M_return = Mt(:,end);
-    figure; plot(0:dt:Trf, Mt(3,:), 'LineWidth',3);
-    hold on
-    plot(0:dt:Trf, Mt(1,:), 'LineWidth',3);
-    plot(0:dt:Trf, Mt(2,:), 'LineWidth',3);
-    legend('M_z', 'M_x', 'M_y');
+    % figure; plot(0:dt:Trf, Mt(3,:), 'LineWidth',3);
+    % hold on
+    % plot(0:dt:Trf, Mt(1,:), 'LineWidth',3);
+    % plot(0:dt:Trf, Mt(2,:), 'LineWidth',3);
+    % legend('M_z', 'M_x', 'M_y');
 
 return;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

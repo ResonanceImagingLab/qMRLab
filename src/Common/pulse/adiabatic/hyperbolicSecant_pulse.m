@@ -1,4 +1,4 @@
-function [rf_pulse, Params, omega1] = hyperbolicSecant_pulse(Trf, Params)
+function [rf_pulse, omega1, A_t, Params] = hyperbolicSecant_pulse(Trf, Params)
 
 %   hyperbolicSecant_pulse Adiabatic hyperbolic secant RF pulse function.
 %   pulse = hyperbolicSecant_pulse(t, Trf, PulseOpt)

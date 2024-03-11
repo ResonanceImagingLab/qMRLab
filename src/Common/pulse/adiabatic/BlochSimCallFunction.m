@@ -1,4 +1,4 @@
-function BlochSimCallFunction(Params, rf_pulse, t, A_t, omega1)
+function BlochSimCallFunction(rf_pulse, t, A_t, omega1,Params)
 %% Can do Bloch Sim to get inversion profile and display figure if interested:
 
 
