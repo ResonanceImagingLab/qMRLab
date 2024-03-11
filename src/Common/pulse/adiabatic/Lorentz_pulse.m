@@ -1,7 +1,7 @@
 function [rf_pulse, omega1, A_t, Params] = Lorentz_pulse( Trf, Params)
 
 %   Lorentz_pulse Adiabatic Lorentz RF pulse function.
-%   pulse = Lorentz_pulse(t, Trf, PulseOpt)
+%   pulse = Lorentz_pulse(Trf, PulseOpt)
 %
 %   B1(t) = A(t) * exp( -1i *integral(omega1(t')) dt' )
 %   where A(t) is the envelope, omega1 is the frequency sweep
@@ -40,7 +40,7 @@ function [rf_pulse, omega1, A_t, Params] = Lorentz_pulse( Trf, Params)
 %
 %
 % To be used with qMRlab
-% Written by Christopher Rowley 2023 
+% Written by Christopher Rowley 2023 & Amie Demmans 2024
 
 
 if ~exist('dispFigure','var') || isempty(dispFigure) || ~isfinite(dispFigure)
