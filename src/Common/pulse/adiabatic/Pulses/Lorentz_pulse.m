@@ -14,7 +14,6 @@ function [rf_pulse, omega1, A_t, Params] = Lorentz_pulse( Trf, Params)
 %   omega1(t) = t/(1+Beta*t^2) + (1/(sqrt(Beta)))*arctan(sqrt(Beta)*t)
 %   A0 is the peak amplitude in microTesla
 %   Beta is a frequency modulation parameter in rad/s
-%   mu is a phase modulation parameter (dimensionless)
 %
 %   The pulse is defined to be 0 outside the pulse window (before 
 %   t = 0 or after t=Trf). (HSn, n = 1-8+) 
@@ -26,7 +25,6 @@ function [rf_pulse, omega1, A_t, Params] = Lorentz_pulse( Trf, Params)
 %   --optional args--
 %   PulseOpt: Struct. Contains optional parameters for pulse shapes.
 %   PulseOpt.Beta: frequency modulation parameter
-%   PulseOpt.n: time modulation - Typical 4 for non-selective, 1 for slab
 % 
 %   Reference: Matt A. Bernstein, Kevin F. Kink and Xiaohong Joe Zhou.
 %              Handbook of MRI Pulse Sequences, pp. 110, Eq. 4.10, (2004)
