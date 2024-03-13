@@ -1,4 +1,4 @@
-function [rf_pulse, Params] = GetAdiabaticPulse( Trf, shape, Params)
+function [rf_pulse, omega1, A_t, Params] = GetAdiabaticPulse( Trf, shape, Params)
 
 % This need to take in parameter related to the adiabatic pulse, and return
 % the B1. 
@@ -48,13 +48,13 @@ switch shape
     % case 'gausshann'; pulse_fcn = @gausshann_pulse;    
     % case 'fermi';     pulse_fcn = @fermi_pulse;
     case 'hsn'       
-        [rf_pulse, Params] = hyperbolicSecant_pulse(Trf, Params);
+        [rf_pulse, omega1, A_t, Params] = hyperbolicSecant_pulse(Trf, Params);
     case 'lorentz'
-        [rf_pulse, Params] = Lorentz_pulse(Trf, Params);
+        [rf_pulse, omega1, A_t, Params] = Lorentz_pulse(Trf, Params);
     case 'gauss'
-        [rf_pulse, Params] = Gauss_pulse(Trf, Params);
+        [rf_pulse, omega1, A_t, Params] = Gauss_pulse(Trf, Params);
     case 'hanning'
-        [rf_pulse, Params] = Hanning_pulse(Trf, Params);
+        [rf_pulse, omega1, A_t, Params] = Hanning_pulse(Trf, Params);
 
 end
 
