@@ -35,7 +35,7 @@ function [rf_pulse, omega1, A_t, Params] = Lorentz_pulse( Trf, Params)
 %              de Graaf, R. A., & Nicolay, K. (1998). "Adiabatic water 
 %              suppression using frequency selective excitation." Magnetic 
 %              resonance in medicine, 40(5), 690-696.
-%
+%                   --> tau = (2*t/Trf)-1
 %
 % To be used with qMRlab
 % Written by Christopher Rowley 2023 & Amie Demmans 2024
@@ -60,10 +60,17 @@ A_t((t < 0 | t>Trf)) = 0;
 
 % Frequency modulation function 
 % Carrier frequency modulation function w(t):
-omega1 = (((2*t/Trf)-1)/(1+(Params.PulseOpt.beta .*(((2*t/Trf)-1).^2)))) + (1/sqrt(Params.PulseOpt.beta))*atan((sqrt(Params.PulseOpt.beta))*((2*t/Trf)-1));
+omegaterm1 = (((2*t)/Trf)-1) / (1 + (Params.PulseOpt.beta .* ((2*t/Trf)-1)));
+omegaterm2 = (1/sqrt(Params.PulseOpt.beta)) * atan(sqrt(Params.PulseOpt.beta)*((2*t/Trf)-1));
+omega1 = (omegaterm1 + omegaterm2)/(2*pi); % convert rad/s to Hz 
+
+%omega1 = (((2*t/Trf)-1)/(1+(Params.PulseOpt.beta .*(((2*t/Trf)-1).^2)))) + (1/sqrt(Params.PulseOpt.beta))*atan((sqrt(Params.PulseOpt.beta))*((2*t/Trf)-1));
 
 % Phase modulation function phi(t):
-phi = (((2*t/Trf)-1).*atan(sqrt(Params.PulseOpt.beta).*((2*t/Trf)-1))) / sqrt(Params.PulseOpt.beta);
+phi_num = ((2*t/Trf)-1) .* atan (sqrt(Params.PulseOpt.beta).*((2*t/Trf)-1));
+phi_denom = sqrt(Params.PulseOpt.beta);
+phi = phi_num/phi_denom;
+% phi = (((2*t/Trf)-1).*atan(sqrt(Params.PulseOpt.beta).*((2*t/Trf)-1))) / sqrt(Params.PulseOpt.beta);
 
 % Put together complex RF pulse waveform:
 rf_pulse = A_t .* exp(1i .* phi);
