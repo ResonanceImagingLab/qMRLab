@@ -45,17 +45,23 @@ Params.PulseOpt = defaultHanningParams(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);
+tau = ((2*t/Trf)-1);
 
 % Amplitude
-A_t = (Params.PulseOpt.A0) * ((1 + cos(pi.*t))/2);
+%A_t = 1+cos(tau.*pi);
+A_t = (Params.PulseOpt.A0).*(1+cos(tau*pi));
 A_t((t < 0 | t>Trf)) = 0;
 % disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
 
 % Carrier frequency modulation function w(t):
-omega1 = t + (4/(3*pi))*sin(pi.*t)*(1+(1/4)*(cos(pi.*t)));
+omegaterm1 = tau;
+omegaterm2 = (4/(3*pi)).*sin(pi.*tau).*(1+(1/4).*cos(pi.*tau));
+omega1 = -(omegaterm1+omegaterm2)/(2*pi);
 
 % Phase modulation function phi(t):
-phi = ((t.^2)/2) - ((cos(pi.*t)+4)^2)/(24*pi^2);
+phiterm1 = tau.^2 ./2;
+phiterm2 = ((cos(pi.*tau)+4).^2)/(6.*tau.^2);
+phi = phiterm1 - phiterm2;
 
 % Put together complex RF pulse waveform:
 rf_pulse = A_t .* exp(1i .* phi);

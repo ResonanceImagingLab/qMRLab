@@ -31,10 +31,19 @@ function [rf_pulse, omega1, A_t, Params] = Gauss_pulse( Trf, Params)
 %
 %              Tannús, A. and M. Garwood (1997). "Adiabatic pulses." 
 %              NMR in Biomedicine 10(8): 423-434.
+%                  --> Fig 5, Gaussian OIA pulse image 
 %
 %              Kupce, E. and Freeman, R (1995). "Optimized Adiabatic Pulses
 %              for Wideband Spin Inversion." Journal of Magnetic Resonance
 %              Imaging, Series A 118(2): 299-303.
+%                  --> A_t, omega1, lambda equation  
+%
+%              Tannus, A. Garwood, M. (1996). "Improved Performance of 
+%              Frequency Swept Pulses Using Offset-Independent
+%              Adiabaticity" Journal of Magnetic Resonance, 120(1),
+%              133-137.
+%                   --> Fig 1a and 1b. Show how width of amplitude and
+%                   frequency vary with each pulse
 %
 % To be used with qMRlab
 % Written by Christopher Rowley 2023 & Amie Demmans 2024
@@ -50,22 +59,28 @@ Params.PulseOpt = defaultGaussParams(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);
+tau = (2*t/Trf)-1;
 
 % Amplitude
-A_t = (Params.PulseOpt.A0) * exp((-(Params.PulseOpt.beta^2).*(((2*t/Trf)-1).^2))/2);
+A_t = Params.PulseOpt.A0 .* exp(-Params.PulseOpt.beta .* tau.^2);
+%A_t = Params.PulseOpt.A0 .* exp(-Params.PulseOpt.beta .* ((2*t/Trf)-1).^2);
 A_t((t < 0 | t>Trf)) = 0;
 % disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
 
 % Scaling Factor 
-%lambda = (Params.PulseOpt.A0).^2 / (Params.PulseOpt.beta*Params.PulseOpt.Q);
+lambda = (Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q);
 
 % Carrier frequency modulation function w(t):
-omega1 = erf(Params.PulseOpt.beta .* ((2*t/Trf)-1))/erf(Params.PulseOpt.beta);
-%omega1 = lambda .* erf(Params.PulseOpt.beta .* t);
+omega1 = -(lambda.*erf(Params.PulseOpt.beta .* tau))/(2*pi);
+%omega1 = -(lambda .* erf(Params.PulseOpt.beta .* ((2*t/Trf)-1)))/(2*pi);
 
 % Phase modulation function phi(t):
-phi = ((((2*t/Trf)-1) .* erf(Params.PulseOpt.beta .* ((2*t/Trf)-1))) / erf(Params.PulseOpt.beta)) + (exp(-(Params.PulseOpt.beta)^2 .* ((2*t/Trf)-1).^2)) / ((sqrt(pi))*Params.PulseOpt.beta * erf(Params.PulseOpt.beta));
-%phi = ((lambda .* t .* erf(Params.PulseOpt.beta .* t)) + lambda .* (exp(-(Params.PulseOpt.beta).^2 * t.^2)) / (sqrt(pi)*Params.PulseOpt.beta));
+
+phi1 = lambda .* tau .* erf(Params.PulseOpt.beta .*tau);
+%phi1 = lambda .* ((2*t/Trf)-1) .* erf(Params.PulseOpt.beta .*((2*t/Trf)-1));
+phi2 = (lambda.*exp(-(Params.PulseOpt.beta.^2).*tau.^2))/(sqrt(pi).*Params.PulseOpt.beta);
+%phi2 = (lambda.*exp(-(Params.PulseOpt.beta.^2).*((2*t/Trf)-1)))/(sqrt(pi).*Params.PulseOpt.beta);
+phi = phi1 + phi2;
 
 % Put together complex RF pulse waveform:
 rf_pulse = A_t .* exp(1i .* phi);
