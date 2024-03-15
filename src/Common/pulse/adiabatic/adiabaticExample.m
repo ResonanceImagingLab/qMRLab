@@ -27,9 +27,10 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-PlotPulse(t, inv_pulse);
+PlotAdiabaticPulse(t, inv_pulse);
 
 % Plot Bloch Sim Results based on NumPools
+
 BlochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -45,8 +46,8 @@ Params.Ra = 1; % 1000ms
 Params.NumPools = 1;
 
 % Define Lorentz Parameters
-Params.Inv.PulseOpt.beta = 500;  
-Params.Inv.PulseOpt.A0 = 13.726;
+Params.Inv.PulseOpt.beta = 100;  
+Params.Inv.PulseOpt.A0 = 11;
 Params.Inv.nSamples = 512;
 Params.Inv.Trf = 15/1000;
 Params.Inv.shape = 'lorentz';
@@ -58,7 +59,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-PlotPulse(t, inv_pulse);
+%PlotAdiabaticPulse(t, inv_pulse);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
@@ -75,9 +76,9 @@ Params.Ra = 1; % 1000ms
 Params.NumPools = 1;
 
 % Define Gaussian Parameters
-Params.Inv.PulseOpt.beta = 50;  
-Params.Inv.PulseOpt.A0 = 13.726;
-%Params.Inv.PulseOpt.Q = 4;
+Params.Inv.PulseOpt.beta = 2;  
+Params.Inv.PulseOpt.A0 = 15;
+Params.Inv.PulseOpt.Q = 4;
 Params.Inv.nSamples = 512;
 Params.Inv.Trf = 10/1000;
 Params.Inv.shape = 'gauss';
@@ -89,7 +90,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-PlotPulse(t, inv_pulse);
+%PlotAdiabaticPulse(t, inv_pulse);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
@@ -106,17 +107,21 @@ Params.Ra = 1; % 1000ms
 Params.NumPools = 1;
 
 % Define Gaussian Parameters 
-Params.Inv.PulseOpt.A0 = 13.726;
+Params.Inv.PulseOpt.A0 = 6.2;
 Params.Inv.nSamples = 512;
-Params.Inv.Trf = 10/1000;
+Params.Inv.Trf = 2/1000;
 Params.Inv.shape = 'hanning';
 
 % Apply inversion pulse by calling GetAdiabatic 
 Params.dispFigure = 0;
-[inv_pulse, ~] = GetAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
+[inv_pulse, omega1, A_t, ~] = GetAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
                                     Params.Inv);
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-PlotPulse(t, inv_pulse);
+%PlotAdiabaticPulse(t, inv_pulse);
+
+% Plot Bloch Sim Results based on NumPools 
+BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+
 
