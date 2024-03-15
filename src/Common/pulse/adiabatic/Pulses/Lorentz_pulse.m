@@ -37,6 +37,13 @@ function [rf_pulse, omega1, A_t, Params] = Lorentz_pulse( Trf, Params)
 %              resonance in medicine, 40(5), 690-696.
 %                   --> tau = (2*t/Trf)-1
 %
+%              Tannus, A. Garwood, M. (1996). "Improved Performance of 
+%              Frequency Swept Pulses Using Offset-Independent
+%              Adiabaticity" Journal of Magnetic Resonance, 120(1),
+%              133-137.
+%                   --> Fig 1a and 1b. Show how width of amplitude and
+%                   frequency vary with each pulse 
+%
 % To be used with qMRlab
 % Written by Christopher Rowley 2023 & Amie Demmans 2024
 
@@ -51,26 +58,24 @@ Params.PulseOpt = defaultLorentzParams(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);
+tau = ((2*t/Trf)-1);
 
 % Amplitude
-A_t = (Params.PulseOpt.A0)./(1+Params.PulseOpt.beta .*(((2*t/Trf)-1).^2));
+A_t = Params.PulseOpt.A0./(1+(Params.PulseOpt.beta).*(tau.^2));
 A_t((t < 0 | t>Trf)) = 0;
 % disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
 
 
 % Frequency modulation function 
 % Carrier frequency modulation function w(t):
-omegaterm1 = (((2*t)/Trf)-1) / (1 + (Params.PulseOpt.beta .* ((2*t/Trf)-1)));
-omegaterm2 = (1/sqrt(Params.PulseOpt.beta)) * atan(sqrt(Params.PulseOpt.beta)*((2*t/Trf)-1));
-omega1 = (omegaterm1 + omegaterm2)/(2*pi); % convert rad/s to Hz 
-
-%omega1 = (((2*t/Trf)-1)/(1+(Params.PulseOpt.beta .*(((2*t/Trf)-1).^2)))) + (1/sqrt(Params.PulseOpt.beta))*atan((sqrt(Params.PulseOpt.beta))*((2*t/Trf)-1));
+omegaterm1 = tau ./ (1+(Params.PulseOpt.beta).*(tau.^2));
+omegaterm2 = (1/sqrt(Params.PulseOpt.beta)).* atan(tau.*sqrt(Params.PulseOpt.beta));
+omega1 = -(omegaterm1+omegaterm2)/(2*pi); % convert rad/s to Hz 
 
 % Phase modulation function phi(t):
-phi_num = ((2*t/Trf)-1) .* atan (sqrt(Params.PulseOpt.beta).*((2*t/Trf)-1));
+phi_num = tau .* atan(tau.*sqrt(Params.PulseOpt.beta));
 phi_denom = sqrt(Params.PulseOpt.beta);
 phi = phi_num/phi_denom;
-% phi = (((2*t/Trf)-1).*atan(sqrt(Params.PulseOpt.beta).*((2*t/Trf)-1))) / sqrt(Params.PulseOpt.beta);
 
 % Put together complex RF pulse waveform:
 rf_pulse = A_t .* exp(1i .* phi);
