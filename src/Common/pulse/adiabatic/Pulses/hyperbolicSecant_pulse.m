@@ -33,6 +33,13 @@ function [rf_pulse, omega1, A_t, Params] = hyperbolicSecant_pulse(Trf, Params)
 %              Tannús, A. and M. Garwood (1997). "Adiabatic pulses." 
 %              NMR in Biomedicine 10(8): 423-434.
 %
+%              Tannus, A. Garwood, M. (1996). "Improved Performance of 
+%              Frequency Swept Pulses Using Offset-Independent
+%              Adiabaticity" Journal of Magnetic Resonance, 120(1),
+%              133-137.
+%                   --> Fig 1a and 1b. Show how width of amplitude and
+%                   frequency vary with each pulse
+%
 %
 % To be used with qMRlab
 % Written by Christopher Rowley 2023
@@ -66,51 +73,7 @@ phi = Params.PulseOpt.mu .* log(sech(Params.PulseOpt.beta .* (t - Trf/2)) );
 % Put together complex RF pulse waveform:
 rf_pulse = A_t .* exp(1i .* phi);
 
-%% Can do Bloch Sim to get inversion profile and display figure if interested:
 
-% Params.NumPools = 1;
-% BlochSimCallFunction(Params, rf_pulse, t, A_t, omega1);
-
-%     M_start = [0, 0, Params.M0a, Params.M0b]';
-%     b1Rel = 0.5:0.1:1.5;
-%     freqOff = -2000:200:2000;
-%     [b1m, freqm] = ndgrid(b1Rel, freqOff);
-% 
-%     Mza = zeros(size(b1m));
-%     Mzb = zeros(size(b1m));
-% 
-%  for i = 1:length(b1Rel)
-%     for j = 1:length(freqOff)
-%         if dispFigure
-% 
-%             M_return = blochSimAdiabaticPulse( b1Rel(i)*rf_pulse, Params.Inv,  ...
-%                             freqOff(j), Params, M_start, []);
-% 
-%             Mza(i,j) = M_return(5);
-%             Mzb(i,j) = M_return(6);
-%         end
-%     end
-% 
-%     figure ('Name', 'Hyperbolic Secant', 'NumberTitle', 'off'); 
-%     tiledlayout(2,2)
-%     nexttile; plot(t*1000, A_t, 'LineWidth', 3); 
-%     xlabel('Time(ms)'); ylabel('B_1 (μT)')
-%     title('Amplitude Function');ax = gca; ax.FontSize = 20;
-% 
-%     nexttile; plot(t*1000, omega1, 'LineWidth', 3);
-%     xlabel('Time(ms)'); ylabel('Frequency (Hz)');
-%     title('Frequency Modulation function');ax = gca; ax.FontSize = 20;
-% 
-%     nexttile; surf(b1m, freqm, Mza);
-%     xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{za}');ax = gca; ax.FontSize = 20;
-% 
-%     nexttile; surf(b1m, freqm, Mzb);
-%     xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{zb}');ax = gca; ax.FontSize = 20;
-% 
-%     set(gcf,'Position',[100 100 1200 1000])
-% end
-% 
-% return; 
 
 
 
