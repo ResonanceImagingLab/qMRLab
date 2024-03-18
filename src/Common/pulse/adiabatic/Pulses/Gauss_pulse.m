@@ -32,11 +32,14 @@ function [rf_pulse, omega1, A_t, Params] = Gauss_pulse( Trf, Params)
 %              Tannús, A. and M. Garwood (1997). "Adiabatic pulses." 
 %              NMR in Biomedicine 10(8): 423-434.
 %                  --> Fig 5, Gaussian OIA pulse image 
+%                  --> Trf = 10 ms 
 %
 %              Kupce, E. and Freeman, R (1995). "Optimized Adiabatic Pulses
 %              for Wideband Spin Inversion." Journal of Magnetic Resonance
 %              Imaging, Series A 118(2): 299-303.
-%                  --> A_t, omega1, lambda equation  
+%                  --> A_t, omega1, lambda equation 
+%                  --> Q value of 4 
+%                  --> Trf = 20ms BUT width of the 'bowl' gets skinny 
 %
 %              Tannus, A. Garwood, M. (1996). "Improved Performance of 
 %              Frequency Swept Pulses Using Offset-Independent

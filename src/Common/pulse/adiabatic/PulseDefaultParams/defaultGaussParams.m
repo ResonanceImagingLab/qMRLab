@@ -14,12 +14,12 @@ if(~isfield(PulseOpt,'A0') || isempty(PulseOpt.A0) || ~isfinite(PulseOpt.A0))
 end
 
 if(~isfield(PulseOpt,'nSamples') || isempty(PulseOpt.nSamples) || ~isfinite(PulseOpt.nSamples))
-    % Peak B1 of the pulse in microTesla
+    % Default number of samples taken based on machine properties
     PulseOpt.nSamples = 512;       
 end
 
 if(~isfield(PulseOpt,'Q') || isempty(PulseOpt.Q) || ~isfinite(PulseOpt.Q))
-    % Peak B1 of the pulse in microTesla
+    % Adiabaticity factor 
     PulseOpt.Q = 4;       
 end
 
