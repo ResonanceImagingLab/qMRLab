@@ -6,7 +6,7 @@ function PulseOpt = defaultHanningParams(PulseOpt)
 
 if(~isfield(PulseOpt,'A0') || isempty(PulseOpt.A0) || ~isfinite(PulseOpt.A0))
     % Peak B1 of the pulse in microTesla
-    PulseOpt.A0 = 7;       
+    PulseOpt.A0 = 14;       
 end
 
 if(~isfield(PulseOpt,'nSamples') || isempty(PulseOpt.nSamples) || ~isfinite(PulseOpt.nSamples))

@@ -5,7 +5,7 @@ function PulseOpt = defaultLorentzParams(PulseOpt)
 
 if(~isfield(PulseOpt,'beta') || isempty(PulseOpt.beta) || ~isfinite(PulseOpt.beta))
     % Default beta value in rad/s
-    PulseOpt.beta = 99;       
+    PulseOpt.beta = 150;       
 end
 
 if(~isfield(PulseOpt,'A0') || isempty(PulseOpt.A0) || ~isfinite(PulseOpt.A0))
@@ -17,5 +17,9 @@ if(~isfield(PulseOpt,'nSamples') || isempty(PulseOpt.nSamples) || ~isfinite(Puls
     % Peak B1 of the pulse in microTesla
     PulseOpt.nSamples = 512;       
 end
-
+% 
+% if(~isfield(PulseOpt,'Q') || isempty(PulseOpt.Q) || ~isfinite(PulseOpt.Q))
+%     % Peak B1 of the pulse in microTesla
+%     PulseOpt.Q = 4;       
+% end
 return;

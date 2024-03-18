@@ -80,6 +80,42 @@ phi = phi_num/phi_denom;
 % Put together complex RF pulse waveform:
 rf_pulse = A_t .* exp(1i .* phi);
 
+%% DIfferent equations based on optimized adibatic pulses for wideband spin inversion 
+% if ~exist('dispFigure','var') || isempty(dispFigure) || ~isfinite(dispFigure)
+%     dispFigure = 0;      
+% end
+
+
+% Function to fill default values;
+% Params.PulseOpt = defaultLorentzParams(Params.PulseOpt);
+% 
+% nSamples = Params.PulseOpt.nSamples;  
+% t = linspace(0, Trf, nSamples);
+% tau = ((2*t/Trf)-1);
+
+% Amplitude 
+% A_t = Params.PulseOpt.A0.*(1+(Params.PulseOpt.beta)^2.*(tau).^2);
+% A_t((t < 0 | t>Trf)) = 0;
+% disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
+
+% Scaling Factor 
+% lambda = (Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q);
+
+% Frequency modulation function 
+% omegaterm1 = atan(Params.PulseOpt.beta.*tau);
+% omegaterm2num = Params.PulseOpt.beta.*tau;
+% omegaterm2denom = 1 + (Params.PulseOpt.beta^2).*(tau).^2;
+% omegaterm2 = omegaterm2num/omegaterm2denom;
+% omega1 = -(lambda/2)*(omegaterm1+omegaterm2);
+
+% Phase modulation function phi(t)
+% phi = (lambda.*tau.*atan(Params.PulseOpt.beta.*tau))/2;
+
+% Put together complex RF pulse waveform:
+% rf_pulse = A_t .* exp(1i .* phi);
+
+
+
 %% Can do Bloch Sim to get inversion profile and display figure if interested:
 
 % Params.NumPools = 1;
