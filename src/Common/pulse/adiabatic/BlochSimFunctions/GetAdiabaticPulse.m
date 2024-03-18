@@ -55,6 +55,8 @@ switch shape
         [rf_pulse, omega1, A_t, Params] = Gauss_pulse(Trf, Params);
     case 'hanning'
         [rf_pulse, omega1, A_t, Params] = Hanning_pulse(Trf, Params);
+    case 'Hsn8'
+        [rf_pulse, omega1, A_t, Params] = Hsn_pulse(Trf, Params);
 
 end
 

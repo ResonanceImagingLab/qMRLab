@@ -49,7 +49,7 @@ tau = ((2*t/Trf)-1);
 
 % Amplitude
 %A_t = 1+cos(tau.*pi);
-A_t = (Params.PulseOpt.A0).*(1+cos(tau*pi));
+A_t = (Params.PulseOpt.A0).*(1+cos(tau.*pi))./2;
 A_t((t < 0 | t>Trf)) = 0;
 % disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
 
