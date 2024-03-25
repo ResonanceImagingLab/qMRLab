@@ -4,8 +4,8 @@ function PulseOpt = defaultLorentzParams(PulseOpt)
 % Fills in default values if they are not user-defined
 
 if(~isfield(PulseOpt,'beta') || isempty(PulseOpt.beta) || ~isfinite(PulseOpt.beta))
-    % Default beta value in rad/s
-    PulseOpt.beta = 150;       
+    % Default beta value in rad/s (modulation angular frequency)
+    PulseOpt.beta = 5;       
 end
 
 if(~isfield(PulseOpt,'A0') || isempty(PulseOpt.A0) || ~isfinite(PulseOpt.A0))
@@ -14,12 +14,12 @@ if(~isfield(PulseOpt,'A0') || isempty(PulseOpt.A0) || ~isfinite(PulseOpt.A0))
 end
 
 if(~isfield(PulseOpt,'nSamples') || isempty(PulseOpt.nSamples) || ~isfinite(PulseOpt.nSamples))
-    % Peak B1 of the pulse in microTesla
+    % Default number of samples taken based on machine properties
     PulseOpt.nSamples = 512;       
 end
 % 
-% if(~isfield(PulseOpt,'Q') || isempty(PulseOpt.Q) || ~isfinite(PulseOpt.Q))
-%     % Peak B1 of the pulse in microTesla
-%     PulseOpt.Q = 4;       
-% end
+if(~isfield(PulseOpt,'Q') || isempty(PulseOpt.Q) || ~isfinite(PulseOpt.Q))
+    % Adiabaticity factor 
+    PulseOpt.Q = 4;       
+end
 return;

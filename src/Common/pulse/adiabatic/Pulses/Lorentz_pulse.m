@@ -10,8 +10,9 @@ function [rf_pulse, omega1, A_t, Params] = Lorentz_pulse( Trf, Params)
 %   Frequency modulation is time derivative of phi(t)
 %
 %   For the case of a Lorentz pulse:
-%   A(t) = 1 / (1 + Beta*t^2)
-%   omega1(t) = t/(1+Beta*t^2) + (1/(sqrt(Beta)))*arctan(sqrt(Beta)*t)
+%   A(t) = A_0 / (1 + Beta^2*t^2)
+%   lambda = A_0^2/(Beta*Q)
+%   omega1(t) = lambda(arctan(Beta*t)+Beta*t/(1+Beta^2*t^2))/2
 %   A0 is the peak amplitude in microTesla
 %   Beta is a frequency modulation parameter in rad/s
 %
@@ -37,12 +38,20 @@ function [rf_pulse, omega1, A_t, Params] = Lorentz_pulse( Trf, Params)
 %              resonance in medicine, 40(5), 690-696.
 %                   --> tau = (2*t/Trf)-1
 %
+%              Kupce, E. and Freeman, R (1995). "Optimized Adiabatic Pulses
+%              for Wideband Spin Inversion." Journal of Magnetic Resonance
+%              Imaging, Series A 118(2): 299-303.
+%                  --> A_t, omega1, lambda equation 
+%                  --> Q value of 4 
+%
 %              Tannus, A. Garwood, M. (1996). "Improved Performance of 
 %              Frequency Swept Pulses Using Offset-Independent
 %              Adiabaticity" Journal of Magnetic Resonance, 120(1),
 %              133-137.
 %                   --> Fig 1a and 1b. Show how width of amplitude and
 %                   frequency vary with each pulse 
+%                   --> A0 set to 20 as Lorentz pulse has the highest
+%                   amplitude
 %
 % To be used with qMRlab
 % Written by Christopher Rowley 2023 & Amie Demmans 2024
@@ -52,67 +61,37 @@ if ~exist('dispFigure','var') || isempty(dispFigure) || ~isfinite(dispFigure)
     dispFigure = 0;      
 end
 
+% Trf = 10;
+% Params = Params.Inv;
 
 % Function to fill default values;
 Params.PulseOpt = defaultLorentzParams(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);
+
 tau = ((2*t/Trf)-1);
+%tau = (t - Trf /2);
 
 % Amplitude
-A_t = Params.PulseOpt.A0./(1+(Params.PulseOpt.beta).*(tau.^2));
+%A_t = Params.PulseOpt.A0./(1+(Params.PulseOpt.beta).*(tau.^2));
+A_t = Params.PulseOpt.A0./(1+(Params.PulseOpt.beta.^2).*(tau.^2));
 A_t((t < 0 | t>Trf)) = 0;
 % disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
 
+% Scaling Factor 
+lambda = (Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q);
 
 % Frequency modulation function 
-% Carrier frequency modulation function w(t):
-omegaterm1 = tau ./ (1+(Params.PulseOpt.beta).*(tau.^2));
-omegaterm2 = (1/sqrt(Params.PulseOpt.beta)).* atan(tau.*sqrt(Params.PulseOpt.beta));
-omega1 = -(omegaterm1+omegaterm2)/(2*pi); % convert rad/s to Hz 
+% Carrier frequency modulation function w(t)
+omega1 = -lambda*(atan(Params.PulseOpt.beta.*tau)+(Params.PulseOpt.beta.*tau) ...
+            /(1+(Params.PulseOpt.beta.^2).*(tau.^2)))./(2*pi); % convert rad/s to Hz
 
 % Phase modulation function phi(t):
-phi_num = tau .* atan(tau.*sqrt(Params.PulseOpt.beta));
-phi_denom = sqrt(Params.PulseOpt.beta);
-phi = phi_num/phi_denom;
+phi = lambda.*tau.*atan(Params.PulseOpt.beta.*tau)./2;
 
 % Put together complex RF pulse waveform:
 rf_pulse = A_t .* exp(1i .* phi);
-
-%% DIfferent equations based on optimized adibatic pulses for wideband spin inversion 
-% if ~exist('dispFigure','var') || isempty(dispFigure) || ~isfinite(dispFigure)
-%     dispFigure = 0;      
-% end
-
-
-% Function to fill default values;
-% Params.PulseOpt = defaultLorentzParams(Params.PulseOpt);
-% 
-% nSamples = Params.PulseOpt.nSamples;  
-% t = linspace(0, Trf, nSamples);
-% tau = ((2*t/Trf)-1);
-
-% Amplitude 
-% A_t = Params.PulseOpt.A0.*(1+(Params.PulseOpt.beta)^2.*(tau).^2);
-% A_t((t < 0 | t>Trf)) = 0;
-% disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
-
-% Scaling Factor 
-% lambda = (Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q);
-
-% Frequency modulation function 
-% omegaterm1 = atan(Params.PulseOpt.beta.*tau);
-% omegaterm2num = Params.PulseOpt.beta.*tau;
-% omegaterm2denom = 1 + (Params.PulseOpt.beta^2).*(tau).^2;
-% omegaterm2 = omegaterm2num/omegaterm2denom;
-% omega1 = -(lambda/2)*(omegaterm1+omegaterm2);
-
-% Phase modulation function phi(t)
-% phi = (lambda.*tau.*atan(Params.PulseOpt.beta.*tau))/2;
-
-% Put together complex RF pulse waveform:
-% rf_pulse = A_t .* exp(1i .* phi);
 
 
 
