@@ -10,8 +10,9 @@ function [rf_pulse, omega1, A_t, Params] = Gauss_pulse( Trf, Params)
 %   Frequency modulation is time derivative of phi(t)
 %
 %   For the case of a Gauus^c pulse:
-%   A(t) = A_0 * exp((-Beta^2 * t^2)/2)
-%   omega1(t) = erf(Beta*t)/erf(Beta)
+%   A(t) = A_0 * exp(-Beta * t^2)
+%   lambda = A0^2/(Beta*Q)
+%   omega1(t) = lamdba*erf(Beta*t)
 %   A0 is the peak amplitude in microTesla
 %   Beta is a frequency modulation parameter in rad/s
 %
@@ -64,9 +65,9 @@ nSamples = Params.PulseOpt.nSamples;
 t = linspace(0, Trf, nSamples);
 tau = (2*t/Trf)-1;
 
+
 % Amplitude
 A_t = Params.PulseOpt.A0 .* exp(-Params.PulseOpt.beta .* tau.^2);
-%A_t = Params.PulseOpt.A0 .* exp(-Params.PulseOpt.beta .* ((2*t/Trf)-1).^2);
 A_t((t < 0 | t>Trf)) = 0;
 % disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
 
@@ -75,14 +76,10 @@ lambda = (Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q);
 
 % Carrier frequency modulation function w(t):
 omega1 = -(lambda.*erf(Params.PulseOpt.beta .* tau))/(2*pi);
-%omega1 = -(lambda .* erf(Params.PulseOpt.beta .* ((2*t/Trf)-1)))/(2*pi);
 
 % Phase modulation function phi(t):
-
 phi1 = lambda .* tau .* erf(Params.PulseOpt.beta .*tau);
-%phi1 = lambda .* ((2*t/Trf)-1) .* erf(Params.PulseOpt.beta .*((2*t/Trf)-1));
 phi2 = (lambda.*exp(-(Params.PulseOpt.beta.^2).*tau.^2))/(sqrt(pi).*Params.PulseOpt.beta);
-%phi2 = (lambda.*exp(-(Params.PulseOpt.beta.^2).*((2*t/Trf)-1)))/(sqrt(pi).*Params.PulseOpt.beta);
 phi = phi1 + phi2;
 
 % Put together complex RF pulse waveform:
