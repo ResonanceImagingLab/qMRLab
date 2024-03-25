@@ -4,7 +4,7 @@ function PulseOpt = defaultGaussParams(PulseOpt)
 % Fills in default values if they are not user-defined
 
 if(~isfield(PulseOpt,'beta') || isempty(PulseOpt.beta) || ~isfinite(PulseOpt.beta))
-    % Default beta value in rad/s
+    % Default beta value in rad/s (modulation angular frequency)
     PulseOpt.beta = 20;       
 end
 
