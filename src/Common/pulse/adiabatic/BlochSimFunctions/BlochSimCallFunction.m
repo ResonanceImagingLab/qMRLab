@@ -30,8 +30,9 @@ if Params.NumPools == 1
     xlabel('Time(ms)'); ylabel('Frequency (Hz)');
     title('Frequency Modulation function');ax = gca; ax.FontSize = 20;
     
-    nexttile; surf(b1m, freqm, Mza);
+    nexttile; surf(b1m, freqm, Mza,'FaceColor','interp'); 
     xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{za}');ax = gca; ax.FontSize = 20;
+    view(-55, 10)
     
     set(gcf,'Position',[100 100 1200 500])
 
@@ -64,10 +65,10 @@ elseif Params.NumPools == 2
     xlabel('Time(ms)'); ylabel('Frequency (Hz)');
     title('Frequency Modulation function');ax = gca; ax.FontSize = 20;
     
-    nexttile; surf(b1m, freqm, Mza);
+    nexttile; surf(b1m, freqm, Mza, 'FaceColor','interp');
     xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{za}');ax = gca; ax.FontSize = 20;
     
-    nexttile; surf(b1m, freqm, Mzb);
+    nexttile; surf(b1m, freqm, Mzb,'FaceColor','interp');
     xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{zb}');ax = gca; ax.FontSize = 20;
     
     set(gcf,'Position',[100 100 1200 1000])
