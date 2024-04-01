@@ -42,12 +42,7 @@ function [rf_pulse, omega1, A_t, Params] = hyperbolicSecant_pulse(Trf, Params)
 %
 %
 % To be used with qMRlab
-% Written by Christopher Rowley 2023
-
-
-if ~exist('dispFigure','var') || isempty(dispFigure) || ~isfinite(dispFigure)
-    dispFigure = 0;      
-end
+% Written by Christopher Rowley 2023 & Amie Demmans 2024
 
 
 % Function to fill default values;
@@ -66,6 +61,9 @@ A_t((t < 0 | t>Trf)) = 0;
 % Carrier frequency modulation function w(t):
 omega1 = -Params.PulseOpt.mu.*Params.PulseOpt.beta .* ...
             tanh(Params.PulseOpt.beta .* (t - Trf/2))./(2*pi); % 2pi to convert from rad/s to Hz
+
+% omega1 = -Params.PulseOpt.mu.*Params.PulseOpt.beta .* ...
+%             tanh(Params.PulseOpt.beta .* (t - Trf/2));
 
 % Phase modulation function phi(t):
 phi = Params.PulseOpt.mu .* log(sech(Params.PulseOpt.beta .* (t - Trf/2)) );
