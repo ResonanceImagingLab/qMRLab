@@ -57,10 +57,6 @@ function [rf_pulse, omega1, A_t, Params] = Lorentz_pulse( Trf, Params)
 % Written by Christopher Rowley 2023 & Amie Demmans 2024
 
 
-if ~exist('dispFigure','var') || isempty(dispFigure) || ~isfinite(dispFigure)
-    dispFigure = 0;      
-end
-
 % Trf = 10;
 % Params = Params.Inv;
 
@@ -70,25 +66,30 @@ Params.PulseOpt = defaultLorentzParams(Params.PulseOpt);
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);
 
-tau = ((2*t/Trf)-1);
-%tau = (t - Trf /2);
+%tau = ((2*t/Trf)-1);
+tau = (t - Trf /2);
+%beta_Hz = Params.PulseOpt.beta/(2*pi);
 
 % Amplitude
-%A_t = Params.PulseOpt.A0./(1+(Params.PulseOpt.beta).*(tau.^2));
-A_t = Params.PulseOpt.A0./(1+(Params.PulseOpt.beta.^2).*(tau.^2));
+A_t = Params.PulseOpt.A0./(1+Params.PulseOpt.beta.^2.*tau.^2); % From Ref 4
 A_t((t < 0 | t>Trf)) = 0;
 % disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
 
 % Scaling Factor 
-lambda = (Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q);
+lambda = (Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q); % From Ref 4
 
 % Frequency modulation function 
 % Carrier frequency modulation function w(t)
-omega1 = -lambda*(atan(Params.PulseOpt.beta.*tau)+(Params.PulseOpt.beta.*tau) ...
-            /(1+(Params.PulseOpt.beta.^2).*(tau.^2)))./(2*pi); % convert rad/s to Hz
+% omega1 = -lambda*(atan(Params.PulseOpt.beta.*tau)+(Params.PulseOpt.beta.*tau) ...
+%             /(1+(Params.PulseOpt.beta.^2).*(tau.^2)))./(2*pi); % convert rad/s to Hz
+omegaterm1 = atan(Params.PulseOpt.beta.*tau);
+omegaterm2num = Params.PulseOpt.beta.*tau;
+omegaterm2denom = 1+(Params.PulseOpt.beta.^2.*tau.^2);
+omegaterm2 = omegaterm2num/omegaterm2denom;
+omega1 = -lambda*(omegaterm1+omegaterm2)/4*pi;
 
 % Phase modulation function phi(t):
-phi = lambda.*tau.*atan(Params.PulseOpt.beta.*tau)./2;
+phi = lambda.*tau.*atan(Params.PulseOpt.beta.*tau)./(2);
 
 % Put together complex RF pulse waveform:
 rf_pulse = A_t .* exp(1i .* phi);
