@@ -15,12 +15,6 @@ function M_return = blochSimAdiabaticPulse_1pool( rf_pulse, Trf, delta,...
     if ~exist('B','var') || isempty(B) 
         B = [0,0,Params.Ra*Params.M0a]';
     end
-
-    % if ~isnumeric(Trf) || ~isnumeric(Params.PulseOpt.nsamples)
-    %     error('Trf and nSamples must be numeric.')
-    % end
-    % 
-    %nSamples = Params.PulseOpt.nSamples;
   
  
        
