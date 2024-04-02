@@ -79,9 +79,7 @@ A_t((t < 0 | t>Trf)) = 0;
 lambda = (Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q); % From Ref 4
 
 % Frequency modulation function 
-% Carrier frequency modulation function w(t)
-% omega1 = -lambda*(atan(Params.PulseOpt.beta.*tau)+(Params.PulseOpt.beta.*tau) ...
-%             /(1+(Params.PulseOpt.beta.^2).*(tau.^2)))./(2*pi); % convert rad/s to Hz
+% Carrier frequency modulation function w(t) --> from Ref 4 
 omegaterm1 = atan(Params.PulseOpt.beta.*tau);
 omegaterm2num = Params.PulseOpt.beta.*tau;
 omegaterm2denom = 1+(Params.PulseOpt.beta.^2.*tau.^2);

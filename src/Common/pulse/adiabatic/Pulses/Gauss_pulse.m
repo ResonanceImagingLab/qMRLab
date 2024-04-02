@@ -61,7 +61,7 @@ t = linspace(0, Trf, nSamples);
 %tau = (2*t/Trf)-1;
 tau = t-Trf/2;
 
-% Amplitude
+% Amplitude --> From Ref 2
 A_t = Params.PulseOpt.A0 .* exp(-1*(Params.PulseOpt.beta.^2 .* tau.^2)./2);
 A_t((t < 0 | t>Trf)) = 0;
 % disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
@@ -70,6 +70,7 @@ A_t((t < 0 | t>Trf)) = 0;
 lambda = (Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q);
 
 % Carrier frequency modulation function w(t):
+% --> From Ref2 with addition of lambda from ref 4  
 omega1 = -lambda*erf(Params.PulseOpt.beta.*tau)./erf(Params.PulseOpt.beta);
 
 % Phase modulation function phi(t):
