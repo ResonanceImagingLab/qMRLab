@@ -35,33 +35,44 @@ function [rf_pulse, omega1, A_t, Params] = Hanning_pulse( Trf, Params)
 % Written by Christopher Rowley 2023 & Amie Demmans 2024
 
 
-if ~exist('dispFigure','var') || isempty(dispFigure) || ~isfinite(dispFigure)
-    dispFigure = 0;      
-end
-
-
 % Function to fill default values;
 Params.PulseOpt = defaultHanningParams(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);
-tau = ((2*t/Trf)-1);
+%tau = ((2*t/Trf)-1);
+tau = t-Trf/2;
 
 % Amplitude
-%A_t = 1+cos(tau.*pi);
-A_t = (Params.PulseOpt.A0).*(1+cos(tau.*pi))./2;
+%A_t = Params.PulseOpt.A0*((1+cos(tau.*pi))./2);
+A_t = Params.PulseOpt.A0*((1+cos(pi.*tau.*Params.PulseOpt.beta))./2);
+    % From ref 2 but with addition of beta term 
 A_t((t < 0 | t>Trf)) = 0;
 % disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
 
+% Scaling Factor 
+lambda = (Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q);
+
 % Carrier frequency modulation function w(t):
-omegaterm1 = tau;
-omegaterm2 = (4/(3*pi)).*sin(pi.*tau).*(1+(1/4).*cos(pi.*tau));
-omega1 = -(omegaterm1+omegaterm2)/(2*pi);
+    % Integral of A_t^2
+omegaterm1 = Params.PulseOpt.beta.*tau;
+omegaterm2 = (4/(3*pi)*sin(pi.*tau.*Params.PulseOpt.beta));
+omegaterm3 = 1+1/4*cos(pi.*tau.*Params.PulseOpt.beta);
+omega1 = -lambda.*(omegaterm1+(omegaterm2.*omegaterm3));
+
 
 % Phase modulation function phi(t):
-phiterm1 = tau.^2 ./2;
-phiterm2 = ((cos(pi.*tau)+4).^2)/(6.*tau.^2);
-phi = phiterm1 - phiterm2;
+phiterm1 = (Params.PulseOpt.beta*lambda.*tau.^2)./2;
+phiterm2num = lambda*(cos(pi.*tau.*Params.PulseOpt.beta)+4).^2;
+phiterm2denom = 6*Params.PulseOpt.beta*pi^2;
+phi = phiterm1 - (phiterm2num/phiterm2denom);
 
 % Put together complex RF pulse waveform:
 rf_pulse = A_t .* exp(1i .* phi);
+
+
+
+
+
+
+
