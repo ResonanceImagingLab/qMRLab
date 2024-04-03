@@ -10,8 +10,10 @@ function [rf_pulse, omega1, A_t, Params] = Hsn_pulse(Trf, Params)
 %   Frequency modulation is time derivative of phi(t)
 %
 %   For the case of a hyperbolic secant pulse:
-%   A(t) = A0 * sech(Beta*t^n)
+%   A(t) = A0 * sech((Beta*t)^n)
+%   lambda = (A_0^2/(Beta*Q))^2
 %   omega1(t) = integral(sech^2(Beta*t^n)
+%
 %   A0 is the peak amplitude in microTesla
 %   Beta is a frequency modulation parameter in rad/s
 %
@@ -31,6 +33,12 @@ function [rf_pulse, omega1, A_t, Params] = Hsn_pulse(Trf, Params)
 %
 %              Tannús, A. and M. Garwood (1997). "Adiabatic pulses." 
 %              NMR in Biomedicine 10(8): 423-434.
+%                   --> A(t), omega1 
+%
+%              Kupce, E. and Freeman, R (1995). "Optimized Adiabatic Pulses
+%              for Wideband Spin Inversion." Journal of Magnetic Resonance
+%              Imaging, Series A 118(2): 299-303.
+%                   --> lambda
 %
 %              Tannus, A. Garwood, M. (1996). "Improved Performance of 
 %              Frequency Swept Pulses Using Offset-Independent
@@ -44,32 +52,33 @@ function [rf_pulse, omega1, A_t, Params] = Hsn_pulse(Trf, Params)
 % Written by Christopher Rowley 2023 and Amie Demmans 2024
 
 
-if ~exist('dispFigure','var') || isempty(dispFigure) || ~isfinite(dispFigure)
-    dispFigure = 0;      
-end
-
-
 % Function to fill default values;
 Params.PulseOpt = defaultHsnParams(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);
+
 %tau = ((2*t/Trf)-1);
+tau = t-Trf/2;
 
 % Amplitude
-A_t =  Params.PulseOpt.A0* sech(Params.PulseOpt.beta* t.^Params.PulseOpt.n);
+A_t =  Params.PulseOpt.A0* sech((Params.PulseOpt.beta .*tau).^Params.PulseOpt.n);
 A_t((t < 0 | t>Trf)) = 0;
 % disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
 
+% Scaling Factor 
+lambda = ((Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q))^2;
 
 % Frequency modulation function 
 % Carrier frequency modulation function w(t):
-omegaterm1 = sech(Params.PulseOpt.beta* t.^Params.PulseOpt.n);
-omegaterm2 = trapz(t,omegaterm1.^2);
-omega1 = -omegaterm2/(2*pi); % 2pi to convert from rad/s to Hz
+omegaterm1 = sech((Params.PulseOpt.beta .* tau).^Params.PulseOpt.n);
+omegaterm2 = cumtrapz(t,(omegaterm1.^2));
+omega1 = -lambda*(omegaterm2 - omegaterm2(round(nSamples/2))); % offset to allow for center at zero
+omega = lambda*omegaterm2;
 
 % Phase modulation function phi(t):
-phi = trapz(t,omegaterm2(:));
+phi = cumtrapz(tau, omega);
+
 % Put together complex RF pulse waveform:
 rf_pulse = A_t .* exp(1i .* phi);
 
@@ -78,12 +87,42 @@ rf_pulse = A_t .* exp(1i .* phi);
 % t = linspace(0, Trf, 512);
 % tau = ((2*t/Trf)-1);
 % omegaterm1 = sech(300*tau.^8);
-% omegaterm2 = trapz(tau,omegaterm1.^2);
-% omega1 = trapz(tau,trapz(tau,omegaterm1));
+% omegaterm2 = cumtrapz(tau,omegaterm1.^2);
+% omega1 = cumtrapz(tau,omegaterm2);
 % disp(omegaterm2)
 % disp(omega1)
 
+% Trf = 10;
+% t = linspace(1,5,5);
+% %tau = (2*t/Trf)-1;
+% omega1 = t.^2;
+% omegacum = cumtrapz(omega1);
+% omegaint = trapz(omega1);
+% disp(omegacum)
+% disp(omegaint)
 
+% you need to find a way to integrate from t= 0 to each of the next time
+% points
+% This will give you nsamples-1 points. Use interp1 to interpolate this
+% back to nSamples number of points. You will need to plot this as it
+% involves extrapolation to make sure the limits at the ends make sense.
+% Also try different interpolating functions. 
+
+% omega = zeros(1, nSamples-1);
+% for i = 1:nSamples-1
+%     tau_range = t(1:i);
+%     omega(i) = trapz(tau_range, (sech(Params.PulseOpt.beta * tau_range .^ Params.PulseOpt.n)).^2);
+% end
+
+%omega1 = interp1(tau(1:nSamples-1),omega, t, 'linear');
+% omega1 = interp1(omega,t);
+
+% Phase modulation function phi(t):
+% phi = zeros(1, nSamples-1);
+% for i = 1:nSamples-1
+%     phi(i) = trapz(t, omega1);
+% end
+% phi = interp1(phi,t);
 
 
 
