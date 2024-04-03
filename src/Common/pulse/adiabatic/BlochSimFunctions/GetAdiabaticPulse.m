@@ -47,7 +47,7 @@ switch shape
     % case 'gaussian';  pulse_fcn = @gaussian_pulse;        
     % case 'gausshann'; pulse_fcn = @gausshann_pulse;    
     % case 'fermi';     pulse_fcn = @fermi_pulse;
-    case 'hsn'       
+    case 'hsn'  % Change to Hs1 so when n = 8 it can be Hsn where n can be any # from 2-8      
         [rf_pulse, omega1, A_t, Params] = hyperbolicSecant_pulse(Trf, Params);
     case 'lorentz'
         [rf_pulse, omega1, A_t, Params] = Lorentz_pulse(Trf, Params);
@@ -57,6 +57,8 @@ switch shape
         [rf_pulse, omega1, A_t, Params] = Hanning_pulse(Trf, Params);
     case 'Hsn8'
         [rf_pulse, omega1, A_t, Params] = Hsn_pulse(Trf, Params);
+    case 'Sin40'
+        [rf_pulse, omega1, A_t, Params] = Sin40_pulse(Trf, Params);
 
 end
 
