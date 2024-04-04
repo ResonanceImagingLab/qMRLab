@@ -5,12 +5,12 @@ function PulseOpt = defaultGaussParams(PulseOpt)
 
 if(~isfield(PulseOpt,'beta') || isempty(PulseOpt.beta) || ~isfinite(PulseOpt.beta))
     % Default beta value in rad/s (modulation angular frequency)
-    PulseOpt.beta = 20;       
+    PulseOpt.beta = 550;       
 end
 
 if(~isfield(PulseOpt,'A0') || isempty(PulseOpt.A0) || ~isfinite(PulseOpt.A0))
     % Peak B1 of the pulse in microTesla
-    PulseOpt.A0 = 17.5;       
+    PulseOpt.A0 = 13;       
 end
 
 if(~isfield(PulseOpt,'nSamples') || isempty(PulseOpt.nSamples) || ~isfinite(PulseOpt.nSamples))
@@ -20,7 +20,7 @@ end
 
 if(~isfield(PulseOpt,'Q') || isempty(PulseOpt.Q) || ~isfinite(PulseOpt.Q))
     % Adiabaticity factor 
-    PulseOpt.Q = 4;       
+    PulseOpt.Q = 1e-4;       
 end
 
 return;
