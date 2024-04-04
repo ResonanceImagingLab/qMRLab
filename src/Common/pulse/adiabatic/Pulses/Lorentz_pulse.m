@@ -65,7 +65,7 @@ A_t((t < 0 | t>Trf)) = 0;
 % disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
 
 % Scaling Factor 
-lambda = (Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q); % From Ref 4
+lambda = (Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q);
 
 % Frequency modulation function 
 % Carrier frequency modulation function w(t)

@@ -60,7 +60,7 @@ nSamples = Params.PulseOpt.nSamples;
 t = linspace(0, Trf, nSamples);
 tau = t-Trf/2;
 
-% Amplitude --> From Ref 2
+% Amplitude 
 A_t = Params.PulseOpt.A0 .* exp(-1*(Params.PulseOpt.beta.^2 .* tau.^2)./2);
 A_t((t < 0 | t>Trf)) = 0;
 % disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
@@ -76,7 +76,7 @@ phi1num = lambda.*tau.*erf(Params.PulseOpt.beta.*tau);
 phi1denom = erf(Params.PulseOpt.beta);
 phi1 = phi1num/phi1denom;
 phi2num = lambda*exp(-Params.PulseOpt.beta.^2 .* tau.^2);
-phi2denom = sqrt(pi)*Params.PulseOpt.beta*erf(Params.PulseOpt.beta); % If I divide B by 2pi for rad/s to Hz it gets angry 
+phi2denom = sqrt(pi)*Params.PulseOpt.beta*erf(Params.PulseOpt.beta);  
 phi2 = phi2num/phi2denom;
 phi = phi1+phi2;
 

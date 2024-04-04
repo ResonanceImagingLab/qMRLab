@@ -41,6 +41,10 @@ function [rf_pulse, omega1, A_t, Params] = Hsn_pulse(Trf, Params)
 %              Imaging, Series A 118(2): 299-303.
 %                   --> lambda equation added to omega 1 for scaling, Eq.10
 %
+%              Tesiram, Y. "Implementation Equations for HSn RF Pulses."
+%              Journal of Magentic Resonance, 204, 333-339
+%                   --> Placing beta ^n 
+%
 %              Tannus, A. Garwood, M. (1996). "Improved Performance of 
 %              Frequency Swept Pulses Using Offset-Independent
 %              Adiabaticity" Journal of Magnetic Resonance, 120(1),
