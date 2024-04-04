@@ -32,15 +32,15 @@ function [rf_pulse, omega1, A_t, Params] = Gauss_pulse( Trf, Params)
 %
 %              Tannús, A. and M. Garwood (1997). "Adiabatic pulses." 
 %              NMR in Biomedicine 10(8): 423-434.
+%                  --> Table 1 contains all modulation functions 
+%                  --> A(t), omega1
 %                  --> Fig 5, Gaussian OIA pulse image 
 %                  --> Trf = 10 ms 
 %
 %              Kupce, E. and Freeman, R (1995). "Optimized Adiabatic Pulses
 %              for Wideband Spin Inversion." Journal of Magnetic Resonance
 %              Imaging, Series A 118(2): 299-303.
-%                  --> A_t, omega1, lambda equation 
-%                  --> Q value of 4 
-%                  --> Trf = 20ms BUT width of the 'bowl' gets skinny 
+%                  --> lambda equation, Eq. 10 (added to omega1 for scaling)
 %
 %              Tannus, A. Garwood, M. (1996). "Improved Performance of 
 %              Frequency Swept Pulses Using Offset-Independent
@@ -58,7 +58,6 @@ Params.PulseOpt = defaultGaussParams(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);
-%tau = (2*t/Trf)-1;
 tau = t-Trf/2;
 
 % Amplitude --> From Ref 2
@@ -69,8 +68,7 @@ A_t((t < 0 | t>Trf)) = 0;
 % Scaling Factor 
 lambda = (Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q);
 
-% Carrier frequency modulation function w(t):
-% --> From Ref2 with addition of lambda from ref 4  
+% Carrier frequency modulation function w(t):  
 omega1 = -lambda*erf(Params.PulseOpt.beta.*tau)./erf(Params.PulseOpt.beta);
 
 % Phase modulation function phi(t):
@@ -81,6 +79,7 @@ phi2num = lambda*exp(-Params.PulseOpt.beta.^2 .* tau.^2);
 phi2denom = sqrt(pi)*Params.PulseOpt.beta*erf(Params.PulseOpt.beta); % If I divide B by 2pi for rad/s to Hz it gets angry 
 phi2 = phi2num/phi2denom;
 phi = phi1+phi2;
+
 % Put together complex RF pulse waveform:
 rf_pulse = A_t .* exp(1i .* phi);
 
