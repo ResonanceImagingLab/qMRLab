@@ -32,46 +32,35 @@ function [rf_pulse, omega1, A_t, Params] = Lorentz_pulse( Trf, Params)
 %
 %              Tannús, A. and M. Garwood (1997). "Adiabatic pulses." 
 %              NMR in Biomedicine 10(8): 423-434.
-%
-%              de Graaf, R. A., & Nicolay, K. (1998). "Adiabatic water 
-%              suppression using frequency selective excitation." Magnetic 
-%              resonance in medicine, 40(5), 690-696.
-%                   --> tau = (2*t/Trf)-1
-%
+%                  --> Table 1 contains all modulation functions 
+%        
 %              Kupce, E. and Freeman, R (1995). "Optimized Adiabatic Pulses
 %              for Wideband Spin Inversion." Journal of Magnetic Resonance
 %              Imaging, Series A 118(2): 299-303.
-%                  --> A_t, omega1, lambda equation 
-%                  --> Q value of 4 
+%                  --> A(t), omega1 (listed under Lorentzian)
+%                  --> lambda equation for scaling factor, Eq. 10 
 %
 %              Tannus, A. Garwood, M. (1996). "Improved Performance of 
 %              Frequency Swept Pulses Using Offset-Independent
 %              Adiabaticity" Journal of Magnetic Resonance, 120(1),
 %              133-137.
-%                   --> Fig 1a and 1b. Show how width of amplitude and
+%                  --> Fig 1a and 1b. Show how width of amplitude and
 %                   frequency vary with each pulse 
-%                   --> A0 set to 20 as Lorentz pulse has the highest
+%                  --> A0 set to 18 as Lorentz pulse has the highest
 %                   amplitude
 %
 % To be used with qMRlab
 % Written by Christopher Rowley 2023 & Amie Demmans 2024
-
-
-% Trf = 10;
-% Params = Params.Inv;
 
 % Function to fill default values;
 Params.PulseOpt = defaultLorentzParams(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);
-
-%tau = ((2*t/Trf)-1);
 tau = (t - Trf /2);
-%beta_Hz = Params.PulseOpt.beta/(2*pi);
 
 % Amplitude
-A_t = Params.PulseOpt.A0./(1+Params.PulseOpt.beta.^2.*tau.^2); % From Ref 4
+A_t = Params.PulseOpt.A0./(1+Params.PulseOpt.beta.^2.*tau.^2);
 A_t((t < 0 | t>Trf)) = 0;
 % disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
 
@@ -79,7 +68,7 @@ A_t((t < 0 | t>Trf)) = 0;
 lambda = (Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q); % From Ref 4
 
 % Frequency modulation function 
-% Carrier frequency modulation function w(t) --> from Ref 4 
+% Carrier frequency modulation function w(t)
 omegaterm1 = atan(Params.PulseOpt.beta.*tau);
 omegaterm2num = Params.PulseOpt.beta.*tau;
 omegaterm2denom = 1+(Params.PulseOpt.beta.^2.*tau.^2);

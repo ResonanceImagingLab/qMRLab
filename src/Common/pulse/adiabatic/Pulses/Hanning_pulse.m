@@ -29,7 +29,16 @@ function [rf_pulse, omega1, A_t, Params] = Hanning_pulse( Trf, Params)
 %
 %              Tannús, A. and M. Garwood (1997). "Adiabatic pulses." 
 %              NMR in Biomedicine 10(8): 423-434.
+%                  --> Table 1 contains all modulation functions 
+%                  --> A(t), omega1 
+%                  --> Trf = 10ms
 %
+%              Kupce, E. and Freeman, R (1995). "Optimized Adiabatic Pulses
+%              for Wideband Spin Inversion." Journal of Magnetic Resonance
+%              Imaging, Series A 118(2): 299-303.
+%                  --> lambda equation, Eq. 10 (added to omega1 for scaling)
+%                  --> Added beta for everywhere theres tau to follow
+%                  trends in Table 1
 %
 % To be used with qMRlab
 % Written by Christopher Rowley 2023 & Amie Demmans 2024
@@ -40,13 +49,10 @@ Params.PulseOpt = defaultHanningParams(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);
-%tau = ((2*t/Trf)-1);
 tau = t-Trf/2;
 
 % Amplitude
-%A_t = Params.PulseOpt.A0*((1+cos(tau.*pi))./2);
 A_t = Params.PulseOpt.A0*((1+cos(pi.*tau.*Params.PulseOpt.beta))./2);
-    % From ref 2 but with addition of beta term 
 A_t((t < 0 | t>Trf)) = 0;
 % disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
 
@@ -54,7 +60,6 @@ A_t((t < 0 | t>Trf)) = 0;
 lambda = (Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q);
 
 % Carrier frequency modulation function w(t):
-    % Integral of A_t^2
 omegaterm1 = Params.PulseOpt.beta.*tau;
 omegaterm2 = (4/(3*pi)*sin(pi.*tau.*Params.PulseOpt.beta));
 omegaterm3 = 1+1/4*cos(pi.*tau.*Params.PulseOpt.beta);

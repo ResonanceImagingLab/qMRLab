@@ -32,6 +32,12 @@ function [rf_pulse, omega1, A_t, Params] = hyperbolicSecant_pulse(Trf, Params)
 %
 %              Tannús, A. and M. Garwood (1997). "Adiabatic pulses." 
 %              NMR in Biomedicine 10(8): 423-434.
+%                   --> Table 1 contains all modulation functions 
+%
+%              Garwood, M. and DelaBarre, L. (2001). "The Return of the
+%              Frequency Sweep: Designing Adiabatic Pulses for Contemporary
+%              NMR." Journal of Magnetic Resonance, 153(1), 155-177.
+%                   --> A(t), omega1, mu(phase modulation parameter)
 %
 %              Tannus, A. Garwood, M. (1996). "Improved Performance of 
 %              Frequency Swept Pulses Using Offset-Independent

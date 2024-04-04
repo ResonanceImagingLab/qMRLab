@@ -33,12 +33,15 @@ function [rf_pulse, omega1, A_t, Params] = Sin40_pulse(Trf, Params)
 %
 %              Tannús, A. and M. Garwood (1997). "Adiabatic pulses." 
 %              NMR in Biomedicine 10(8): 423-434.
-%                   --> A(t), omega1 
+%                  --> Table 1 contains all modulation functions 
+%                  --> A(t), omega1 
 %
 %              Kupce, E. and Freeman, R (1995). "Optimized Adiabatic Pulses
 %              for Wideband Spin Inversion." Journal of Magnetic Resonance
 %              Imaging, Series A 118(2): 299-303.
-%                   --> lambda
+%                  --> lambda equation added to omega 1 for scaling, Eq. 10
+%                  --> Added beta for everywhere there is tau to follow
+%                  trends in Table 1
 %
 %              Tannus, A. Garwood, M. (1996). "Improved Performance of 
 %              Frequency Swept Pulses Using Offset-Independent
@@ -50,7 +53,7 @@ function [rf_pulse, omega1, A_t, Params] = Sin40_pulse(Trf, Params)
 %              De Graaf, R. Nicolay, K. (1997). "Adiabatic rf Pulses: 
 %              Applications to In Vivo NMR" Concepts Magn. Reson. 9:247-268.
 %                   --> Fig 12 b. Width of inversion profile is wider than
-%                   for that of hyperbolic secant 
+%                   for that of hyperbolic secant (HS1)
 %
 %
 % To be used with qMRlab

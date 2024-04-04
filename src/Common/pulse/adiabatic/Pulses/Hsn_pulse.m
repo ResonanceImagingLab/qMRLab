@@ -33,12 +33,13 @@ function [rf_pulse, omega1, A_t, Params] = Hsn_pulse(Trf, Params)
 %
 %              Tannús, A. and M. Garwood (1997). "Adiabatic pulses." 
 %              NMR in Biomedicine 10(8): 423-434.
+%                   --> Table 1 contains all modulation functions 
 %                   --> A(t), omega1 
 %
 %              Kupce, E. and Freeman, R (1995). "Optimized Adiabatic Pulses
 %              for Wideband Spin Inversion." Journal of Magnetic Resonance
 %              Imaging, Series A 118(2): 299-303.
-%                   --> lambda
+%                   --> lambda equation added to omega 1 for scaling, Eq.10
 %
 %              Tannus, A. Garwood, M. (1996). "Improved Performance of 
 %              Frequency Swept Pulses Using Offset-Independent
@@ -57,8 +58,6 @@ Params.PulseOpt = defaultHsnParams(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);
-
-%tau = ((2*t/Trf)-1);
 tau = t-Trf/2;
 
 % Amplitude
@@ -83,23 +82,6 @@ phi = cumtrapz(tau, omega);
 rf_pulse = A_t .* exp(1i .* phi);
 
 %% Test 
-% Trf = 10;
-% t = linspace(0, Trf, 512);
-% tau = ((2*t/Trf)-1);
-% omegaterm1 = sech(300*tau.^8);
-% omegaterm2 = cumtrapz(tau,omegaterm1.^2);
-% omega1 = cumtrapz(tau,omegaterm2);
-% disp(omegaterm2)
-% disp(omega1)
-
-% Trf = 10;
-% t = linspace(1,5,5);
-% %tau = (2*t/Trf)-1;
-% omega1 = t.^2;
-% omegacum = cumtrapz(omega1);
-% omegaint = trapz(omega1);
-% disp(omegacum)
-% disp(omegaint)
 
 % you need to find a way to integrate from t= 0 to each of the next time
 % points
