@@ -76,7 +76,7 @@ lambda = ((Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q))^2
 % Carrier frequency modulation function w(t):
 omegaterm1 = sech((Params.PulseOpt.beta .* tau).^Params.PulseOpt.n);
 omegaterm2 = cumtrapz(t,(omegaterm1.^2));
-omega1 = -lambda*(omegaterm2 - omegaterm2(round(nSamples/2))); % offset to allow for center at zero
+omega1 = -lambda*(omegaterm2 - omegaterm2(round(nSamples/2)))./(2*pi); % offset to allow for center at zero and rad/s to Hz
 omega = lambda*omegaterm2;
 
 % Phase modulation function phi(t):
