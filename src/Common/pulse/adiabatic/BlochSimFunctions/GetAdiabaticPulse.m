@@ -47,13 +47,13 @@ switch shape
     % case 'gaussian';  pulse_fcn = @gaussian_pulse;        
     % case 'gausshann'; pulse_fcn = @gausshann_pulse;    
     % case 'fermi';     pulse_fcn = @fermi_pulse;
-    case 'hs1'        
+    case 'Hs1'        
         [rf_pulse, omega1, A_t, Params] = hyperbolicSecant_pulse(Trf, Params);
-    case 'lorentz'
+    case 'Lorentz'
         [rf_pulse, omega1, A_t, Params] = Lorentz_pulse(Trf, Params);
-    case 'gauss'
+    case 'Gauss'
         [rf_pulse, omega1, A_t, Params] = Gauss_pulse(Trf, Params);
-    case 'hanning'
+    case 'Hanning'
         [rf_pulse, omega1, A_t, Params] = Hanning_pulse(Trf, Params);
     case 'Hsn'
         [rf_pulse, omega1, A_t, Params] = Hsn_pulse(Trf, Params);
