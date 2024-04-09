@@ -43,22 +43,23 @@
 %% Hyperbolic Secant 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+clear all
+
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
-Params.TissueType = 'WM';
+Params.TissueType = 'WM'; % white matter 
 Params = DefaultCortexTissueParams(Params);
-Params.R2a = 80/1000; % 80 ms
 Params.Ra = 1; % 1000ms
-Params.NumPools = 1; % or 2
+Params.NumPools = 1; % water pool 
 
 % Define Hyperbolic Secant Parameter
-Params.Inv.PulseOpt.beta = 672; % rad/s
-Params.Inv.PulseOpt.n = 1; 
-Params.Inv.PulseOpt.mu = 5;
-Params.Inv.PulseOpt.A0 = 13.726; % micro Tesla
-Params.Inv.nSamples = 512;
-Params.Inv.Trf = 10.24/1000; % ms
-Params.Inv.shape = 'hs1';
+Params.Inv.PulseOpt.beta = 672; % default 672 rad/s
+Params.Inv.PulseOpt.n = 1; % default 1
+Params.Inv.PulseOpt.mu = 5; % default 5
+Params.Inv.PulseOpt.A0 = 13.726; % default 13.726 micro Tesla
+Params.Inv.nSamples = 512; % default 512
+Params.Inv.Trf = 10.24/1000; % default 10.24 ms
+Params.Inv.shape = 'Hs1';
 
 
 % Apply Inversion pulse by calling GetAdiabatic
@@ -72,7 +73,6 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 
 % Plot Bloch Sim Results based on NumPools
 BlochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
-title('HS1')
 
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -81,24 +81,23 @@ title('HS1')
 %% Lorentz
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+clear all
+
 % Define Initial Parameters
 Params.B0 = 3; % Tesla
-Params.TissueType = 'WM';
+Params.TissueType = 'WM'; % White matter
 Params = DefaultCortexTissueParams(Params);
-Params.R2a = 1000/80; % 80 ms
 Params.Ra = 1; % 1000ms
-Params.NumPools = 1;
+Params.NumPools = 1; % water pool 
 
 % Define Lorentz Parameters
-Params.Inv.PulseOpt.beta = 600;  % rad/s 
-Params.Inv.PulseOpt.A0 = 18; % micro Tesla
-Params.Inv.PulseOpt.Q = 1e-4;
-    % 1e-4 will give nice boat shape but HUGE omega1
-    % 1e-3 gives omega1 value better but Mz is crazy 
-Params.Inv.nSamples = 512;
-Params.Inv.Trf = 20/1000; % ms
+Params.Inv.PulseOpt.beta = 850;  % default 850 rad/s 
+Params.Inv.PulseOpt.A0 = 18; % default 18 micro Tesla
+Params.Inv.PulseOpt.Q = 1e-4; % default 1e-4
+Params.Inv.nSamples = 512; % default 512
+Params.Inv.Trf = 20/1000; % default 20 ms
     % Raising Trf made omega1 look better 
-Params.Inv.shape = 'lorentz';
+Params.Inv.shape = 'Lorentz';
 
 % Apply inversion pulse by calling GetAdiabatic 
 Params.dispFigure = 0;
@@ -111,7 +110,6 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
-title('Lorentz')
 
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -120,25 +118,22 @@ title('Lorentz')
 %% Gaussian
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+clear all
+
 % Define Initial Parameters
 Params.B0 = 3; % Tesla
-Params.TissueType = 'WM';
+Params.TissueType = 'WM'; % white matter
 Params = DefaultCortexTissueParams(Params);
-Params.R2a = 1000/80; % 80 ms
 Params.Ra = 1; % 1000ms
-Params.NumPools = 1;
+Params.NumPools = 1; % water pool 
 
 % Define Gaussian Parameters
-Params.Inv.PulseOpt.beta = 550; % rad/s
-    % B = 600 --> happy
-Params.Inv.PulseOpt.A0 = 13; % micro Tesla
-    % A0 = 14 --> happy 
-Params.Inv.PulseOpt.Q = 1e-4;
-    % 1e-4 gives the bowl look but very high omega (3200 Hz)
-    % 2e-4 gives more of a v shaped bowl 
-Params.Inv.nSamples = 512;
-Params.Inv.Trf = 10/1000; % ms
-Params.Inv.shape = 'gauss';
+Params.Inv.PulseOpt.beta = 550; % default 550 rad/s
+Params.Inv.PulseOpt.A0 = 14; % default 14 micro Tesla
+Params.Inv.PulseOpt.Q = 1e-4; % default 1e-4
+Params.Inv.nSamples = 512; % default 512
+Params.Inv.Trf = 10/1000; % default 10 ms
+Params.Inv.shape = 'Gauss';
 
 % Apply inversion pulse by calling GetAdiabatic 
 Params.dispFigure = 0;
@@ -151,7 +146,6 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
-title('Gaussian')
 
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -160,23 +154,22 @@ title('Gaussian')
 %% Hanning 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+clear all
+
 % Define Initial Parameters
 Params.B0 = 3; % Tesla
-Params.TissueType = 'WM';
+Params.TissueType = 'WM'; % white matter 
 Params = DefaultCortexTissueParams(Params);
-Params.R2a = 1000/80; % 80 ms
 Params.Ra = 1; % 1000ms
-Params.NumPools = 1;
+Params.NumPools = 1; % water pool 
 
 % Define Hanning Parameters
-Params.Inv.PulseOpt.beta = 175; % rad/s
-    % Can vary from 150-200 depending on what you're looking for 
-Params.Inv.PulseOpt.A0 = 14; % micro Tesla 
-Params.Inv.PulseOpt.Q = 4.2e-4;
-    % Any deviations from this and Mz got mad 
-Params.Inv.nSamples = 512;
-Params.Inv.Trf = 10/1000; % ms
-Params.Inv.shape = 'hanning';
+Params.Inv.PulseOpt.beta = 200; % default 200 rad/s
+Params.Inv.PulseOpt.A0 = 14; % default 14 micro Tesla 
+Params.Inv.PulseOpt.Q = 4.2e-4; % default 4.2e-4 
+Params.Inv.nSamples = 512; % default 512
+Params.Inv.Trf = 10/1000; % default 10 ms
+Params.Inv.shape = 'Hanning';
 
 % Apply inversion pulse by calling GetAdiabatic 
 Params.dispFigure = 0;
@@ -189,7 +182,6 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
-title('Hanning')
 
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -198,26 +190,24 @@ title('Hanning')
 %% Hsn (Params set for n = 8) 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+clear all
+
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
-Params.TissueType = 'WM';
+Params.TissueType = 'WM'; % white matter 
 Params = DefaultCortexTissueParams(Params);
-Params.R2a = 1000/80; % 80 ms
 Params.Ra = 1; % 1000ms
-Params.NumPools = 1; % or 2
+Params.NumPools = 1; % water pool 
 
 % Define Hyperbolic Secant Parameter
-Params.Inv.PulseOpt.beta = 250; % rad/s
+Params.Inv.PulseOpt.beta = 250; % default 250 rad/s
 % amplitude looks best at beta = 250 
-Params.Inv.PulseOpt.n = 8; 
-Params.Inv.PulseOpt.Q = 4e-4;
-Params.Inv.PulseOpt.A0 = 10; % micro Tesla
-Params.Inv.nSamples = 512;
-Params.Inv.Trf = 10/1000; % ms
+Params.Inv.PulseOpt.n = 8; % default 8
+Params.Inv.PulseOpt.Q = 4e-4; % default 4e-4
+Params.Inv.PulseOpt.A0 = 10; % default 10 micro Tesla
+Params.Inv.nSamples = 512; % default 512
+Params.Inv.Trf = 10/1000; % default 10 ms
 Params.Inv.shape = 'Hsn';
-
-% Need to figure out scaling on y-axis of Mz plot as well as issues with
-% spiking on the bottom --> Is this from scaling issues? 
 
 % Apply Inversion pulse by calling GetAdiabatic
 Params.dispFigure = 0;
@@ -230,7 +220,6 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
-title('HSn')
 
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -239,22 +228,22 @@ title('HSn')
 %% Sin40 (n = 40) 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+clear all
+
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
-Params.TissueType = 'WM';
+Params.TissueType = 'WM'; % white matter 
 Params = DefaultCortexTissueParams(Params);
-Params.R2a = 80/1000; % 80 ms
 Params.Ra = 1; % 1000ms
-Params.NumPools = 1; % or 2
+Params.NumPools = 1; % water pool 
 
 % Define Hyperbolic Secant Parameter
-Params.Inv.PulseOpt.beta = 200; % rad/s
-% DO NOT stray from 200 it gets angry!!!!
-Params.Inv.PulseOpt.n = 40; 
-Params.Inv.PulseOpt.A0 = 13; % micro Tesla
-Params.Inv.PulseOpt.Q = 6.5e-7;
-Params.Inv.nSamples = 512;
-Params.Inv.Trf = 10/1000; % ms
+Params.Inv.PulseOpt.beta = 200; % default 200 rad/s
+Params.Inv.PulseOpt.n = 40; % default 40
+Params.Inv.PulseOpt.A0 = 13; % default 13 micro Tesla
+Params.Inv.PulseOpt.Q = 6.5e-7; % default 6.5e-7
+Params.Inv.nSamples = 512; % default 512
+Params.Inv.Trf = 10/1000; % default 10 ms
 Params.Inv.shape = 'Sin40';
 
 
@@ -269,39 +258,36 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
-title('Sin40')
 
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%--------------------------
-%% WATER AND BOUND POOL %% 
-%--------------------------
+%-------------------------------
+%% WATER AND MACROMOLECULAR POOL %% 
+%-------------------------------
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Hyperbolic Secant 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+clear all
+
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
-Params.TissueType = 'WM';
+Params.TissueType = 'WM'; % white matter 
 Params = DefaultCortexTissueParams(Params);
-Params.R2a = 80/1000; % 80 ms
-Params.R2b = 0.012; % 0.012 ms
-Params.Ra = 1; % 1000ms
-Params.R1b = 1; % 1000ms
-Params.kr = 200*1000; % 200 /ms
-Params.kf = 0.2*1000; % 2 /ms
-Params.NumPools = 2; 
+Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
+Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
+Params.NumPools = 2; % macromolecular pool 
 
 % Define Hyperbolic Secant Parameter
-Params.Inv.PulseOpt.beta = 672; % rad/s
-Params.Inv.PulseOpt.n = 1; 
-Params.Inv.PulseOpt.mu = 5;
-Params.Inv.PulseOpt.A0 = 13.726; % micro Tesla
-Params.Inv.nSamples = 512;
-Params.Inv.Trf = 10.24/1000; % ms
-Params.Inv.shape = 'hs1';
+Params.Inv.PulseOpt.beta = 672; % default 672 rad/s
+Params.Inv.PulseOpt.n = 1; % default 1 
+Params.Inv.PulseOpt.mu = 5; % default 5
+Params.Inv.PulseOpt.A0 = 13.726; % default 13.726 micro Tesla
+Params.Inv.nSamples = 512; % default 512
+Params.Inv.Trf = 10.24/1000; % default 10.24 ms
+Params.Inv.shape = 'Hs1';
 
 
 % Apply Inversion pulse by calling GetAdiabatic
@@ -315,7 +301,6 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 
 % Plot Bloch Sim Results based on NumPools
 BlochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
-title('HS1')
 
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -324,28 +309,24 @@ title('HS1')
 %% Lorentz
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+clear all 
+
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
-Params.TissueType = 'WM';
+Params.TissueType = 'WM'; % white matter
 Params = DefaultCortexTissueParams(Params);
-Params.R2a = 80/1000; % 80 ms
-Params.R2b = 12/1e6; % 12 us
-Params.Ra = 1; % 1000ms
-Params.R1b = 1; % 1000ms
-Params.kr = 200*1000; % 200 /ms
-Params.kf = 0.2*1000; % 2 /ms
-Params.NumPools = 2; 
+Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
+Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
+Params.NumPools = 2; % macromolecular pool
 
 % Define Lorentz Parameters
-Params.Inv.PulseOpt.beta = 600;  % rad/s 
-Params.Inv.PulseOpt.A0 = 18; % micro Tesla
-Params.Inv.PulseOpt.Q = 1e-4;
-    % 1e-4 will give nice boat shape but HUGE omega1
-    % 1e-3 gives omega1 value better but Mz is crazy 
-Params.Inv.nSamples = 512;
-Params.Inv.Trf = 20/1000; % ms
+Params.Inv.PulseOpt.beta = 850;  % default 850 rad/s 
+Params.Inv.PulseOpt.A0 = 18; % default 18 micro Tesla
+Params.Inv.PulseOpt.Q = 1e-4; % default 1e-4
+Params.Inv.nSamples = 512; % default 512
+Params.Inv.Trf = 20/1000; % default 20 ms
     % Raising Trf made omega1 look better 
-Params.Inv.shape = 'lorentz';
+Params.Inv.shape = 'Lorentz';
 
 % Apply inversion pulse by calling GetAdiabatic 
 Params.dispFigure = 0;
@@ -358,7 +339,6 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
-title('Lorentz')
 
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -367,29 +347,23 @@ title('Lorentz')
 %% Gaussian
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+clear all 
+
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
-Params.TissueType = 'WM';
+Params.TissueType = 'WM'; % white matter
 Params = DefaultCortexTissueParams(Params);
-Params.R2a = 80/1000; % 80 ms
-Params.R2b = 12/1e6; % 12 us
-Params.Ra = 1; % 1000ms
-Params.R1b = 1; % 1000ms
-Params.kr = 200*1000; % 200 /ms
-Params.kf = 0.2*1000; % 2 /ms
-Params.NumPools = 2; 
+Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
+Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
+Params.NumPools = 2; % macromolecular pool 
 
 % Define Gaussian Parameters
-Params.Inv.PulseOpt.beta = 550; % rad/s
-    % B = 600 --> happy
-Params.Inv.PulseOpt.A0 = 13; % micro Tesla
-    % A0 = 14 --> happy 
-Params.Inv.PulseOpt.Q = 1e-4;
-    % 1e-4 gives the bowl look but very high omega (3200 Hz)
-    % 2e-4 gives more of a v shaped bowl 
-Params.Inv.nSamples = 512;
-Params.Inv.Trf = 10/1000; % ms
-Params.Inv.shape = 'gauss';
+Params.Inv.PulseOpt.beta = 550; % default 550 rad/s
+Params.Inv.PulseOpt.A0 = 14; % default 14 micro Tesla
+Params.Inv.PulseOpt.Q = 1e-4; % default 1e-4
+Params.Inv.nSamples = 512; % default 512
+Params.Inv.Trf = 10/1000; % default 10 ms
+Params.Inv.shape = 'Gauss';
 
 % Apply inversion pulse by calling GetAdiabatic 
 Params.dispFigure = 0;
@@ -402,7 +376,6 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
-title('Gaussian')
 
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -411,27 +384,23 @@ title('Gaussian')
 %% Hanning 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+clear all
+
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
-Params.TissueType = 'WM';
+Params.TissueType = 'WM'; % white matter 
 Params = DefaultCortexTissueParams(Params);
-Params.R2a = 80/1000; % 80 ms
-Params.R2b = 12/1e6; % 12 us
-Params.Ra = 1; % 1000ms
-Params.R1b = 1; % 1000ms
-Params.kr = 200*1000; % 200 /ms
-Params.kf = 0.2*1000; % 2 /ms
-Params.NumPools = 2; 
+Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool) 
+Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
+Params.NumPools = 2; % macromolecular pool 
 
 % Define Hanning Parameters
-Params.Inv.PulseOpt.beta = 175; % rad/s
-    % Can vary from 150-200 depending on what you're looking for 
-Params.Inv.PulseOpt.A0 = 14; % micro Tesla 
-Params.Inv.PulseOpt.Q = 4.2e-4;
-    % Any deviations from this and Mz got mad 
-Params.Inv.nSamples = 512;
-Params.Inv.Trf = 10/1000; % ms
-Params.Inv.shape = 'hanning';
+Params.Inv.PulseOpt.beta = 200; % default 200 rad/s
+Params.Inv.PulseOpt.A0 = 14; % default 14 micro Tesla 
+Params.Inv.PulseOpt.Q = 4.2e-4; % default 4.2e-4 
+Params.Inv.nSamples = 512; % default 512
+Params.Inv.Trf = 10/1000; % default 10 ms
+Params.Inv.shape = 'Hanning';
 
 % Apply inversion pulse by calling GetAdiabatic 
 Params.dispFigure = 0;
@@ -444,7 +413,6 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
-title('Hanning')
 
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -453,30 +421,25 @@ title('Hanning')
 %% Hsn (Params set for n = 8) 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+clear all
+
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
-Params.TissueType = 'WM';
+Params.TissueType = 'WM'; % white matter
 Params = DefaultCortexTissueParams(Params);
-Params.R2a = 80/1000; % 80 ms
-Params.R2b = 12/1e6; % 12 us
-Params.Ra = 1; % 1000ms
-Params.R1b = 1; % 1000ms
-Params.kr = 200*1000; % 200 /ms
-Params.kf = 0.2*1000; % 2 /ms
-Params.NumPools = 2; 
+Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
+Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool) 
+Params.NumPools = 2; % macromolecular pool 
 
 % Define Hyperbolic Secant Parameter
-Params.Inv.PulseOpt.beta = 250; % rad/s
+Params.Inv.PulseOpt.beta = 250; % default 250 rad/s
 % amplitude looks best at beta = 250 
-Params.Inv.PulseOpt.n = 8; 
-Params.Inv.PulseOpt.Q = 4e-4;
-Params.Inv.PulseOpt.A0 = 10; % micro Tesla
-Params.Inv.nSamples = 512;
-Params.Inv.Trf = 10/1000; % ms
+Params.Inv.PulseOpt.n = 8; % default 8
+Params.Inv.PulseOpt.Q = 4e-4; % default 4e-4
+Params.Inv.PulseOpt.A0 = 10; % default 10 micro Tesla
+Params.Inv.nSamples = 512; % default 512
+Params.Inv.Trf = 10/1000; % default 10 ms
 Params.Inv.shape = 'Hsn';
-
-% Need to figure out scaling on y-axis of Mz plot as well as issues with
-% spiking on the bottom --> Is this from scaling issues? 
 
 % Apply Inversion pulse by calling GetAdiabatic
 Params.dispFigure = 0;
@@ -489,7 +452,6 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
-title('HSn')
 
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -498,28 +460,24 @@ title('HSn')
 %% Sin40 (n = 40) 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+clear all
+
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
-Params.TissueType = 'WM';
+Params.TissueType = 'WM'; % white matter 
 Params = DefaultCortexTissueParams(Params);
-Params.R2a = 80/1000; % 80 ms
-Params.R2b = 12/1e6; % 12 us
-Params.Ra = 1; % 1000ms
-Params.R1b = 1; % 1000ms
-Params.kr = 200*1000; % 200 /ms
-Params.kf = 0.2*1000; % 2 /ms
-Params.NumPools = 2; 
+Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
+Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
+Params.NumPools = 2; % macromolecular pool 
 
 % Define Hyperbolic Secant Parameter
-Params.Inv.PulseOpt.beta = 200; % rad/s
-% DO NOT stray from 200 it gets angry!!!!
-Params.Inv.PulseOpt.n = 40; 
-Params.Inv.PulseOpt.A0 = 13; % micro Tesla
-Params.Inv.PulseOpt.Q = 6.5e-7;
-Params.Inv.nSamples = 512;
-Params.Inv.Trf = 10/1000; % ms
+Params.Inv.PulseOpt.beta = 200; % default 200 rad/s
+Params.Inv.PulseOpt.n = 40; % default 40
+Params.Inv.PulseOpt.A0 = 13; % default 13 micro Tesla
+Params.Inv.PulseOpt.Q = 6.5e-7; % default 6.5e-7
+Params.Inv.nSamples = 512; % default 512
+Params.Inv.Trf = 10/1000; % default 10 ms
 Params.Inv.shape = 'Sin40';
-
 
 % Apply Inversion pulse by calling GetAdiabatic
 Params.dispFigure = 0;
@@ -532,7 +490,19 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
-title('Sin40')
 
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+
+
+%% NOTES 
+% - Need to change default params potentially for Hsn and Sin40 once offset
+% and integral issues have been fixed 
+%  --> Will need to do this for 1 pool and 2 pool (c+p 1 pool to 2 pool) 
+
+
+
+
+
+
+
