@@ -1,7 +1,7 @@
 function BlochSimCallFunction(rf_pulse, t, A_t, omega1,Params)
 %% Can do Bloch Sim to get inversion profile and display figure if interested:
 
-
+fs = 20;
 
 if Params.NumPools == 1
     M_start = [0, 0, Params.M0a]';
@@ -24,17 +24,19 @@ if Params.NumPools == 1
     figure; tiledlayout(1,3)
     nexttile; plot(t*1000, A_t, 'LineWidth', 3); 
     xlabel('Time(ms)'); ylabel('B_1 (μT)')
-    title('Amplitude Function');ax = gca; ax.FontSize = 20;
+    title('Amplitude Function','FontWeight','normal');ax = gca; ax.FontSize = fs;
     
     nexttile; plot(t*1000, omega1, 'LineWidth', 3);
     xlabel('Time(ms)'); ylabel('Frequency (Hz)');
-    title('Frequency Modulation function');ax = gca; ax.FontSize = 20;
+    title('Frequency Modulation function','FontWeight','normal');ax = gca; ax.FontSize = fs;
     
     nexttile; surf(b1m, freqm, Mza,'FaceColor','interp'); 
-    xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{za}');ax = gca; ax.FontSize = 20;
+    xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{za}');ax = gca; ax.FontSize = fs;
     view(-55, 10)
     
     set(gcf,'Position',[100 100 1200 500])
+
+    sgtitle(Params.Inv.shape, 'FontSize', fs+4,'FontWeight','bold')
 
 elseif Params.NumPools == 2
     M_start = [0, 0, 0, 0, Params.M0a, Params.M0b]';
@@ -59,19 +61,21 @@ elseif Params.NumPools == 2
     figure; tiledlayout(2,2)
     nexttile; plot(t*1000, A_t, 'LineWidth', 3); 
     xlabel('Time(ms)'); ylabel('B_1 (μT)')
-    title('Amplitude Function');ax = gca; ax.FontSize = 20;
+    title('Amplitude Function','FontWeight','normal');ax = gca; ax.FontSize = fs;
     
     nexttile; plot(t*1000, omega1, 'LineWidth', 3);
     xlabel('Time(ms)'); ylabel('Frequency (Hz)');
-    title('Frequency Modulation function');ax = gca; ax.FontSize = 20;
+    title('Frequency Modulation function','FontWeight','normal');ax = gca; ax.FontSize = fs;
     
     nexttile; surf(b1m, freqm, Mza, 'FaceColor','interp');
-    xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{za}');ax = gca; ax.FontSize = 20;
+    xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{za}');ax = gca; ax.FontSize = fs;
     
     nexttile; surf(b1m, freqm, Mzb,'FaceColor','interp');
-    xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{zb}');ax = gca; ax.FontSize = 20;
+    xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{zb}');ax = gca; ax.FontSize = fs;
     
     set(gcf,'Position',[100 100 1200 1000])
+
+    sgtitle(Params.Inv.shape, 'FontSize', fs+4,'FontWeight','bold')
 
 else
     error('Define Params.NumPools to be = 1 or 2;')
