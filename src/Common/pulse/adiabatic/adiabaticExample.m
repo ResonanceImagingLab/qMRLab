@@ -164,7 +164,7 @@ Params.Ra = 1; % 1000ms
 Params.NumPools = 1; % water pool 
 
 % Define Hanning Parameters
-Params.Inv.PulseOpt.beta = 200; % default 200 rad/s
+Params.Inv.PulseOpt.beta = 175; % default 175 rad/s
 Params.Inv.PulseOpt.A0 = 14; % default 14 micro Tesla 
 Params.Inv.PulseOpt.Q = 4.2e-4; % default 4.2e-4 
 Params.Inv.nSamples = 512; % default 512
@@ -200,13 +200,12 @@ Params.Ra = 1; % 1000ms
 Params.NumPools = 1; % water pool 
 
 % Define Hyperbolic Secant Parameter
-Params.Inv.PulseOpt.beta = 250; % default 250 rad/s
-% amplitude looks best at beta = 250 
+Params.Inv.PulseOpt.beta = 265; % default 265 rad/s
 Params.Inv.PulseOpt.n = 8; % default 8
-Params.Inv.PulseOpt.Q = 4e-4; % default 4e-4
-Params.Inv.PulseOpt.A0 = 10; % default 10 micro Tesla
+Params.Inv.PulseOpt.Q = 3.9e-4; % default 4e-4
+Params.Inv.PulseOpt.A0 = 11; % default 10 micro Tesla
 Params.Inv.nSamples = 512; % default 512
-Params.Inv.Trf = 10/1000; % default 10 ms
+Params.Inv.Trf = 10/1000; % default 10.24 ms
 Params.Inv.shape = 'Hsn';
 
 % Apply Inversion pulse by calling GetAdiabatic
@@ -240,8 +239,8 @@ Params.NumPools = 1; % water pool
 % Define Hyperbolic Secant Parameter
 Params.Inv.PulseOpt.beta = 200; % default 200 rad/s
 Params.Inv.PulseOpt.n = 40; % default 40
-Params.Inv.PulseOpt.A0 = 13; % default 13 micro Tesla
-Params.Inv.PulseOpt.Q = 6.5e-7; % default 6.5e-7
+Params.Inv.PulseOpt.A0 = 12; % default 12 micro Tesla
+Params.Inv.PulseOpt.Q = 6.25e-7; % default 6.3e-7
 Params.Inv.nSamples = 512; % default 512
 Params.Inv.Trf = 10/1000; % default 10 ms
 Params.Inv.shape = 'Sin40';
@@ -395,7 +394,7 @@ Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
 Params.NumPools = 2; % macromolecular pool 
 
 % Define Hanning Parameters
-Params.Inv.PulseOpt.beta = 200; % default 200 rad/s
+Params.Inv.PulseOpt.beta = 175; % default 200 rad/s
 Params.Inv.PulseOpt.A0 = 14; % default 14 micro Tesla 
 Params.Inv.PulseOpt.Q = 4.2e-4; % default 4.2e-4 
 Params.Inv.nSamples = 512; % default 512
@@ -432,13 +431,12 @@ Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
 Params.NumPools = 2; % macromolecular pool 
 
 % Define Hyperbolic Secant Parameter
-Params.Inv.PulseOpt.beta = 250; % default 250 rad/s
-% amplitude looks best at beta = 250 
+Params.Inv.PulseOpt.beta = 265; % default 265 rad/s
 Params.Inv.PulseOpt.n = 8; % default 8
-Params.Inv.PulseOpt.Q = 4e-4; % default 4e-4
-Params.Inv.PulseOpt.A0 = 10; % default 10 micro Tesla
+Params.Inv.PulseOpt.Q = 3.9e-4; % default 4e-4
+Params.Inv.PulseOpt.A0 = 11; % default 10 micro Tesla
 Params.Inv.nSamples = 512; % default 512
-Params.Inv.Trf = 10/1000; % default 10 ms
+Params.Inv.Trf = 10/1000; % default 10.24 ms
 Params.Inv.shape = 'Hsn';
 
 % Apply Inversion pulse by calling GetAdiabatic
@@ -473,8 +471,8 @@ Params.NumPools = 2; % macromolecular pool
 % Define Hyperbolic Secant Parameter
 Params.Inv.PulseOpt.beta = 200; % default 200 rad/s
 Params.Inv.PulseOpt.n = 40; % default 40
-Params.Inv.PulseOpt.A0 = 13; % default 13 micro Tesla
-Params.Inv.PulseOpt.Q = 6.5e-7; % default 6.5e-7
+Params.Inv.PulseOpt.A0 = 12; % default 12 micro Tesla
+Params.Inv.PulseOpt.Q = 6.25e-7; % default 6.3e-7
 Params.Inv.nSamples = 512; % default 512
 Params.Inv.Trf = 10/1000; % default 10 ms
 Params.Inv.shape = 'Sin40';
@@ -493,12 +491,6 @@ BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
-
-
-%% NOTES 
-% - Need to change default params potentially for Hsn and Sin40 once offset
-% and integral issues have been fixed 
-%  --> Will need to do this for 1 pool and 2 pool (c+p 1 pool to 2 pool) 
 
 
 
