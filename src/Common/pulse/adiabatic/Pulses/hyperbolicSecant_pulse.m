@@ -30,19 +30,22 @@ function [rf_pulse, omega1, A_t, Params] = hyperbolicSecant_pulse(Trf, Params)
 %   Reference: Matt A. Bernstein, Kevin F. Kink and Xiaohong Joe Zhou.
 %              Handbook of MRI Pulse Sequences, pp. 110, Eq. 4.10, (2004)
 %
-%              Tannús, A. and M. Garwood (1997). "Adiabatic pulses." 
-%              NMR in Biomedicine 10(8): 423-434.
+%              Tannús, A., & Garwood, M. (1997). Adiabatic pulses. NMR in 
+%              Biomedicine: An International Journal Devoted to the 
+%              Development and Application of Magnetic Resonance In Vivo, 
+%              10(8), 423-434. https://doi.org/10.1002/(sici)1099-1492(199712)10:8 
 %                   --> Table 1 contains all modulation functions 
 %
-%              Garwood, M. and DelaBarre, L. (2001). "The Return of the
-%              Frequency Sweep: Designing Adiabatic Pulses for Contemporary
-%              NMR." Journal of Magnetic Resonance, 153(1), 155-177.
+%              Garwood, M., & DelaBarre, L. (2001). The return of the frequency
+%              sweep: designing adiabatic pulses for contemporary NMR. Journal
+%              of Magnetic Resonance, 153(2), 155-177. 
+%              https://doi.org/10.1006/jmre.2001.2340 
 %                   --> A(t), omega1, mu(phase modulation parameter)
 %
-%              Tannus, A. Garwood, M. (1996). "Improved Performance of 
-%              Frequency Swept Pulses Using Offset-Independent
-%              Adiabaticity" Journal of Magnetic Resonance, 120(1),
-%              133-137.
+%              Tannús, A., & Garwood, M. (1996). Improved performance of 
+%              frequency-swept pulses using offset-independent adiabaticity. 
+%              Journal of Magnetic Resonance, 120(1), 133-137. 
+%              https://doi.org/https://doi.org/10.1006/jmra.1996.0110 
 %                   --> Fig 1a and 1b. Show how width of amplitude and
 %                   frequency vary with each pulse
 %

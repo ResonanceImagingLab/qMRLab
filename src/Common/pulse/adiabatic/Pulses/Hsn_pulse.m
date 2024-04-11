@@ -31,24 +31,27 @@ function [rf_pulse, omega1, A_t, Params] = Hsn_pulse(Trf, Params)
 %   Reference: Matt A. Bernstein, Kevin F. Kink and Xiaohong Joe Zhou.
 %              Handbook of MRI Pulse Sequences, pp. 110, Eq. 4.10, (2004)
 %
-%              Tannús, A. and M. Garwood (1997). "Adiabatic pulses." 
-%              NMR in Biomedicine 10(8): 423-434.
+%              Tannús, A., & Garwood, M. (1997). Adiabatic pulses. NMR in 
+%              Biomedicine: An International Journal Devoted to the 
+%              Development and Application of Magnetic Resonance In Vivo, 
+%              10(8), 423-434. https://doi.org/10.1002/(sici)1099-1492(199712)10:8 
 %                   --> Table 1 contains all modulation functions 
 %                   --> A(t), omega1 
 %
-%              Kupce, E. and Freeman, R (1995). "Optimized Adiabatic Pulses
-%              for Wideband Spin Inversion." Journal of Magnetic Resonance
-%              Imaging, Series A 118(2): 299-303.
+%              Kupce, E., & Freeman, R. (1996). Optimized adiabatic pulses 
+%              for wideband spin inversion. Journal of Magnetic Resonance, 
+%              118(2), 299-303. https://doi.org/https://doi.org/10.1006/jmra.1996.0042 
 %                   --> lambda equation added to omega 1 for scaling, Eq.10
 %
-%              Tesiram, Y. "Implementation Equations for HSn RF Pulses."
-%              Journal of Magentic Resonance, 204, 333-339
+%              Tesiram, Y. A. (2010). Implementation equations for HSn RF 
+%              pulses. Journal of Magnetic Resonance, 204(2), 333-339. 
+%              https://doi.org/10.1016/j.jmr.2010.02.022 
 %                   --> Placing beta ^n 
 %
-%              Tannus, A. Garwood, M. (1996). "Improved Performance of 
-%              Frequency Swept Pulses Using Offset-Independent
-%              Adiabaticity" Journal of Magnetic Resonance, 120(1),
-%              133-137.
+%              Tannús, A., & Garwood, M. (1996). Improved performance of 
+%              frequency-swept pulses using offset-independent adiabaticity. 
+%              Journal of Magnetic Resonance, 120(1), 133-137. 
+%              https://doi.org/https://doi.org/10.1006/jmra.1996.0110 
 %                   --> Fig 1a and 1b. Show how width of amplitude and
 %                   frequency vary with each pulse
 %
@@ -72,43 +75,47 @@ A_t((t < 0 | t>Trf)) = 0;
 % Scaling Factor 
 lambda = ((Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q))^2;
 
+
 % Frequency modulation function 
 % Carrier frequency modulation function w(t):
-omegaterm1 = sech((Params.PulseOpt.beta .* tau).^Params.PulseOpt.n);
-omegaterm2 = cumtrapz(t,(omegaterm1.^2));
-omega1 = -lambda*(omegaterm2 - omegaterm2(round(nSamples/2)))./(2*pi); % offset to allow for center at zero and rad/s to Hz
-omega = lambda*omegaterm2;
+omegaterm1 = sech((Params.PulseOpt.beta .* tau).^Params.PulseOpt.n).^2;
+omegaterm2 = -lambda*cumtrapz(tau,omegaterm1);
+%plot(t,omegaterm2);
+omegaterm3 = (omegaterm2(1)-omegaterm2(512))/2;
+omega1 = omegaterm2+omegaterm3; 
+%plot(t,omegaterm4);
+
+
 
 % Phase modulation function phi(t):
-phi = cumtrapz(tau, omega);
+phi = cumtrapz(tau, omega1);
 
 % Put together complex RF pulse waveform:
 rf_pulse = A_t .* exp(1i .* phi);
 
-%% Test 
+%% omega1 tests
 
-% you need to find a way to integrate from t= 0 to each of the next time
-% points
-% This will give you nsamples-1 points. Use interp1 to interpolate this
-% back to nSamples number of points. You will need to plot this as it
-% involves extrapolation to make sure the limits at the ends make sense.
-% Also try different interpolating functions. 
 
-% omega = zeros(1, nSamples-1);
-% for i = 1:nSamples-1
-%     tau_range = t(1:i);
-%     omega(i) = trapz(tau_range, (sech(Params.PulseOpt.beta * tau_range .^ Params.PulseOpt.n)).^2);
-% end
+% Trf = 10/1000;
+% Params = Params.Inv;
+%
+% omegaterm1 = sech((Params.PulseOpt.beta .* tau).^Params.PulseOpt.n).^2;
+% omegaterm3 = omegaterm1(1)-omegaterm1(512)./2;
+% plot(tau,omegaterm1)
+% 
+% omegaterm2 = cumtrapz(tau,(omegaterm1));
+% 
+% plot (t,omegaterm2)
+% omega1 = -lambda*((omegaterm2(1)-omegaterm2(512))/2);
+% plot(t,omega1)
+%omega1 = -lambda*(omegaterm2 - omegaterm2(round(nSamples/2)))./(2*pi); % offset to allow for center at zero and rad/s to Hz
+% omega = lambda*omegaterm2;
 
-%omega1 = interp1(tau(1:nSamples-1),omega, t, 'linear');
-% omega1 = interp1(omega,t);
+% omegaterm1 = -lambda*sech((Params.PulseOpt.beta .* tau).^Params.PulseOpt.n).^2;
+% omegaterm2 = (omegaterm1(1)-omegaterm1(512))/2;
+% omegaterm3 = cumtrapz(tau,omegaterm1-omegaterm2);
+% plot(t,omegaterm3);
 
-% Phase modulation function phi(t):
-% phi = zeros(1, nSamples-1);
-% for i = 1:nSamples-1
-%     phi(i) = trapz(t, omega1);
-% end
-% phi = interp1(phi,t);
 
 
 

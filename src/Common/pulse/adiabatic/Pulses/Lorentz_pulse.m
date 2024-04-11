@@ -30,20 +30,22 @@ function [rf_pulse, omega1, A_t, Params] = Lorentz_pulse( Trf, Params)
 %   Reference: Matt A. Bernstein, Kevin F. Kink and Xiaohong Joe Zhou.
 %              Handbook of MRI Pulse Sequences, pp. 110, Eq. 4.10, (2004)
 %
-%              Tannús, A. and M. Garwood (1997). "Adiabatic pulses." 
-%              NMR in Biomedicine 10(8): 423-434.
+%              Tannús, A., & Garwood, M. (1997). Adiabatic pulses. NMR in 
+%              Biomedicine: An International Journal Devoted to the 
+%              Development and Application of Magnetic Resonance In Vivo, 
+%              10(8), 423-434. https://doi.org/10.1002/(sici)1099-1492(199712)10:8 
 %                  --> Table 1 contains all modulation functions 
 %        
-%              Kupce, E. and Freeman, R (1995). "Optimized Adiabatic Pulses
-%              for Wideband Spin Inversion." Journal of Magnetic Resonance
-%              Imaging, Series A 118(2): 299-303.
+%              Kupce, E., & Freeman, R. (1996). Optimized adiabatic pulses 
+%              for wideband spin inversion. Journal of Magnetic Resonance, 
+%              118(2), 299-303. https://doi.org/https://doi.org/10.1006/jmra.1996.0042 
 %                  --> A(t), omega1 (listed under Lorentzian)
 %                  --> lambda equation for scaling factor, Eq. 10 
 %
-%              Tannus, A. Garwood, M. (1996). "Improved Performance of 
-%              Frequency Swept Pulses Using Offset-Independent
-%              Adiabaticity" Journal of Magnetic Resonance, 120(1),
-%              133-137.
+%              Tannús, A., & Garwood, M. (1996). Improved performance of 
+%              frequency-swept pulses using offset-independent adiabaticity. 
+%              Journal of Magnetic Resonance, 120(1), 133-137. 
+%              https://doi.org/https://doi.org/10.1006/jmra.1996.0110 
 %                  --> Fig 1a and 1b. Show how width of amplitude and
 %                   frequency vary with each pulse 
 %                  --> A0 set to 18 as Lorentz pulse has the highest

@@ -27,15 +27,17 @@ function [rf_pulse, omega1, A_t, Params] = Hanning_pulse( Trf, Params)
 %   Reference: Matt A. Bernstein, Kevin F. Kink and Xiaohong Joe Zhou.
 %              Handbook of MRI Pulse Sequences, pp. 110, Eq. 4.10, (2004)
 %
-%              Tannús, A. and M. Garwood (1997). "Adiabatic pulses." 
-%              NMR in Biomedicine 10(8): 423-434.
+%              Tannús, A., & Garwood, M. (1997). Adiabatic pulses. NMR in 
+%              Biomedicine: An International Journal Devoted to the 
+%              Development and Application of Magnetic Resonance In Vivo, 
+%              10(8), 423-434. https://doi.org/10.1002/(sici)1099-1492(199712)10:8 
 %                  --> Table 1 contains all modulation functions 
 %                  --> A(t), omega1 
 %                  --> Trf = 10ms
 %
-%              Kupce, E. and Freeman, R (1995). "Optimized Adiabatic Pulses
-%              for Wideband Spin Inversion." Journal of Magnetic Resonance
-%              Imaging, Series A 118(2): 299-303.
+%              Kupce, E., & Freeman, R. (1996). Optimized adiabatic pulses 
+%              for wideband spin inversion. Journal of Magnetic Resonance, 
+%              118(2), 299-303. https://doi.org/https://doi.org/10.1006/jmra.1996.0042 
 %                  --> lambda equation, Eq. 10 (added to omega1 for scaling)
 %                  --> Added beta for everywhere theres tau to follow
 %                  trends in Table 1
