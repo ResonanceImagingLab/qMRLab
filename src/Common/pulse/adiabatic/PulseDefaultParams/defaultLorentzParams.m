@@ -5,7 +5,7 @@ function PulseOpt = defaultLorentzParams(PulseOpt)
 
 if(~isfield(PulseOpt,'beta') || isempty(PulseOpt.beta) || ~isfinite(PulseOpt.beta))
     % Default beta value in rad/s (modulation angular frequency)
-    PulseOpt.beta = 600;       
+    PulseOpt.beta = 850;       
 end
 
 if(~isfield(PulseOpt,'A0') || isempty(PulseOpt.A0) || ~isfinite(PulseOpt.A0))

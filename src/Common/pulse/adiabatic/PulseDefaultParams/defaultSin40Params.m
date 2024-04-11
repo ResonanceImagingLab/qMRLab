@@ -11,7 +11,7 @@ end
 
 if(~isfield(PulseOpt,'A0') || isempty(PulseOpt.A0) || ~isfinite(PulseOpt.A0))
     % Peak B1 of the pulse in microTesla
-    PulseOpt.A0 = 14;       
+    PulseOpt.A0 = 12;       
 end
 
 if(~isfield(PulseOpt,'n') || isempty(PulseOpt.n) || ~isfinite(PulseOpt.n))
@@ -26,6 +26,6 @@ end
  
 if(~isfield(PulseOpt,'Q') || isempty(PulseOpt.Q) || ~isfinite(PulseOpt.Q))
     % Adiabaticity factor 
-    PulseOpt.Q = 8e-7;       
+    PulseOpt.Q = 6.25e-7;       
 end
 return;

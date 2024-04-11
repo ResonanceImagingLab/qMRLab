@@ -6,7 +6,7 @@ function PulseOpt = defaultHsnParams(PulseOpt)
 
 if(~isfield(PulseOpt,'beta') || isempty(PulseOpt.beta) || ~isfinite(PulseOpt.beta))
     % Default beta value in rad/s
-    PulseOpt.beta = 250;       
+    PulseOpt.beta = 265;       
 end
 
 if(~isfield(PulseOpt,'n') || isempty(PulseOpt.n) || ~isfinite(PulseOpt.n))
@@ -16,7 +16,7 @@ end
 
 if(~isfield(PulseOpt,'A0') || isempty(PulseOpt.A0) || ~isfinite(PulseOpt.A0))
     % Peak B1 of the pulse in microTesla
-    PulseOpt.A0 = 17.5;       
+    PulseOpt.A0 = 11;       
 end
 
 if(~isfield(PulseOpt,'nSamples') || isempty(PulseOpt.nSamples) || ~isfinite(PulseOpt.nSamples))
@@ -26,7 +26,7 @@ end
 
 if(~isfield(PulseOpt,'Q') || isempty(PulseOpt.Q) || ~isfinite(PulseOpt.Q))
     % Adiabaticity Factor
-    PulseOpt.nSamples = 4e-4;       
+    PulseOpt.Q = 3.9e-4;       
 end
 
 return;
