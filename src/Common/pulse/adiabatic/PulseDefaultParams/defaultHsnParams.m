@@ -10,7 +10,7 @@ if(~isfield(PulseOpt,'beta') || isempty(PulseOpt.beta) || ~isfinite(PulseOpt.bet
 end
 
 if(~isfield(PulseOpt,'n') || isempty(PulseOpt.n) || ~isfinite(PulseOpt.n))
-    % Default sech exponent
+    % Default sech exponent (n = 2-8)
     PulseOpt.n = 8;       
 end
 
