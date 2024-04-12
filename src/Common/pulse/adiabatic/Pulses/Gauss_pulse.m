@@ -10,11 +10,12 @@ function [rf_pulse, omega1, A_t, Params] = Gauss_pulse( Trf, Params)
 %   Frequency modulation is time derivative of phi(t)
 %
 %   For the case of a Gauus^c pulse:
-%   A(t) = A_0 * exp(-Beta * t^2)
-%   lambda = A0^2/(Beta*Q)
-%   omega1(t) = lamdba*erf(Beta*t)
+%   A(t) = A_0 * exp((-beta^2 * t^2)/2)
+%   lambda = A0^2/(beta*Q)
+%   omega1(t) = -lamdba*(erf(beta*t)/erf(beta))
+%
 %   A0 is the peak amplitude in microTesla
-%   Beta is a frequency modulation parameter in rad/s
+%   beta is a frequency modulation parameter in rad/s
 %
 %   The pulse is defined to be 0 outside the pulse window (before 
 %   t = 0 or after t=Trf). (HSn, n = 1-8+) 
@@ -70,6 +71,7 @@ A_t((t < 0 | t>Trf)) = 0;
 % Scaling Factor 
 lambda = (Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q);
 
+% Frequency modulation function 
 % Carrier frequency modulation function w(t):  
 omega1 = -lambda*erf(Params.PulseOpt.beta.*tau)./erf(Params.PulseOpt.beta);
 

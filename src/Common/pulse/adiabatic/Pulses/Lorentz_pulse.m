@@ -10,11 +10,12 @@ function [rf_pulse, omega1, A_t, Params] = Lorentz_pulse( Trf, Params)
 %   Frequency modulation is time derivative of phi(t)
 %
 %   For the case of a Lorentz pulse:
-%   A(t) = A_0 / (1 + Beta^2*t^2)
-%   lambda = A_0^2/(Beta*Q)
-%   omega1(t) = lambda(arctan(Beta*t)+Beta*t/(1+Beta^2*t^2))/2
+%   A(t) = A_0 / (1 + beta^2*t^2)
+%   lambda = A_0^2/(beta*Q)
+%   omega1(t) = -lambda(arctan(beta*t)+beta*t/(1+beta^2*t^2))/2
+%
 %   A0 is the peak amplitude in microTesla
-%   Beta is a frequency modulation parameter in rad/s
+%   beta is a frequency modulation parameter in rad/s
 %
 %   The pulse is defined to be 0 outside the pulse window (before 
 %   t = 0 or after t=Trf). (HSn, n = 1-8+) 
@@ -83,49 +84,4 @@ phi = lambda.*tau.*atan(Params.PulseOpt.beta.*tau)./(2);
 % Put together complex RF pulse waveform:
 rf_pulse = A_t .* exp(1i .* phi);
 
-
-
-%% Can do Bloch Sim to get inversion profile and display figure if interested:
-
-% Params.NumPools = 1;
-% BlochSimCallFunction(Params, rf_pulse, t, A_t, omega1);
-
-% 
-%     M_start = [0, 0, 0, 0, Params.M0a, Params.M0b]';
-%     b1Rel = 0.5:0.1:1.5;
-%     freqOff = -2000:200:2000;
-%     [b1m, freqm] = ndgrid(b1Rel, freqOff);
-% 
-%     Mza = zeros(size(b1m));
-%     Mzb = zeros(size(b1m));
-% 
-%     for i = 1:length(b1Rel)
-%         for j = 1:length(freqOff)
-% 
-%             M_return = blochSimAdiabaticPulse( b1Rel(i)*rf_pulse, Params.Inv,  ...
-%                             freqOff(j), Params, M_start, []);
-% 
-%             Mza(i,j) = M_return(5);
-%             Mzb(i,j) = M_return(6);
-%         end
-%     end
-% 
-%     figure ('Name', 'Lorentz', 'NumberTitle', 'off'); 
-%     tiledlayout(2,2)
-%     nexttile; plot(t*1000, A_t, 'LineWidth', 3); 
-%     xlabel('Time(ms)'); ylabel('B_1 (μT)')
-%     title('Amplitude Function');ax = gca; ax.FontSize = 20;
-% 
-%     nexttile; plot(t*1000, omega1, 'LineWidth', 3);
-%     xlabel('Time(ms)'); ylabel('Frequency (Hz)');
-%     title('Frequency Modulation function');ax = gca; ax.FontSize = 20;
-% 
-%     nexttile; surf(b1m, freqm, Mza);
-%     xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{za}');ax = gca; ax.FontSize = 20;
-% 
-%     nexttile; surf(b1m, freqm, Mzb);
-%     xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{zb}');ax = gca; ax.FontSize = 20;
-% 
-%     set(gcf,'Position',[100 100 1200 1000])
-% end
 

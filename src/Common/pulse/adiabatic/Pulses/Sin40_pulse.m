@@ -10,12 +10,12 @@ function [rf_pulse, omega1, A_t, Params] = Sin40_pulse(Trf, Params)
 %   Frequency modulation is time derivative of phi(t)
 %
 %   For the case of a Sin40 pulse:
-%   A(t) = A0 * (1-|sin^n(Beta*pi*t/2)|)
-%   lambda = A_0^2/(Beta*Q)
-%   omega1(t) = t - integral (sin^n(Beta*pi*n/2)*(1+cos^2(Beta*pi*t/2)) dt
+%   A(t) = A0 * (1-|sin^n(beta*pi*t/2)|)
+%   lambda = A_0^2/(beta*Q)
+%   omega1(t) = t - integral (sin^n(beta*pi*n/2)*(1+cos^2(beta*pi*t/2)) dt
 %
 %   A0 is the peak amplitude in microTesla
-%   Beta is a frequency modulation parameter in rad/s
+%   beta is a frequency modulation parameter in rad/s
 %
 %   The pulse is defined to be 0 outside the pulse window (before 
 %   t = 0 or after t=Trf). (HSn, n = 1-8+) 
@@ -71,7 +71,6 @@ Params.PulseOpt = defaultSin40Params(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);
-
 tau = t-Trf/2;
 
 % Amplitude

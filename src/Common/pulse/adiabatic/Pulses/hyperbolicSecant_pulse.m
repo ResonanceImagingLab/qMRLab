@@ -12,6 +12,7 @@ function [rf_pulse, omega1, A_t, Params] = hyperbolicSecant_pulse(Trf, Params)
 %   For the case of a hyperbolic secant pulse:
 %   A(t) = A0 * sech(Beta*t)
 %   omega1(t) = -mu*Beta*tanh(Beta*t)
+%
 %   A0 is the peak amplitude in microTesla
 %   Beta is a frequency modulation parameter in rad/s
 %   mu is a phase modulation parameter (dimensionless)
@@ -59,20 +60,20 @@ Params.PulseOpt = defaultHyperbolicSecParams(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);
+tau = t-Trf/2;
 
 % Amplitude
-A_t =  Params.PulseOpt.A0* sech(Params.PulseOpt.beta* ( (t - Trf /2)).^Params.PulseOpt.n);
+A_t =  Params.PulseOpt.A0* sech(Params.PulseOpt.beta* ( (tau)).^Params.PulseOpt.n);
 A_t((t < 0 | t>Trf)) = 0;
 % disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
-
 
 % Frequency modulation function 
 % Carrier frequency modulation function w(t):
 omega1 = -Params.PulseOpt.mu.*Params.PulseOpt.beta .* ...
-            tanh(Params.PulseOpt.beta .* (t - Trf/2))./(2*pi); % 2pi to convert from rad/s to Hz
+            tanh(Params.PulseOpt.beta .* (tau))./(2*pi); % 2pi to convert from rad/s to Hz
 
 % Phase modulation function phi(t):
-phi = Params.PulseOpt.mu .* log(sech(Params.PulseOpt.beta .* (t - Trf/2)) );
+phi = Params.PulseOpt.mu .* log(sech(Params.PulseOpt.beta .* (tau)) );
 
 % Put together complex RF pulse waveform:
 rf_pulse = A_t .* exp(1i .* phi);

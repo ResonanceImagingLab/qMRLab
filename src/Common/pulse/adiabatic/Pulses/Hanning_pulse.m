@@ -10,9 +10,12 @@ function [rf_pulse, omega1, A_t, Params] = Hanning_pulse( Trf, Params)
 %   Frequency modulation is time derivative of phi(t)
 %
 %   For the case of a Gauus^c pulse:
-%   A(t) = A_0 * ((1 + cos(pi*t))/2)
-%   omega1(t) = t + ((4/3)*pi)*sin(pi*t) * (1 + 1/4*cos(pi*t))
+%   A(t) = A_0 * ((1 + cos(beta*pi*t))/2)
+%   lambda = A0^2/(beta*Q)
+%   omega1(t) = -lambda ((beta*t)+((4/3)*pi)*sin(beta*pi*t)*(1 +1/4*cos(beta*pi*t)))
+%
 %   A0 is the peak amplitude in microTesla
+%   beta is a frequency modulation parameter in rad/s
 %
 %   The pulse is defined to be 0 outside the pulse window (before 
 %   t = 0 or after t=Trf). (HSn, n = 1-8+) 
@@ -61,6 +64,7 @@ A_t((t < 0 | t>Trf)) = 0;
 % Scaling Factor 
 lambda = (Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q);
 
+% Frequency modulation function 
 % Carrier frequency modulation function w(t):
 omegaterm1 = Params.PulseOpt.beta.*tau;
 omegaterm2 = (4/(3*pi)*sin(pi.*tau.*Params.PulseOpt.beta));

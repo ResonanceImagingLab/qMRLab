@@ -10,9 +10,9 @@ function [rf_pulse, omega1, A_t, Params] = Hsn_pulse(Trf, Params)
 %   Frequency modulation is time derivative of phi(t)
 %
 %   For the case of a hyperbolic secant pulse:
-%   A(t) = A0 * sech((Beta*t)^n)
-%   lambda = (A_0^2/(Beta*Q))^2
-%   omega1(t) = integral(sech^2(Beta*t^n)
+%   A(t) = A0 * sech((beta*t)^n)
+%   lambda = (A_0^2/(beta*Q))^2
+%   omega1(t) = integral(sech^2(beta*t^n)
 %
 %   A0 is the peak amplitude in microTesla
 %   Beta is a frequency modulation parameter in rad/s
@@ -75,17 +75,12 @@ A_t((t < 0 | t>Trf)) = 0;
 % Scaling Factor 
 lambda = ((Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q))^2;
 
-
 % Frequency modulation function 
 % Carrier frequency modulation function w(t):
 omegaterm1 = sech((Params.PulseOpt.beta .* tau).^Params.PulseOpt.n).^2;
 omegaterm2 = -lambda*cumtrapz(tau,omegaterm1);
-%plot(t,omegaterm2);
 omegaterm3 = (omegaterm2(1)-omegaterm2(512))/2;
 omega1 = omegaterm2+omegaterm3; 
-%plot(t,omegaterm4);
-
-
 
 % Phase modulation function phi(t):
 phi = cumtrapz(tau, omega1);
@@ -93,28 +88,6 @@ phi = cumtrapz(tau, omega1);
 % Put together complex RF pulse waveform:
 rf_pulse = A_t .* exp(1i .* phi);
 
-%% omega1 tests
-
-
-% Trf = 10/1000;
-% Params = Params.Inv;
-%
-% omegaterm1 = sech((Params.PulseOpt.beta .* tau).^Params.PulseOpt.n).^2;
-% omegaterm3 = omegaterm1(1)-omegaterm1(512)./2;
-% plot(tau,omegaterm1)
-% 
-% omegaterm2 = cumtrapz(tau,(omegaterm1));
-% 
-% plot (t,omegaterm2)
-% omega1 = -lambda*((omegaterm2(1)-omegaterm2(512))/2);
-% plot(t,omega1)
-%omega1 = -lambda*(omegaterm2 - omegaterm2(round(nSamples/2)))./(2*pi); % offset to allow for center at zero and rad/s to Hz
-% omega = lambda*omegaterm2;
-
-% omegaterm1 = -lambda*sech((Params.PulseOpt.beta .* tau).^Params.PulseOpt.n).^2;
-% omegaterm2 = (omegaterm1(1)-omegaterm1(512))/2;
-% omegaterm3 = cumtrapz(tau,omegaterm1-omegaterm2);
-% plot(t,omegaterm3);
 
 
 
