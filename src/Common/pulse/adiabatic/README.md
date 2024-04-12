@@ -1,24 +1,28 @@
 # Adiabatic Inversion Pulses 
 
-## What are adiabatic pulses? 
-Adiabatic pulses are a special class of RF pulses that can excite, refocus, or **invert** magnetization vectors uniformly (Matt A. Bernstein et al., 2004a). In a RF frequency sweep from one side of resonance to the other, the net rotation of the magnetization vector **$\overrightarrow{M}$** is highly insensitive to changes in B1 amplitude (Tannús & Garwood, 1997). So, adiabatic pulses rotate **$\overrightarrow{M}$** by a constant 180&deg; flip angle, even when B1 is extremely inhomogeneous (Tannús & Garwood, 1997). Adiabatic pulses also operate under the **adiabatic passage principle** or **adiabatic condition** which states that **$\overrightarrow{M}$** of a spin system follows the direction of **Beff** such that the direction of **$\overrightarrow{Beff}$** does not change much during one period of precession (Matt A. Bernstein et al., 2004a). 
+## Background: What are adiabatic pulses? 
+Adiabatic pulses are a special class of RF pulses that can excite, refocus, or **invert** magnetization vectors uniformly (Matt A. Bernstein et al., 2004a). In a RF frequency sweep from one side of resonance to the other, the net rotation of the magnetization vector **$\overrightarrow{M}$** is highly insensitive to changes in B<sub>1</sub> amplitude (Tannús & Garwood, 1997). So, adiabatic pulses rotate **$\overrightarrow{M}$** by a constant 180&deg; flip angle, even when B<sub>1</sub> is extremely inhomogeneous (Tannús & Garwood, 1997). Adiabatic pulses also operate under the **adiabatic passage principle** or **adiabatic condition** which states that **$\overrightarrow{M}$** of a spin system follows the direction of **Beff** such that the direction of **$\overrightarrow{Beff}$** does not change much during one period of precession (Matt A. Bernstein et al., 2004a). 
+
 
 ## Adiabatic vs Non-Adiabatic 
-### In an adiabatic pulse... 
-- ${Θ \not{=}γ\int0^T{B1(τ)dτ}}$
-- long duration (10-20ms)
-- higher B1 amplitude (>10μT)
-- generally NOT multi-purpose (inversion can't be used for refocus, etc.)
-  
-### In a regular RF pulse... 
+
+### In a standard RF pulse: 
 - ${Θ = γ\int_0^T{B1(τ)dτ}}$
-- AM, constant carrier frequency
+- constant carrier frequency
 - short duration (0.3-1ms)
-- lower B1 amplitude 
+- lower B<sub>1</sub> amplitude 
 - generally multi-purpose
 
+### In an adiabatic pulse: 
+- ${Θ \not{=}γ\int0^T{B1(τ)dτ}}$
+- long duration (10-20ms)
+- higher B<sub>1</sub> amplitude (>10μT)
+- generally NOT multi-purpose (inversion can't be used for refocus, etc.)
+  
+
+
 ## What are adiabatic inversion pulses? 
-Adiabatic inversion pulses are a special class of RF pulses that rotate **M** from the +z to -z axis (Matt A. Bernstein et al., 2004a). They will uniformly invert **$\overrightarrow{M}$** across an imaged object even when the B1 field is spatially non-uniform (Matt A. Bernstein et al., 2004a). These pulses also operate under the **adiabatic condition** and can be displayed visually in the following figure. Note: Figure a-e denotes beginning to end of an adiabatic inversion pulse and Figure f denotes the trajectory of a non-adiabatic pulse.
+Adiabatic inversion pulses are a special class of RF pulses that rotate **M** from the +z to -z axis (Matt A. Bernstein et al., 2004a). They will uniformly invert **$\overrightarrow{M}$** across an imaged object even when the B<sub>1</sub> field is spatially non-uniform (Matt A. Bernstein et al., 2004a). These pulses also operate under the **adiabatic condition** and can be displayed visually in the following figure. Note: Figure a-e denotes beginning to end of an adiabatic inversion pulse and Figure f denotes the trajectory of a non-adiabatic pulse.
 
 ![image](https://github.com/ResonanceImagingLab/qMRLab/assets/154541326/b36dc143-b5d3-4070-8deb-a428cc18debc)
 
@@ -30,7 +34,7 @@ Adiabatic inversion pulses can be displayed as a frequency modulated pulse or a 
   
 A(t) is defined as the envelop/max amplitude and w1(t) is the frequency sweep 
 
-These functions are designed do display the six different adiabatic inversion pulses including hyperbolic secant (Hs1), lorentz, gaussian, hanning, Hsn (n=2-8) and Sin40. The following section will take you step-by-step how this document works. 
+The functions included in this package are designed to display six different adiabatic inversion pulses including hyperbolic secant (Hs1), lorentz, gaussian, hanning, Hsn (n=2-8) and Sin40. The following section will take you step-by-step how this document works. 
 
 ## Software Requirements 
 MATLAB_R2023b or higher 
@@ -42,7 +46,6 @@ MATLAB_R2023b or higher
    - addpath("c:\matlab\MyFolder")4.
 3. Open adiabaticexample.m
      
-## How does adiabaticexample.m work? 
 ### Within adiabaticexample.m ...
 - The beginning section gives a brief overview on what is included within the code and where you can find certain information
 - Each of the six pulses are listed twice: the first set is for a 1 pool case and the last set is for the 2 pool case
@@ -60,18 +63,18 @@ MATLAB_R2023b or higher
     - Under each reference is a list of the important information the selected papers or book chapters cover so you do not need to read through every single reference to find the information you are looking for
 
 ## Questions to ask yourself 
-[] What happens if I increase or decrease beta? 
+&#x2610;  What happens if I increase or decrease beta? 
 
-[] What happens if I increase or decrease A0?
+&#x2610;  What happens if I increase or decrease A0?
 
-[] What happens if I increase or decrease Q? 
+&#x2610;  What happens if I increase or decrease Q? 
 
-[] Does anything happen if nSamples changes from 512 to 256?
+&#x2610;  Does anything happen if nSamples changes from 512 to 256?
 
-[] What happens if Trf increases or decreases? 
+&#x2610;  What happens if Trf increases or decreases? 
 
-[] What would happen if the Hsn pulse changes from n=8?
+&#x2610;  What would happen if the Hsn pulse changes from n=8?
 
-[] What if a higher Tesla magnet was used? (ex. 7T)
+&#x2610;  What if a higher Tesla magnet was used? (ex. 7T)
 
-[] What if a lower Tesla magnet was used? (ex. 1.5T) 
+&#x2610;  What if a lower Tesla magnet was used? (ex. 1.5T) 
