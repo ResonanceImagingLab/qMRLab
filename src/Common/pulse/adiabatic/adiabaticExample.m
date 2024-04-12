@@ -22,13 +22,15 @@
 %    - Plot just the RF pulse to visualize when frequency modulation is absent 
 %
 % 4. The exact amplitude, frequency, and phase modulation equation for each
-%    pulse with their references are listed in the matlab functions
+%    pulse with their references are listed in the respective matlab functions
 %
 % 5. Pulse parameters are automatically set with the default params, but
 %    you can change them as you please to see how that may affect the pulse
 %    - Descriptions of each parameter are listed in the defaultparam
-%    matlab functions for each pulse 
+%    matlab functions for each pulse
 %    - Units for each parameter are listed in this code where applicable
+%    - Default params are also listed beside each parameter for easy
+%    reference 
 %
 % 6. For more information on adiabatic inversion pulses, check out the
 %    README.md or all references are listed in GetAdiabaticPulse.m
@@ -96,7 +98,6 @@ Params.Inv.PulseOpt.A0 = 18; % default 18 micro Tesla
 Params.Inv.PulseOpt.Q = 1e-4; % default 1e-4
 Params.Inv.nSamples = 512; % default 512
 Params.Inv.Trf = 20/1000; % default 20 ms
-    % Raising Trf made omega1 look better 
 Params.Inv.shape = 'Lorentz';
 
 % Apply inversion pulse by calling GetAdiabatic 
