@@ -48,6 +48,7 @@ function M_return = blochSimAdiabaticPulse_2pool( rf_pulse, PulseParams, delta,.
     for t = 1:nSamples
     
         w1 = 2*pi *42.577478518 * rf_pulse(t);  % assume B1 is in microTesla, and drop the 10^6 from gamma. w1 in rad/s
+        % 42.577 = gyromagnetic ratio of H
     
         A_rf =[ -(R2a+kf),          kr, -2*pi*delta,          0, -imag(w1),        0; ...       % Water X
                        kf,   -(R2b+kr),          0, -2*pi*delta,       0,  -imag(w1); ...       % Bound X

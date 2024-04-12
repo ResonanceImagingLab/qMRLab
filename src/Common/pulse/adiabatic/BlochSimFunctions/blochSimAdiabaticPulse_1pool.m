@@ -35,7 +35,7 @@ function M_return = blochSimAdiabaticPulse_1pool( rf_pulse, Trf, delta,...
     for t = 1:nSamples
     
         w1 = 2*pi *42.577478518 * rf_pulse(t);  % assume B1 is in microTesla, and drop the 10^6 from gamma. w1 in rad/s
-        % 42.477 = gyromagnetic ratio of H
+        % 42.577 = gyromagnetic ratio of H
 
         % Generate RF matrix
 
