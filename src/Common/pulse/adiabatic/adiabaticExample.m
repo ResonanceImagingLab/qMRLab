@@ -37,13 +37,13 @@
 %
 % Written by Amie Demmans 2024
 %
-%--------------------
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% WATER POOL ONLY %% 
-%--------------------
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%---------------------
 %% Hyperbolic Secant 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%---------------------
 
 clear all
 
@@ -71,17 +71,17 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse);
+%PlotAdiabaticPulse(t, inv_pulse,Params);
 
 % Plot Bloch Sim Results based on NumPools
-BlochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
+%BlochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
 
 % What happens in an RF pulse 
-%BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%----------
 %% Lorentz
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%----------
 
 clear all
 
@@ -107,7 +107,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse);
+%PlotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
@@ -115,9 +115,9 @@ BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%-----------
 %% Gaussian
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%-----------
 
 clear all
 
@@ -143,7 +143,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse);
+%PlotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
@@ -151,9 +151,9 @@ BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Hanning 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%----------
+%% Hanning  
+%----------
 
 clear all
 
@@ -179,7 +179,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse);
+%PlotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
@@ -187,9 +187,9 @@ BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%-----------------------------
 %% Hsn (Params set for n = 8) 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%-----------------------------
 
 clear all
 
@@ -216,7 +216,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse);
+%PlotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
@@ -224,9 +224,9 @@ BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%-----------------
 %% Sin40 (n = 40) 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%-----------------
 
 clear all
 
@@ -254,7 +254,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse);
+%PlotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
@@ -262,13 +262,13 @@ BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%-------------------------------
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% WATER AND MACROMOLECULAR POOL %% 
-%-------------------------------
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%--------------------
 %% Hyperbolic Secant 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%--------------------
 
 clear all
 
@@ -297,7 +297,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse);
+%PlotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools
 BlochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
@@ -305,9 +305,9 @@ BlochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%----------
 %% Lorentz
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%----------
 
 clear all 
 
@@ -335,7 +335,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse);
+%PlotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
@@ -343,9 +343,9 @@ BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%-----------
 %% Gaussian
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%-----------
 
 clear all 
 
@@ -372,7 +372,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse);
+%PlotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
@@ -380,9 +380,9 @@ BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%----------
 %% Hanning 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%----------
 
 clear all
 
@@ -409,7 +409,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse);
+%PlotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
@@ -417,9 +417,9 @@ BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%-----------------------------
 %% Hsn (Params set for n = 8) 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%-----------------------------
 
 clear all
 
@@ -447,7 +447,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse);
+%PlotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
@@ -455,9 +455,9 @@ BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 % What happens in an RF pulse 
 %BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%-----------------
 %% Sin40 (n = 40) 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%-----------------
 
 clear all
 
@@ -485,7 +485,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse);
+%PlotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
