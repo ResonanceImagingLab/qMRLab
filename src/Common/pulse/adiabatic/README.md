@@ -24,7 +24,7 @@ Adiabatic pulses are a special class of RF pulses that can excite, refocus, or *
 ## What are adiabatic inversion pulses? 
 Adiabatic inversion pulses are a special class of RF pulses that rotate **$\overrightarrow{M}$** from the +z to -z axis (Matt A. Bernstein et al., 2004a). They will uniformly invert **$\overrightarrow{M}$** across an imaged object even when the B<sub>1</sub> field is spatially non-uniform (Matt A. Bernstein et al., 2004a). These pulses also operate under the **adiabatic condition** and can be displayed visually in the following figure. Note: Figure a-e denotes beginning to end of an adiabatic inversion pulse and Figure f denotes the trajectory of a non-adiabatic pulse.
 
-![image](https://github.com/ResonanceImagingLab/qMRLab/assets/154541326/b36dc143-b5d3-4070-8deb-a428cc18debc)
+ ![image](https://github.com/ResonanceImagingLab/qMRLab/assets/154541326/b36dc143-b5d3-4070-8deb-a428cc18debc)
 
 Adiabatic inversion pulses can be displayed as a frequency modulated pulse or a phase modulated pulse: 
 - **Frequency Modulated pulse:**
@@ -64,20 +64,30 @@ Tested on MATLAB_R2023b. May work on earlier versions
 ### Step-by-step example to run through adiabaticexample.m
 #### Example for hyperbolic secant 1 pool 
 1. Clear your workspace `clear all`
+    - The code is set to clear all parameters at the beginning of each pulse
 2. Run the first set of initial parameters from Params.B0 = 3 to Params.NumPools = 1 by highlighting the specified values, right click and select "Evaluate section in command window" 
     -  If you want to see the Default tissue params: `open DefaultCortexTissueParams` into command window
 3. Run the specified pulse parameters from Params.Inv.PulseOpt.beta = 550 to Params.Inv.shape = 'Hs1' by repeating step 2 
 4. Apply the inversion pulse by calling `[inv_pulse, omega1, A_t, ~] = GetAdiabaticPulse(Params.Inf.Trf, Params.Inv.shape, Params.Inv`
     - You can run this step by highlighting --> Right click --> "Evaluate section in command window"
     - or copy and paste this line into the command window
+    - `open GetAdiabaticPulse`
 5. Define your time array: `t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples)`
 6. Select the desired plotting option you wish to see
-    - `PlotAdiabaticPulse(t, inv_pulse)`
+    - `PlotAdiabaticPulse(t, inv_pulse, Params)`
     - `BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params)`
     - `BlochSimCallFunction(abs(inv_pulse), t, A_t, omega1, Params)`
-7. To open the functions: `open` and then the name of the desired function (refer to step 2)
+7. To open any function: `open` and then the name of the desired function (refer to step 2) OR highlight pulse name, right click, select **Open "function name"** 
 8. Expected plots for each plotting function are displayed below in order they are listed in step 6
-    
+   ##### PlotAdiabaticPulse
+    <img width="1197" alt="Screenshot 2024-04-14 at 4 07 41 PM" src="https://github.com/ResonanceImagingLab/qMRLab/assets/154541326/3e52fffc-fe2d-45f0-868c-23dc66ade43f">
+
+   ##### BlochSimCallFunction Adiabatic Inv
+   <img width="1197" alt="Screenshot 2024-04-14 at 4 10 55 PM" src="https://github.com/ResonanceImagingLab/qMRLab/assets/154541326/7ba7cf61-93b2-4173-ae05-7fad2802d0a8">
+
+   ##### BlochSimCallFunction RF pulse
+   <img width="1197" alt="Screenshot 2024-04-14 at 4 12 04 PM" src="https://github.com/ResonanceImagingLab/qMRLab/assets/154541326/05095348-93ea-4d09-ac46-9d7a7a1af7e3">
+
 ## Questions to ask yourself 
 &#x2610;  What happens if I increase or decrease beta? 
 
