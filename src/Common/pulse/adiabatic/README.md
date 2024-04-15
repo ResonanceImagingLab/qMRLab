@@ -42,7 +42,7 @@ The functions included in this package are designed to display six different adi
 The following section will take you step-by-step how this document works. 
 
 ## Software Requirements 
-Tested on MATLAB_R2023b. May work on earlier versions  
+Tested on MATLAB_R2022a. May work on earlier versions  
 
 ## Step-by-step tutorial 
 1. Download qMRLab
