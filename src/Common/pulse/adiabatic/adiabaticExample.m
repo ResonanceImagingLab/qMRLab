@@ -102,7 +102,7 @@ Params.Inv.shape = 'Lorentz';
 
 % Apply inversion pulse by calling GetAdiabatic 
 Params.dispFigure = 0;
-[inv_pulse, omega1, A_t, ~] = GetAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
+[inv_pulse, omega1, A_t, ~] = getAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
                                     Params.Inv);
 
 % To check your pulse: Plot  
@@ -138,7 +138,7 @@ Params.Inv.shape = 'Gauss';
 
 % Apply inversion pulse by calling GetAdiabatic 
 Params.dispFigure = 0;
-[inv_pulse, omega1, A_t, ~] = GetAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
+[inv_pulse, omega1, A_t, ~] = getAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
                                     Params.Inv);
 
 % To check your pulse: Plot  
@@ -174,7 +174,7 @@ Params.Inv.shape = 'Hanning';
 
 % Apply inversion pulse by calling GetAdiabatic 
 Params.dispFigure = 0;
-[inv_pulse, omega1, A_t, ~] = GetAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
+[inv_pulse, omega1, A_t, ~] = getAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
                                     Params.Inv);
 
 % To check your pulse: Plot  
@@ -211,7 +211,7 @@ Params.Inv.shape = 'Hsn';
 
 % Apply Inversion pulse by calling GetAdiabatic
 Params.dispFigure = 0;
-[inv_pulse, omega1, A_t, ~] = GetAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
+[inv_pulse, omega1, A_t, ~] = getAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
                                     Params.Inv);
 
 % To check your pulse: Plot  
@@ -249,7 +249,7 @@ Params.Inv.shape = 'Sin40';
 
 % Apply Inversion pulse by calling GetAdiabatic
 Params.dispFigure = 0;
-[inv_pulse, omega1, A_t, ~] = GetAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
+[inv_pulse, omega1, A_t, ~] = getAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
                                     Params.Inv);
 
 % To check your pulse: Plot  
@@ -292,7 +292,7 @@ Params.Inv.shape = 'Hs1';
 
 % Apply Inversion pulse by calling GetAdiabatic
 Params.dispFigure = 0;
-[inv_pulse, omega1, A_t, ~] = GetAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
+[inv_pulse, omega1, A_t, ~] = getAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
                                     Params.Inv);
 
 % To check your pulse: Plot  
@@ -330,7 +330,7 @@ Params.Inv.shape = 'Lorentz';
 
 % Apply inversion pulse by calling GetAdiabatic 
 Params.dispFigure = 0;
-[inv_pulse, omega1, A_t, ~] = GetAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
+[inv_pulse, omega1, A_t, ~] = getAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
                                     Params.Inv);
 
 % To check your pulse: Plot  
@@ -367,7 +367,7 @@ Params.Inv.shape = 'Gauss';
 
 % Apply inversion pulse by calling GetAdiabatic 
 Params.dispFigure = 0;
-[inv_pulse, omega1, A_t, ~] = GetAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
+[inv_pulse, omega1, A_t, ~] = getAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
                                     Params.Inv);
 
 % To check your pulse: Plot  
@@ -404,7 +404,7 @@ Params.Inv.shape = 'Hanning';
 
 % Apply inversion pulse by calling GetAdiabatic 
 Params.dispFigure = 0;
-[inv_pulse, omega1, A_t, ~] = GetAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
+[inv_pulse, omega1, A_t, ~] = getAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
                                     Params.Inv);
 
 % To check your pulse: Plot  
@@ -442,7 +442,7 @@ Params.Inv.shape = 'Hsn';
 
 % Apply Inversion pulse by calling GetAdiabatic
 Params.dispFigure = 0;
-[inv_pulse, omega1, A_t, ~] = GetAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
+[inv_pulse, omega1, A_t, ~] = getAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
                                     Params.Inv);
 
 % To check your pulse: Plot  
@@ -480,7 +480,7 @@ Params.Inv.shape = 'Sin40';
 
 % Apply Inversion pulse by calling GetAdiabatic
 Params.dispFigure = 0;
-[inv_pulse, omega1, A_t, ~] = GetAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
+[inv_pulse, omega1, A_t, ~] = getAdiabaticPulse( Params.Inv.Trf, Params.Inv.shape, ...
                                     Params.Inv);
 
 % To check your pulse: Plot  
