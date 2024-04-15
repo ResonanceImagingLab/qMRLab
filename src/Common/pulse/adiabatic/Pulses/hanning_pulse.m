@@ -1,7 +1,7 @@
 function [rf_pulse, omega1, A_t, Params] = hanning_pulse( Trf, Params)
 
-%   Hanning_pulse Adiabatic Hanning RF pulse function.
-%   pulse = GaussC_pulse(Trf, PulseOpt)
+%   hanning_pulse Adiabatic Hanning RF pulse function.
+%   pulse = hanning_pulse(Trf, PulseOpt)
 %
 %   B1(t) = A(t) * exp( -1i *integral(omega1(t')) dt' )
 %   where A(t) is the envelope, omega1 is the frequency sweep
@@ -9,7 +9,7 @@ function [rf_pulse, omega1, A_t, Params] = hanning_pulse( Trf, Params)
 %   Phase modulation is found from taking the integral of omega1(t)
 %   Frequency modulation is time derivative of phi(t)
 %
-%   For the case of a Gauus^c pulse:
+%   For the case of a Hanning pulse:
 %   A(t) = A_0 * ((1 + cos(beta*pi*t))/2)
 %   lambda = A0^2/(beta*Q)
 %   omega1(t) = -lambda ((beta*t)+((4/3)*pi)*sin(beta*pi*t)*(1 +1/4*cos(beta*pi*t)))
