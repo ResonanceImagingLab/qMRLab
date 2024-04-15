@@ -71,13 +71,13 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse,Params);
+%plotAdiabaticPulse(t, inv_pulse,Params);
 
 % Plot Bloch Sim Results based on NumPools
-%BlochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
+BlochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
 
 % What happens in an RF pulse 
-BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
 %----------
 %% Lorentz
@@ -107,7 +107,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
@@ -143,7 +143,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
@@ -179,7 +179,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
@@ -216,7 +216,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
@@ -254,7 +254,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
@@ -297,7 +297,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools
 BlochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
@@ -335,7 +335,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
@@ -372,7 +372,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
@@ -409,7 +409,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
@@ -447,7 +447,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
@@ -485,7 +485,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%PlotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
 BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);

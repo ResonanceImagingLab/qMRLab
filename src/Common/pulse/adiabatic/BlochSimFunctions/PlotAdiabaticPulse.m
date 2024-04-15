@@ -1,4 +1,4 @@
-function PlotAdiabaticPulse(t, inv_pulse, Params)
+function plotAdiabaticPulse(t, inv_pulse, Params)
 
 fs = 20; 
 figure; 
