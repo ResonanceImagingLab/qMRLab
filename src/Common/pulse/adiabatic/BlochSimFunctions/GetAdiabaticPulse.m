@@ -1,4 +1,4 @@
-function [rf_pulse, omega1, A_t, Params] = GetAdiabaticPulse( Trf, shape, Params)
+function [rf_pulse, omega1, A_t, Params] = getAdiabaticPulse( Trf, shape, Params)
 
 % This need to take in parameter related to the adiabatic pulse, and return
 % the B1. 
