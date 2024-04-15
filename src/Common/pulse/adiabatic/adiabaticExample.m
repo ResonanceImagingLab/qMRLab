@@ -50,7 +50,7 @@ clear all
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
-Params = DefaultCortexTissueParams(Params);
+Params = defaultCortexTissueParams(Params);
 Params.Ra = 1; % 1000ms
 Params.NumPools = 1; % water pool 
 
@@ -88,7 +88,7 @@ clear all
 % Define Initial Parameters
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % White matter
-Params = DefaultCortexTissueParams(Params);
+Params = defaultCortexTissueParams(Params);
 Params.Ra = 1; % 1000ms
 Params.NumPools = 1; % water pool 
 
@@ -124,7 +124,7 @@ clear all
 % Define Initial Parameters
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter
-Params = DefaultCortexTissueParams(Params);
+Params = defaultCortexTissueParams(Params);
 Params.Ra = 1; % 1000ms
 Params.NumPools = 1; % water pool 
 
@@ -160,7 +160,7 @@ clear all
 % Define Initial Parameters
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
-Params = DefaultCortexTissueParams(Params);
+Params = defaultCortexTissueParams(Params);
 Params.Ra = 1; % 1000ms
 Params.NumPools = 1; % water pool 
 
@@ -196,7 +196,7 @@ clear all
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
-Params = DefaultCortexTissueParams(Params);
+Params = defaultCortexTissueParams(Params);
 Params.Ra = 1; % 1000ms
 Params.NumPools = 1; % water pool 
 
@@ -233,7 +233,7 @@ clear all
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
-Params = DefaultCortexTissueParams(Params);
+Params = defaultCortexTissueParams(Params);
 Params.Ra = 1; % 1000ms
 Params.NumPools = 1; % water pool 
 
@@ -275,7 +275,7 @@ clear all
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
-Params = DefaultCortexTissueParams(Params);
+Params = defaultCortexTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
 Params.NumPools = 2; % macromolecular pool 
@@ -314,7 +314,7 @@ clear all
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter
-Params = DefaultCortexTissueParams(Params);
+Params = defaultCortexTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
 Params.NumPools = 2; % macromolecular pool
@@ -352,7 +352,7 @@ clear all
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter
-Params = DefaultCortexTissueParams(Params);
+Params = defaultCortexTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
 Params.NumPools = 2; % macromolecular pool 
@@ -389,7 +389,7 @@ clear all
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
-Params = DefaultCortexTissueParams(Params);
+Params = defaultCortexTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool) 
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
 Params.NumPools = 2; % macromolecular pool 
@@ -426,7 +426,7 @@ clear all
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter
-Params = DefaultCortexTissueParams(Params);
+Params = defaultCortexTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool) 
 Params.NumPools = 2; % macromolecular pool 
@@ -464,7 +464,7 @@ clear all
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
-Params = DefaultCortexTissueParams(Params);
+Params = defaultCortexTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
 Params.NumPools = 2; % macromolecular pool 

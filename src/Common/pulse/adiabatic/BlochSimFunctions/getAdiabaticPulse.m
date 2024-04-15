@@ -43,15 +43,15 @@ switch shape
     case 'Hs1'        
         [rf_pulse, omega1, A_t, Params] = hyperbolicSecant_pulse(Trf, Params);
     case 'Lorentz'
-        [rf_pulse, omega1, A_t, Params] = Lorentz_pulse(Trf, Params);
+        [rf_pulse, omega1, A_t, Params] = lorentz_pulse(Trf, Params);
     case 'Gauss'
-        [rf_pulse, omega1, A_t, Params] = Gauss_pulse(Trf, Params);
+        [rf_pulse, omega1, A_t, Params] = gauss_pulse(Trf, Params);
     case 'Hanning'
-        [rf_pulse, omega1, A_t, Params] = Hanning_pulse(Trf, Params);
+        [rf_pulse, omega1, A_t, Params] = hanning_pulse(Trf, Params);
     case 'Hsn'
-        [rf_pulse, omega1, A_t, Params] = Hsn_pulse(Trf, Params);
+        [rf_pulse, omega1, A_t, Params] = hsn_pulse(Trf, Params);
     case 'Sin40'
-        [rf_pulse, omega1, A_t, Params] = Sin40_pulse(Trf, Params);
+        [rf_pulse, omega1, A_t, Params] = sin40_pulse(Trf, Params);
 
 end
 
