@@ -32,7 +32,7 @@ Adiabatic inversion pulses can be displayed as a frequency modulated pulse or a 
 - **Phase Modulated pulse:**
   $B_1(t) = A(t)\mathrm{e}^{-i\phi(t)}$ where $\phi(t)=\int{ω_1(t)dt}$
   
-A(t) is defined as the envelop/max amplitude and w1(t) is the frequency sweep 
+A(t) is defined as the envelop/max amplitude and ω<sub>1</sub>(t) is the frequency sweep 
 
 The functions included in this package are designed to display six different adiabatic inversion pulses including hyperbolic secant (Hs1), Lorentz, Gaussian, Hanning, Hsn (n=2-8) and Sin40. The following section will take you step-by-step how this document works. 
 
