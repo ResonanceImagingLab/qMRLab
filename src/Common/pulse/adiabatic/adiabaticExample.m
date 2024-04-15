@@ -74,10 +74,10 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 %plotAdiabaticPulse(t, inv_pulse,Params);
 
 % Plot Bloch Sim Results based on NumPools
-BlochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
+blochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
 
 % What happens in an RF pulse 
-%BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
 %----------
 %% Lorentz
@@ -110,10 +110,10 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 %plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
-BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
 % What happens in an RF pulse 
-%BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
 %-----------
 %% Gaussian
@@ -146,10 +146,10 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 %plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
-BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
 % What happens in an RF pulse 
-%BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
 %----------
 %% Hanning  
@@ -182,10 +182,10 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 %plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
-BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
 % What happens in an RF pulse 
-%BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
 %-----------------------------
 %% Hsn (Params set for n = 8) 
@@ -219,10 +219,10 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 %plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
-BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
 % What happens in an RF pulse 
-%BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
 %-----------------
 %% Sin40 (n = 40) 
@@ -257,10 +257,10 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 %plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
-BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
 % What happens in an RF pulse 
-%BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% WATER AND MACROMOLECULAR POOL %% 
@@ -300,10 +300,10 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 %plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools
-BlochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
+blochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
 
 % What happens in an RF pulse 
-%BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
 %----------
 %% Lorentz
@@ -338,10 +338,10 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 %plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
-BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
 % What happens in an RF pulse 
-%BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
 %-----------
 %% Gaussian
@@ -375,10 +375,10 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 %plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
-BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
 % What happens in an RF pulse 
-%BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
 %----------
 %% Hanning 
@@ -412,10 +412,10 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 %plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
-BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
 % What happens in an RF pulse 
-%BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
 %-----------------------------
 %% Hsn (Params set for n = 8) 
@@ -450,10 +450,10 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 %plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
-BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
 % What happens in an RF pulse 
-%BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
 %-----------------
 %% Sin40 (n = 40) 
@@ -488,10 +488,10 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 %plotAdiabaticPulse(t, inv_pulse, Params);
 
 % Plot Bloch Sim Results based on NumPools 
-BlochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
 % What happens in an RF pulse 
-%BlochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
 
 
