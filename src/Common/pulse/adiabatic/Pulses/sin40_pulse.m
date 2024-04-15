@@ -1,7 +1,7 @@
 function [rf_pulse, omega1, A_t, Params] = sin40_pulse(Trf, Params)
 
-%   Sin40 (n=40) Adiabatic Sin40 RF pulse function.
-%   pulse = Sin40_pulse(t, Trf, PulseOpt)
+%   sin40 (n=40) Adiabatic Sin40 RF pulse function.
+%   pulse = sin40_pulse(t, Trf, PulseOpt)
 %
 %   B1(t) = A(t) * exp( -1i *integral(omega1(t')) dt' )
 %   where A(t) is the envelope, omega1 is the frequency sweep

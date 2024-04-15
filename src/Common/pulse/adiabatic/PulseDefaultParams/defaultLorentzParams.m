@@ -17,7 +17,7 @@ if(~isfield(PulseOpt,'nSamples') || isempty(PulseOpt.nSamples) || ~isfinite(Puls
     % Default number of samples taken based on machine properties
     PulseOpt.nSamples = 512;       
 end
-% 
+
 if(~isfield(PulseOpt,'Q') || isempty(PulseOpt.Q) || ~isfinite(PulseOpt.Q))
     % Adiabaticity factor 
     PulseOpt.Q = 1e-4;       

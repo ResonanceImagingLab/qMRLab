@@ -6,7 +6,7 @@ function [rf_pulse, omega1, A_t, Params] = getAdiabaticPulse( Trf, shape, Params
 % dispFig is a flag to return the BlochSimulation results. 
 
 %GetAdiabaticPulse Generate an Adiabatic pulse structure.
-%   Pulse = GetAdiabaticPulse(Trf, shape, PulseOpt)
+%   Pulse = getAdiabaticPulse(Trf, shape, PulseOpt)
 %
 %   A note on adiabatic pulses:
 %   B1(t) = A(t) * exp( -1i *integral(omega1(t')) dt' )
@@ -28,8 +28,6 @@ function [rf_pulse, omega1, A_t, Params] = getAdiabaticPulse( Trf, shape, Params
 %   --optional args--
 %   Params: Struct. Contains optional parameters for pulse shapes. Need
 %   Params.x as in adiabaticExample. 
-%
-%   See also VIEWPULSE.
 %
 %   All references listed below code 
 %   

@@ -1,7 +1,7 @@
 function [rf_pulse, omega1, A_t, Params] = hsn_pulse(Trf, Params)
 
-%   hyperbolicSecant_pulse Adiabatic hyperbolic secant RF pulse function.
-%   pulse = hyperbolicSecant_pulse(t, Trf, PulseOpt)
+%   hsn_pulse Adiabatic hyperbolic secant RF pulse function.
+%   pulse = hsn_pulse(Trf, PulseOpt)
 %
 %   B1(t) = A(t) * exp( -1i *integral(omega1(t')) dt' )
 %   where A(t) is the envelope, omega1 is the frequency sweep
@@ -9,7 +9,7 @@ function [rf_pulse, omega1, A_t, Params] = hsn_pulse(Trf, Params)
 %   Phase modulation is found from taking the integral of omega1(t)
 %   Frequency modulation is time derivative of phi(t)
 %
-%   For the case of a hyperbolic secant pulse:
+%   For the case of a hyperbolic secant (n = 2-8) pulse:
 %   A(t) = A0 * sech((beta*t)^n)
 %   lambda = (A_0^2/(beta*Q))^2
 %   omega1(t) = integral(sech^2(beta*t^n)

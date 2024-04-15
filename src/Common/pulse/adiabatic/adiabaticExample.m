@@ -325,7 +325,6 @@ Params.Inv.PulseOpt.A0 = 18; % default 18 micro Tesla
 Params.Inv.PulseOpt.Q = 1e-4; % default 1e-4
 Params.Inv.nSamples = 512; % default 512
 Params.Inv.Trf = 20/1000; % default 20 ms
-    % Raising Trf made omega1 look better 
 Params.Inv.shape = 'Lorentz';
 
 % Apply inversion pulse by calling GetAdiabatic 

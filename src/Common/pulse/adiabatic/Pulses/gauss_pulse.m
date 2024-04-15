@@ -1,7 +1,7 @@
 function [rf_pulse, omega1, A_t, Params] = gauss_pulse( Trf, Params)
 
-%   GaussC_pulse Adiabatic Gaussian RF pulse function.
-%   pulse = GaussC_pulse(Trf, PulseOpt)
+%   gauss_pulse Adiabatic Gaussian RF pulse function.
+%   pulse = gauss_pulse(Trf, PulseOpt)
 %
 %   B1(t) = A(t) * exp( -1i *integral(omega1(t')) dt' )
 %   where A(t) is the envelope, omega1 is the frequency sweep
@@ -9,7 +9,7 @@ function [rf_pulse, omega1, A_t, Params] = gauss_pulse( Trf, Params)
 %   Phase modulation is found from taking the integral of omega1(t)
 %   Frequency modulation is time derivative of phi(t)
 %
-%   For the case of a Gauus^c pulse:
+%   For the case of a Gauus pulse:
 %   A(t) = A_0 * exp((-beta^2 * t^2)/2)
 %   lambda = A0^2/(beta*Q)
 %   omega1(t) = -lamdba*(erf(beta*t)/erf(beta))

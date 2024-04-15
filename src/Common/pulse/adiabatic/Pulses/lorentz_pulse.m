@@ -1,7 +1,7 @@
 function [rf_pulse, omega1, A_t, Params] = lorentz_pulse( Trf, Params)
 
-%   Lorentz_pulse Adiabatic Lorentz RF pulse function.
-%   pulse = Lorentz_pulse(Trf, PulseOpt)
+%   lorentz_pulse Adiabatic Lorentz RF pulse function.
+%   pulse = lorentz_pulse(Trf, PulseOpt)
 %
 %   B1(t) = A(t) * exp( -1i *integral(omega1(t')) dt' )
 %   where A(t) is the envelope, omega1 is the frequency sweep
