@@ -58,7 +58,7 @@ end
 
 end
 
-%% For each reference listed, the following important information covered is listed below 
+%% For each reference listed, the following important information covered is listed underneath  
 
 %  De Graaf, R. A. (2016). Adiabatic Excitation Pulses for MRS. In Handbook 
 %   of Magnetic Resonance Spectroscopy In Vivo: MRS Theory, Practice and 
