@@ -33,7 +33,7 @@
 %    reference 
 %
 % 6. For more information on adiabatic inversion pulses, check out the
-%    README.md or all references are listed in GetAdiabaticPulse.m
+%    README.md or all references are listed in getAdiabaticPulse.m
 %
 % Written by Amie Demmans 2024
 %
