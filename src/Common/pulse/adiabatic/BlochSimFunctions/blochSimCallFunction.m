@@ -1,7 +1,7 @@
 function blochSimCallFunction(rf_pulse, t, A_t, omega1,Params)
 %% Can do Bloch Sim to get inversion profile and display figure if interested:
 
-fs = 20;
+fs = 18;
 
 if Params.NumPools == 1
     M_start = [0, 0, Params.M0a]';
@@ -73,7 +73,7 @@ elseif Params.NumPools == 2
     nexttile; surf(b1m, freqm, Mzb,'FaceColor','interp');
     xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{zb}');ax = gca; ax.FontSize = fs;
     
-    set(gcf,'Position',[100 100 1200 1000])
+    set(gcf,'Position',[100 100 1200 800])
 
     sgtitle(Params.Inv.shape, 'FontSize', fs+4,'FontWeight','bold')
 
