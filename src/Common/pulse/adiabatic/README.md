@@ -1,8 +1,7 @@
 # Adiabatic Inversion Pulses 
 
 ## Background: What are adiabatic pulses? 
-Adiabatic pulses are a special class of RF pulses that can excite, refocus, or **invert** magnetization vectors uniformly (Matt A. Bernstein et al., 2004a). In a RF frequency sweep from one side of resonance to the other, the net rotation of the magnetization vector **$\overrightarrow{M}$** is highly insensitive to changes in B<sub>1</sub> amplitude (Tannús & Garwood, 1997). So, adiabatic pulses rotate **$\overrightarrow{M}$** by a constant 180&deg; flip angle, even when B<sub>1</sub> is extremely inhomogeneous (Tannús & Garwood, 1997). Adiabatic pulses also operate under the **adiabatic passage principle** or **adiabatic condition** which states that **$\overrightarrow{M}$** of a spin system follows the direction of **B<sub>eff</sub>** such that the direction of **B<sub>eff</sub>** does not change much during one period of precession (Matt A. Bernstein et al., 2004a). 
-
+Adiabatic pulses are a special class of RF pulses that can excite, refocus, or **invert** magnetization vectors uniformly (Matt A. Bernstein et al., 2004a). In a RF frequency sweep from one side of resonance to the other, the net rotation of the magnetization vector **$\overrightarrow{M}$** is highly insensitive to changes in B<sub>1</sub> amplitude (Tannús & Garwood, 1997). So, adiabatic pulses rotate **$\overrightarrow{M}$** by a constant 180&deg; flip angle, even when B<sub>1</sub> is extremely inhomogeneous (Tannús & Garwood, 1997). Adiabatic pulses also operate under the **adiabatic passage principle** or **adiabatic condition** which states that **$\overrightarrow{M}$** of a spin system follows the direction of **$\overrightarrow{B_eff}$** such that the direction of **$\overrightarrow{B_eff}$** does not change much during one period of precession (Matt A. Bernstein et al., 2004a). 
 
 ## Adiabatic vs Non-Adiabatic 
 
@@ -18,8 +17,6 @@ Adiabatic pulses are a special class of RF pulses that can excite, refocus, or *
 - long duration (10-20ms)
 - higher B<sub>1</sub> amplitude (>10μT)
 - generally NOT multi-purpose (inversion can't be used for refocus, etc.)
-  
-
 
 ## What are adiabatic inversion pulses? 
 Adiabatic inversion pulses are a special class of RF pulses that rotate **$\overrightarrow{M}$** from the +z to -z axis (Matt A. Bernstein et al., 2004a). They will uniformly invert **$\overrightarrow{M}$** across an imaged object even when the B<sub>1</sub> field is spatially non-uniform (Matt A. Bernstein et al., 2004a). These pulses also operate under the **adiabatic condition** and can be displayed visually in the following figure. Note: Figure a-e denotes beginning to end of an adiabatic inversion pulse and Figure f denotes the trajectory of a non-adiabatic pulse.
@@ -68,7 +65,7 @@ Tested on MATLAB_R2023b. May work on earlier versions
 2. Run the first set of initial parameters from Params.B0 = 3 to Params.NumPools = 1 by highlighting the specified values, right click and select "Evaluate section in command window" 
     -  If you want to see the Default tissue params: `open DefaultCortexTissueParams` into command window
 3. Run the specified pulse parameters from Params.Inv.PulseOpt.beta = 550 to Params.Inv.shape = 'Hs1' by repeating step 2 
-4. Apply the inversion pulse by calling `[inv_pulse, omega1, A_t, ~] = GetAdiabaticPulse(Params.Inf.Trf, Params.Inv.shape, Params.Inv`
+4. Apply the inversion pulse by calling `[inv_pulse, omega1, A_t, ~] = GetAdiabaticPulse(Params.Inv.Trf, Params.Inv.shape, Params.Inv`
     - You can run this step by highlighting --> Right click --> "Evaluate section in command window"
     - or copy and paste this line into the command window
     - `open GetAdiabaticPulse`
