@@ -1,5 +1,17 @@
 function plotAdiabaticPulse(t, inv_pulse, Params)
 
+
+%% Adiabatic Pulse Plot function 
+%
+% Called in adiabaticExample.m to check the amplitude and frequency
+% modulation of your pulse 
+%
+%   inv_pulse denotes the adiabatic inversion pulse and can be found from
+%   the individual pulse functions listed in getAdiabaticPulse.m 
+%
+% Written by Amie Demmans 2024
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 fs = 20; 
 figure; 
 tiledlayout(1,2)

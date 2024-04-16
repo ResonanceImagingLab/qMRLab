@@ -31,7 +31,9 @@ function [rf_pulse, omega1, A_t, Params] = getAdiabaticPulse( Trf, shape, Params
 %
 %   All references listed below code 
 %   
-% 
+%   Written by Amie Demmans & Christopher Rowley 2024
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 if (nargin < 3) 
     Params.PulseOpt = struct;
 end
@@ -39,17 +41,17 @@ end
 switch shape
 
     case 'Hs1'        
-        [rf_pulse, omega1, A_t, Params] = hyperbolicSecant_pulse(Trf, Params);
+        [rf_pulse, omega1, A_t, Params] = AI_hs1_pulse(Trf, Params);
     case 'Lorentz'
-        [rf_pulse, omega1, A_t, Params] = lorentz_pulse(Trf, Params);
+        [rf_pulse, omega1, A_t, Params] = AI_lorentz_pulse(Trf, Params);
     case 'Gauss'
-        [rf_pulse, omega1, A_t, Params] = gauss_pulse(Trf, Params);
+        [rf_pulse, omega1, A_t, Params] = AI_gauss_pulse(Trf, Params);
     case 'Hanning'
-        [rf_pulse, omega1, A_t, Params] = hanning_pulse(Trf, Params);
+        [rf_pulse, omega1, A_t, Params] = AI_hanning_pulse(Trf, Params);
     case 'Hsn'
-        [rf_pulse, omega1, A_t, Params] = hsn_pulse(Trf, Params);
+        [rf_pulse, omega1, A_t, Params] = AI_hsn_pulse(Trf, Params);
     case 'Sin40'
-        [rf_pulse, omega1, A_t, Params] = sin40_pulse(Trf, Params);
+        [rf_pulse, omega1, A_t, Params] = AI_sin40_pulse(Trf, Params);
 
 end
 

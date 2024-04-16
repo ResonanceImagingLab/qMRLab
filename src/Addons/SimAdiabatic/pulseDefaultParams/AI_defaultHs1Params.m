@@ -1,4 +1,4 @@
-function PulseOpt = defaultHyperbolicSecParams(PulseOpt)
+function PulseOpt = AI_defaultHs1Params(PulseOpt)
 
 % Function designed to be used with the adiabatic pulse code
 % Fills in default values if they are not user-defined

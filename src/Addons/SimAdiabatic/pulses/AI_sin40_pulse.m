@@ -1,6 +1,6 @@
-function [rf_pulse, omega1, A_t, Params] = sin40_pulse(Trf, Params)
+function [rf_pulse, omega1, A_t, Params] = AI_sin40_pulse(Trf, Params)
 
-%   sin40 (n=40) Adiabatic Sin40 RF pulse function.
+%   sin40 (n=40) Adiabatic Inversion Sin40 RF pulse function.
 %   pulse = sin40_pulse(t, Trf, PulseOpt)
 %
 %   B1(t) = A(t) * exp( -1i *integral(omega1(t')) dt' )
@@ -63,11 +63,8 @@ function [rf_pulse, omega1, A_t, Params] = sin40_pulse(Trf, Params)
 % To be used with qMRlab
 % Written by Christopher Rowley 2023 and Amie Demmans 2024
 
-% Trf = 10/1000;
-% Params = Params.Inv;
-
 % Function to fill default values;
-Params.PulseOpt = defaultSin40Params(Params.PulseOpt);
+Params.PulseOpt = AI_defaultSin40Params(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);

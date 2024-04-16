@@ -1,4 +1,4 @@
-function PulseOpt = defaultLorentzParams(PulseOpt)
+function PulseOpt = AI_defaultLorentzParams(PulseOpt)
 
 % Function designed to be used with the adiabatic pulse code
 % Fills in default values if they are not user-defined

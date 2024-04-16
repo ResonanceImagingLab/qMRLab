@@ -37,20 +37,20 @@
 %
 % Written by Amie Demmans 2024
 %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% WATER POOL ONLY %% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%---------------------
+%--------------------------------------------------------------------------
 %% Hyperbolic Secant 
-%---------------------
+%--------------------------------------------------------------------------
 
 clear Params t inv_pulse omega1 A_t
 
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
-Params = defaultCortexTissueParams(Params);
+Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.NumPools = 1; % water pool only
 
@@ -76,19 +76,19 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 % Plot Bloch Sim Results based on NumPools
 blochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
 
-% What happens in an RF pulse 
+% What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%----------
+%--------------------------------------------------------------------------
 %% Lorentz
-%----------
+%--------------------------------------------------------------------------
 
 clear Params t inv_pulse omega1 A_t
 
 % Define Initial Parameters
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % White matter
-Params = defaultCortexTissueParams(Params);
+Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.NumPools = 1; % water pool 
 
@@ -112,19 +112,19 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 % Plot Bloch Sim Results based on NumPools 
 blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
-% What happens in an RF pulse 
+% What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%-----------
+%--------------------------------------------------------------------------
 %% Gaussian
-%-----------
+%--------------------------------------------------------------------------
 
 clear Params t inv_pulse omega1 A_t
 
 % Define Initial Parameters
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter
-Params = defaultCortexTissueParams(Params);
+Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.NumPools = 1; % water pool 
 
@@ -148,19 +148,19 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 % Plot Bloch Sim Results based on NumPools 
 blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
-% What happens in an RF pulse 
+% What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%----------
+%--------------------------------------------------------------------------
 %% Hanning  
-%----------
+%--------------------------------------------------------------------------
 
 clear Params t inv_pulse omega1 A_t
 
 % Define Initial Parameters
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
-Params = defaultCortexTissueParams(Params);
+Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.NumPools = 1; % water pool 
 
@@ -184,19 +184,19 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 % Plot Bloch Sim Results based on NumPools 
 blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
-% What happens in an RF pulse 
+% What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%-----------------------------
+%--------------------------------------------------------------------------
 %% Hsn (Params set for n = 8) 
-%-----------------------------
+%--------------------------------------------------------------------------
 
 clear Params t inv_pulse omega1 A_t
 
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
-Params = defaultCortexTissueParams(Params);
+Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.NumPools = 1; % water pool 
 
@@ -221,19 +221,19 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 % Plot Bloch Sim Results based on NumPools 
 blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
-% What happens in an RF pulse 
+% What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%-----------------
+%--------------------------------------------------------------------------
 %% Sin40 (n = 40) 
-%-----------------
+%--------------------------------------------------------------------------
 
 clear Params t inv_pulse omega1 A_t
 
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
-Params = defaultCortexTissueParams(Params);
+Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.NumPools = 1; % water pool 
 
@@ -259,23 +259,23 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 % Plot Bloch Sim Results based on NumPools 
 blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
-% What happens in an RF pulse 
+% What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% WATER AND MACROMOLECULAR POOL %% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%--------------------
+%--------------------------------------------------------------------------
 %% Hyperbolic Secant 
-%--------------------
+%--------------------------------------------------------------------------
 
 clear Params t inv_pulse omega1 A_t
 
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
-Params = defaultCortexTissueParams(Params);
+Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
 Params.NumPools = 2; % water pool and macromolecular pool 
@@ -302,19 +302,19 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 % Plot Bloch Sim Results based on NumPools
 blochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
 
-% What happens in an RF pulse 
+% What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%----------
+%--------------------------------------------------------------------------
 %% Lorentz
-%----------
+%--------------------------------------------------------------------------
 
 clear Params t inv_pulse omega1 A_t 
 
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter
-Params = defaultCortexTissueParams(Params);
+Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
 Params.NumPools = 2; % water pool and macromolecular pool
@@ -339,19 +339,19 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 % Plot Bloch Sim Results based on NumPools 
 blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
-% What happens in an RF pulse 
+% What happens in a non-adiabatic pulse  
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%-----------
+%--------------------------------------------------------------------------
 %% Gaussian
-%-----------
+%--------------------------------------------------------------------------
 
 clear Params t inv_pulse omega1 A_t 
 
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter
-Params = defaultCortexTissueParams(Params);
+Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
 Params.NumPools = 2; % water pool and macromolecular pool
@@ -376,19 +376,19 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 % Plot Bloch Sim Results based on NumPools 
 blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
-% What happens in an RF pulse 
+% What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%----------
+%--------------------------------------------------------------------------
 %% Hanning 
-%----------
+%--------------------------------------------------------------------------
 
 clear Params t inv_pulse omega1 A_t
 
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
-Params = defaultCortexTissueParams(Params);
+Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool) 
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
 Params.NumPools = 2; % water pool and macromolecular pool 
@@ -413,19 +413,19 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 % Plot Bloch Sim Results based on NumPools 
 blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
-% What happens in an RF pulse 
+% What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%-----------------------------
+%--------------------------------------------------------------------------
 %% Hsn (Params set for n = 8) 
-%-----------------------------
+%--------------------------------------------------------------------------
 
 clear Params t inv_pulse omega1 A_t
 
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter
-Params = defaultCortexTissueParams(Params);
+Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool) 
 Params.NumPools = 2; % water pool and macromolecular pool 
@@ -451,19 +451,19 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 % Plot Bloch Sim Results based on NumPools 
 blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
-% What happens in an RF pulse 
+% What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
-%-----------------
+%--------------------------------------------------------------------------
 %% Sin40 (n = 40) 
-%-----------------
+%--------------------------------------------------------------------------
 
 clear Params t inv_pulse omega1 A_t
 
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
-Params = defaultCortexTissueParams(Params);
+Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
 Params.NumPools = 2; % water pool and macromolecular pool 
@@ -489,7 +489,7 @@ t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
 % Plot Bloch Sim Results based on NumPools 
 blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 
-% What happens in an RF pulse 
+% What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
 
 

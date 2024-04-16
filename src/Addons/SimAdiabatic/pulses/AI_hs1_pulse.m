@@ -1,6 +1,6 @@
-function [rf_pulse, omega1, A_t, Params] = hyperbolicSecant_pulse(Trf, Params)
+function [rf_pulse, omega1, A_t, Params] = AI_hs1_pulse(Trf, Params)
 
-%   hyperbolicSecant_pulse Adiabatic hyperbolic secant RF pulse function.
+%   hyperbolicSecant_pulse Adiabatic Inversion hyperbolic secant RF pulse function.
 %   pulse = hyperbolicSecant_pulse(t, Trf, PulseOpt)
 %
 %   B1(t) = A(t) * exp( -1i *integral(omega1(t')) dt' )
@@ -56,7 +56,7 @@ function [rf_pulse, omega1, A_t, Params] = hyperbolicSecant_pulse(Trf, Params)
 
 
 % Function to fill default values;
-Params.PulseOpt = defaultHyperbolicSecParams(Params.PulseOpt);
+Params.PulseOpt = AI_defaultHs1Params(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);

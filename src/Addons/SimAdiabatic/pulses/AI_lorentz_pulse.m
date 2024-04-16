@@ -1,6 +1,6 @@
-function [rf_pulse, omega1, A_t, Params] = lorentz_pulse( Trf, Params)
+function [rf_pulse, omega1, A_t, Params] = AI_lorentz_pulse( Trf, Params)
 
-%   lorentz_pulse Adiabatic Lorentz RF pulse function.
+%   lorentz_pulse Adiabatic Inversion Lorentz RF pulse function.
 %   pulse = lorentz_pulse(Trf, PulseOpt)
 %
 %   B1(t) = A(t) * exp( -1i *integral(omega1(t')) dt' )
@@ -56,7 +56,7 @@ function [rf_pulse, omega1, A_t, Params] = lorentz_pulse( Trf, Params)
 % Written by Christopher Rowley 2023 & Amie Demmans 2024
 
 % Function to fill default values;
-Params.PulseOpt = defaultLorentzParams(Params.PulseOpt);
+Params.PulseOpt = AI_defaultLorentzParams(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);

@@ -1,6 +1,6 @@
-function [rf_pulse, omega1, A_t, Params] = hanning_pulse( Trf, Params)
+function [rf_pulse, omega1, A_t, Params] = AI_hanning_pulse( Trf, Params)
 
-%   hanning_pulse Adiabatic Hanning RF pulse function.
+%   hanning_pulse Adiabatic Inversion Hanning RF pulse function.
 %   pulse = hanning_pulse(Trf, PulseOpt)
 %
 %   B1(t) = A(t) * exp( -1i *integral(omega1(t')) dt' )
@@ -50,7 +50,7 @@ function [rf_pulse, omega1, A_t, Params] = hanning_pulse( Trf, Params)
 
 
 % Function to fill default values;
-Params.PulseOpt = defaultHanningParams(Params.PulseOpt);
+Params.PulseOpt = AI_defaultHanningParams(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);

@@ -1,6 +1,6 @@
-function [rf_pulse, omega1, A_t, Params] = gauss_pulse( Trf, Params)
+function [rf_pulse, omega1, A_t, Params] = AI_gauss_pulse( Trf, Params)
 
-%   gauss_pulse Adiabatic Gaussian RF pulse function.
+%   gauss_pulse Adiabatic Inversion Gaussian RF pulse function.
 %   pulse = gauss_pulse(Trf, PulseOpt)
 %
 %   B1(t) = A(t) * exp( -1i *integral(omega1(t')) dt' )
@@ -57,7 +57,7 @@ function [rf_pulse, omega1, A_t, Params] = gauss_pulse( Trf, Params)
 
 
 % Function to fill default values;
-Params.PulseOpt = defaultGaussParams(Params.PulseOpt);
+Params.PulseOpt = AI_defaultGaussParams(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);

@@ -1,4 +1,4 @@
-function PulseOpt = defaultSin40Params(PulseOpt)
+function PulseOpt = AI_defaultSin40Params(PulseOpt)
 
 % Function designed to be used with the adiabatic pulse code
 % Fills in default values if they are not user-defined
