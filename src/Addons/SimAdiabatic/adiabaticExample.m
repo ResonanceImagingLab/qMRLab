@@ -51,8 +51,8 @@ clear all
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
 Params = defaultCortexTissueParams(Params);
-Params.Ra = 1; % 1000ms
-Params.NumPools = 1; % water pool 
+Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
+Params.NumPools = 1; % water pool only
 
 % Define Hyperbolic Secant Parameter
 Params.Inv.PulseOpt.beta = 672; % default 672 rad/s
@@ -89,7 +89,7 @@ clear all
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % White matter
 Params = defaultCortexTissueParams(Params);
-Params.Ra = 1; % 1000ms
+Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.NumPools = 1; % water pool 
 
 % Define Lorentz Parameters
@@ -125,7 +125,7 @@ clear all
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter
 Params = defaultCortexTissueParams(Params);
-Params.Ra = 1; % 1000ms
+Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.NumPools = 1; % water pool 
 
 % Define Gaussian Parameters
@@ -161,7 +161,7 @@ clear all
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
 Params = defaultCortexTissueParams(Params);
-Params.Ra = 1; % 1000ms
+Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.NumPools = 1; % water pool 
 
 % Define Hanning Parameters
@@ -197,7 +197,7 @@ clear all
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
 Params = defaultCortexTissueParams(Params);
-Params.Ra = 1; % 1000ms
+Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.NumPools = 1; % water pool 
 
 % Define Hyperbolic Secant Parameter
@@ -234,7 +234,7 @@ clear all
 Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
 Params = defaultCortexTissueParams(Params);
-Params.Ra = 1; % 1000ms
+Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.NumPools = 1; % water pool 
 
 % Define Hyperbolic Secant Parameter
@@ -278,7 +278,7 @@ Params.TissueType = 'WM'; % white matter
 Params = defaultCortexTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
-Params.NumPools = 2; % macromolecular pool 
+Params.NumPools = 2; % water pool and macromolecular pool 
 
 % Define Hyperbolic Secant Parameter
 Params.Inv.PulseOpt.beta = 672; % default 672 rad/s
@@ -317,7 +317,7 @@ Params.TissueType = 'WM'; % white matter
 Params = defaultCortexTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
-Params.NumPools = 2; % macromolecular pool
+Params.NumPools = 2; % water pool and macromolecular pool
 
 % Define Lorentz Parameters
 Params.Inv.PulseOpt.beta = 850;  % default 850 rad/s 
@@ -354,7 +354,7 @@ Params.TissueType = 'WM'; % white matter
 Params = defaultCortexTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
-Params.NumPools = 2; % macromolecular pool 
+Params.NumPools = 2; % water pool and macromolecular pool
 
 % Define Gaussian Parameters
 Params.Inv.PulseOpt.beta = 550; % default 550 rad/s
@@ -391,7 +391,7 @@ Params.TissueType = 'WM'; % white matter
 Params = defaultCortexTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool) 
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
-Params.NumPools = 2; % macromolecular pool 
+Params.NumPools = 2; % water pool and macromolecular pool 
 
 % Define Hanning Parameters
 Params.Inv.PulseOpt.beta = 175; % default 200 rad/s
@@ -428,7 +428,7 @@ Params.TissueType = 'WM'; % white matter
 Params = defaultCortexTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool) 
-Params.NumPools = 2; % macromolecular pool 
+Params.NumPools = 2; % water pool and macromolecular pool 
 
 % Define Hyperbolic Secant Parameter
 Params.Inv.PulseOpt.beta = 265; % default 265 rad/s
@@ -466,7 +466,7 @@ Params.TissueType = 'WM'; % white matter
 Params = defaultCortexTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
-Params.NumPools = 2; % macromolecular pool 
+Params.NumPools = 2; % water pool and macromolecular pool 
 
 % Define Hyperbolic Secant Parameter
 Params.Inv.PulseOpt.beta = 200; % default 200 rad/s
