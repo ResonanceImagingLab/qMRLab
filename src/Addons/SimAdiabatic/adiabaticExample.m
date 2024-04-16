@@ -45,7 +45,7 @@
 %% Hyperbolic Secant 
 %---------------------
 
-clear all
+clear Params t inv_pulse omega1 A_t
 
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
@@ -83,7 +83,7 @@ blochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
 %% Lorentz
 %----------
 
-clear all
+clear Params t inv_pulse omega1 A_t
 
 % Define Initial Parameters
 Params.B0 = 3; % Tesla
@@ -119,7 +119,7 @@ blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 %% Gaussian
 %-----------
 
-clear all
+clear Params t inv_pulse omega1 A_t
 
 % Define Initial Parameters
 Params.B0 = 3; % Tesla
@@ -155,7 +155,7 @@ blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 %% Hanning  
 %----------
 
-clear all
+clear Params t inv_pulse omega1 A_t
 
 % Define Initial Parameters
 Params.B0 = 3; % Tesla
@@ -191,7 +191,7 @@ blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 %% Hsn (Params set for n = 8) 
 %-----------------------------
 
-clear all
+clear Params t inv_pulse omega1 A_t
 
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
@@ -228,7 +228,7 @@ blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 %% Sin40 (n = 40) 
 %-----------------
 
-clear all
+clear Params t inv_pulse omega1 A_t
 
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
@@ -270,7 +270,7 @@ blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 %% Hyperbolic Secant 
 %--------------------
 
-clear all
+clear Params t inv_pulse omega1 A_t
 
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
@@ -309,7 +309,7 @@ blochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
 %% Lorentz
 %----------
 
-clear all 
+clear Params t inv_pulse omega1 A_t 
 
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
@@ -346,7 +346,7 @@ blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 %% Gaussian
 %-----------
 
-clear all 
+clear Params t inv_pulse omega1 A_t 
 
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
@@ -383,7 +383,7 @@ blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 %% Hanning 
 %----------
 
-clear all
+clear Params t inv_pulse omega1 A_t
 
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
@@ -420,7 +420,7 @@ blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 %% Hsn (Params set for n = 8) 
 %-----------------------------
 
-clear all
+clear Params t inv_pulse omega1 A_t
 
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
@@ -458,7 +458,7 @@ blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
 %% Sin40 (n = 40) 
 %-----------------
 
-clear all
+clear Params t inv_pulse omega1 A_t
 
 % Define Initial Parameters 
 Params.B0 = 3; % Tesla
