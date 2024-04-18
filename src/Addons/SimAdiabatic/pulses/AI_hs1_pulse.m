@@ -69,7 +69,7 @@ A_t((t < 0 | t>Trf)) = 0;
 
 % Frequency modulation function 
 % Carrier frequency modulation function w(t):
-omega1 = -Params.PulseOpt.mu.*Params.PulseOpt.beta .* ...
+omega1 = -Params.PulseOpt.Q.*Params.PulseOpt.beta .* ...
             tanh(Params.PulseOpt.beta .* (tau))./(2*pi); % 2pi to convert from rad/s to Hz
 
 % Phase modulation function phi(t):
