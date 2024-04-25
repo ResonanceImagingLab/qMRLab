@@ -57,7 +57,7 @@ Params.NumPools = 1; % water pool only
 % Define Hyperbolic Secant Parameter
 Params.Inv.PulseOpt.beta = 672; % default 672 rad/s
 Params.Inv.PulseOpt.n = 1; % default 1
-Params.Inv.PulseOpt.mu = 5; % default 5
+Params.Inv.PulseOpt.Q = 5; % default 5
 Params.Inv.PulseOpt.A0 = 13.726; % default 13.726 micro Tesla
 Params.Inv.nSamples = 512; % default 512
 Params.Inv.Trf = 10.24/1000; % default 10.24 ms
@@ -71,7 +71,7 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%plotAdiabaticPulse(t, inv_pulse,Params);
+plotAdiabaticPulse(t, inv_pulse,Params);
 
 % Plot Bloch Sim Results based on NumPools
 blochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
@@ -283,7 +283,7 @@ Params.NumPools = 2; % water pool and macromolecular pool
 % Define Hyperbolic Secant Parameter
 Params.Inv.PulseOpt.beta = 672; % default 672 rad/s
 Params.Inv.PulseOpt.n = 1; % default 1 
-Params.Inv.PulseOpt.mu = 5; % default 5
+Params.Inv.PulseOpt.Q = 5; % default 5
 Params.Inv.PulseOpt.A0 = 13.726; % default 13.726 micro Tesla
 Params.Inv.nSamples = 512; % default 512
 Params.Inv.Trf = 10.24/1000; % default 10.24 ms
