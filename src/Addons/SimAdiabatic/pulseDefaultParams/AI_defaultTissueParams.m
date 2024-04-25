@@ -1,4 +1,4 @@
-function Params = defaultCortexTissueParams(Params)
+function Params = AI_defaultTissueParams(Params)
 
 %% Sort based on field strength and tissue type
 % currently only 3T and 7T are supported fields;
