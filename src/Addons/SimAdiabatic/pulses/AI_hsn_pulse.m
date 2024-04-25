@@ -61,6 +61,10 @@ function [rf_pulse, omega1, A_t, Params] = AI_hsn_pulse(Trf, Params)
 
 
 % Function to fill default values;
+    if ~isfield(Params, 'PulseOpt')
+        Params.PulseOpt = struct();
+    end
+    
 Params.PulseOpt = AI_defaultHsnParams(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  

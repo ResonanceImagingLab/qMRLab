@@ -64,6 +64,10 @@ function [rf_pulse, omega1, A_t, Params] = AI_sin40_pulse(Trf, Params)
 % Written by Christopher Rowley 2023 and Amie Demmans 2024
 
 % Function to fill default values;
+    if ~isfield(Params, 'PulseOpt')
+        Params.PulseOpt = struct();
+    end
+    
 Params.PulseOpt = AI_defaultSin40Params(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  

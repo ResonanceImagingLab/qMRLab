@@ -56,6 +56,10 @@ function [rf_pulse, omega1, A_t, Params] = AI_hs1_pulse(Trf, Params)
 
 
 % Function to fill default values;
+    if ~isfield(Params, 'PulseOpt')
+        Params.PulseOpt = struct();
+    end
+    
 Params.PulseOpt = AI_defaultHs1Params(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  
@@ -73,7 +77,7 @@ omega1 = -Params.PulseOpt.Q.*Params.PulseOpt.beta .* ...
             tanh(Params.PulseOpt.beta .* (tau))./(2*pi); % 2pi to convert from rad/s to Hz
 
 % Phase modulation function phi(t):
-phi = Params.PulseOpt.mu .* log(sech(Params.PulseOpt.beta .* (tau)) );
+phi = Params.PulseOpt.Q .* log(sech(Params.PulseOpt.beta .* (tau)) );
 
 % Put together complex RF pulse waveform:
 rf_pulse = A_t .* exp(1i .* phi);

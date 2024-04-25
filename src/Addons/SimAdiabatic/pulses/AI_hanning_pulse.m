@@ -50,6 +50,10 @@ function [rf_pulse, omega1, A_t, Params] = AI_hanning_pulse( Trf, Params)
 
 
 % Function to fill default values;
+    if ~isfield(Params, 'PulseOpt')
+        Params.PulseOpt = struct();
+    end
+    
 Params.PulseOpt = AI_defaultHanningParams(Params.PulseOpt);
 
 nSamples = Params.PulseOpt.nSamples;  
