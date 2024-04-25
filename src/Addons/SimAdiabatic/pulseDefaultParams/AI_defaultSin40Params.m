@@ -28,4 +28,10 @@ if(~isfield(PulseOpt,'Q') || isempty(PulseOpt.Q) || ~isfinite(PulseOpt.Q))
     % Adiabaticity factor 
     PulseOpt.Q = 6.25e-7;       
 end
+
+if(~isfield(PulseOpt,'Trf') || isempty(PulseOpt.Trf) || ~isfinite(PulseOpt.Trf))
+    % Adiabatic pulse duration 
+    PulseOpt.Trf = 10/1000;       
+end
+
 return;
