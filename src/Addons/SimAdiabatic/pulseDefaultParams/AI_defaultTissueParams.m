@@ -7,30 +7,30 @@ function tissueParams = AI_defaultTissueParams(B0, TissueType)
     if B0 == 3
         if strcmp(TissueType, 'GM')
             % Fill the matrix with the parameters for GM at 3T
-            tissueParams = [1; 1/1.4; 50; 50e-3; 7.5e-4; 'SuperLorentzian',0.25; 11.5e-6; []; 0.071; 0.8e-3/1e6];
+            tissueParams = [1; 1/1.4; 50; 50e-3; 7.5e-4; 0.25; 11.5e-6; 1; 0.071];
         elseif strcmp(TissueType, 'WM')
             % Fill the matrix with the parameters for WM at 3T
-           tissueParams = [1; 1/0.85; 35; 35e-3; 1.25e-3; 'SuperLorentzian',0.25; 11.1e-6; []; 0.155; 1e-3/1e6];
+           tissueParams = [1; 1/0.85; 35; 35e-3; 1.25e-3; 0.25; 11.1e-6; 1; 0.155];
         else
             error('Invalid TissueType for 3T. Choose either "GM" or "WM".');
         end
     elseif B0 == 7
         if strcmp(TissueType, 'GM')
             % Fill the matrix with the parameters for GM at 7T
-            tissueParams = [1, 1/2, 33, 45e-3, 5.25e-4, 0.25, 11e-6, [], 0.075, 0.8e-3/1e6];
+            tissueParams = [1; 1/2; 33; 45e-3; 5.25e-4; 0.25; 11e-6; 1; 0.075];
         elseif strcmp(TissueType, 'WM')
             % Fill the matrix with the parameters for WM at 7T
-            tissueParams = [1, 1/1.4, 27, 45e-3, 5.25e-4, 0.25, 11.1e-6, [], 0.155, 1e-3/1e6];
+            tissueParams = [1; 1/1.4; 27; 45e-3; 5.25e-4; 0.25; 11.1e-6; 1; 0.155];
         else
             error('Invalid TissueType for 7T. Choose either "GM" or "WM".');
         end
     elseif B0 == 1.5
         if strcmp(TissueType, 'GM')
             % Fill the matrix with the parameters for GM at 1.5T
-            tissueParams = [1, 1/2, 25.7, 51e-3, 5.25e-4, 0.25, 11e-6, 1, 0.07, 0.8e-3/1e6];
+            tissueParams = [1; 1/2; 25.7; 51e-3; 5.25e-4; 0.25; 11e-6; 1; 0.07];
         elseif strcmp(TissueType, 'WM')
             % Fill the matrix with the parameters for WM at 1.5T
-            tissueParams = [1, 1/0.55, 25, 35e-3, 5.25e-4, 0.25, 12e-6, 1.8, 0.16, 1e-3/1e6];
+            tissueParams = [1; 1/0.55; 25; 35e-3; 5.25e-4; 0.25; 12e-6; 1.8; 0.16];
         else
             error('Invalid TissueType for 1.5T. Choose either "GM" or "WM".');
         end
