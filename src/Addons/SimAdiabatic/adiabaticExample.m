@@ -71,10 +71,10 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-plotAdiabaticPulse(t, inv_pulse,Params);
+%plotAdiabaticPulse(t, inv_pulse,A_t,omega1, Params);
 
 % Plot Bloch Sim Results based on NumPools
-blochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
+blochSimCallFunction(inv_pulse,Params)
 
 % What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -107,10 +107,10 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%plotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse,A_t,omega1, Params);
 
 % Plot Bloch Sim Results based on NumPools 
-blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+blochSimCallFunction(inv_pulse, Params);
 
 % What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -143,10 +143,10 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%plotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse,A_t,omega1, Params);
 
 % Plot Bloch Sim Results based on NumPools 
-blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+blochSimCallFunction(inv_pulse, Params);
 
 % What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -179,10 +179,10 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%plotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse,A_t,omega1, Params);
 
 % Plot Bloch Sim Results based on NumPools 
-blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+blochSimCallFunction(inv_pulse, Params);
 
 % What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -216,10 +216,10 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%plotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse,A_t,omega1, Params);
 
 % Plot Bloch Sim Results based on NumPools 
-blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+blochSimCallFunction(inv_pulse, Params);
 
 % What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -254,10 +254,10 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%plotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse,A_t,omega1, Params);
 
 % Plot Bloch Sim Results based on NumPools 
-blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+blochSimCallFunction(inv_pulse, Params);
 
 % What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -297,10 +297,10 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%plotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse,A_t,omega1, Params);
 
 % Plot Bloch Sim Results based on NumPools
-blochSimCallFunction(inv_pulse, t, A_t, omega1,Params)
+blochSimCallFunction(inv_pulse, Params)
 
 % What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -334,10 +334,10 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%plotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse,A_t,omega1, Params);
 
 % Plot Bloch Sim Results based on NumPools 
-blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+blochSimCallFunction(inv_pulse, Params);
 
 % What happens in a non-adiabatic pulse  
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -371,10 +371,10 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%plotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse,A_t,omega1, Params);
 
 % Plot Bloch Sim Results based on NumPools 
-blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+blochSimCallFunction(inv_pulse, Params);
 
 % What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -408,10 +408,10 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%plotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse,A_t,omega1, Params);
 
 % Plot Bloch Sim Results based on NumPools 
-blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+blochSimCallFunction(inv_pulse, Params);
 
 % What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -446,10 +446,10 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%plotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse,A_t,omega1, Params);
 
 % Plot Bloch Sim Results based on NumPools 
-blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+blochSimCallFunction(inv_pulse, Params);
 
 % What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
@@ -484,10 +484,10 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples);
-%plotAdiabaticPulse(t, inv_pulse, Params);
+%plotAdiabaticPulse(t, inv_pulse,A_t,omega1, Params);
 
 % Plot Bloch Sim Results based on NumPools 
-blochSimCallFunction(inv_pulse, t, A_t, omega1, Params);
+blochSimCallFunction(inv_pulse, Params);
 
 % What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);

@@ -1,4 +1,4 @@
-function blochSimCallFunction(rf_pulse, t, A_t, omega1,Params)
+function blochSimCallFunction(rf_pulse, Params)
 %% Can do Bloch Sim to get inversion profile and display figure if interested:
 
 fs = 18;
@@ -21,20 +21,20 @@ if Params.NumPools == 1
         end
     end
 
-    figure; tiledlayout(1,3)
-    nexttile; plot(t*1000, A_t, 'LineWidth', 3); 
-    xlabel('Time(ms)'); ylabel('B_1 (μT)')
-    title('Amplitude Function','FontWeight','normal');ax = gca; ax.FontSize = fs;
+     figure; tiledlayout(1,1)
+    % nexttile; plot(t*1000, A_t, 'LineWidth', 3); 
+    % xlabel('Time(ms)'); ylabel('B_1 (μT)')
+    % title('Amplitude Function','FontWeight','normal');ax = gca; ax.FontSize = fs;
     
-    nexttile; plot(t*1000, omega1, 'LineWidth', 3);
-    xlabel('Time(ms)'); ylabel('Frequency (Hz)');
-    title('Frequency Modulation function','FontWeight','normal');ax = gca; ax.FontSize = fs;
+    % nexttile; plot(t*1000, omega1, 'LineWidth', 3);
+    % xlabel('Time(ms)'); ylabel('Frequency (Hz)');
+    % title('Frequency Modulation function','FontWeight','normal');ax = gca; ax.FontSize = fs;
     
     nexttile; surf(b1m, freqm, Mza,'FaceColor','interp'); 
     xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{za}');ax = gca; ax.FontSize = fs;
     view(-55, 10)
     
-    set(gcf,'Position',[100 100 1200 500])
+    set(gcf,'Position',[100 100 700 500])
 
     sgtitle(Params.Inv.shape, 'FontSize', fs+4,'FontWeight','bold')
 
@@ -58,14 +58,14 @@ elseif Params.NumPools == 2
         end
     end
 
-    figure; tiledlayout(2,2)
-    nexttile; plot(t*1000, A_t, 'LineWidth', 3); 
-    xlabel('Time(ms)'); ylabel('B_1 (μT)')
-    title('Amplitude Function','FontWeight','normal');ax = gca; ax.FontSize = fs;
-    
-    nexttile; plot(t*1000, omega1, 'LineWidth', 3);
-    xlabel('Time(ms)'); ylabel('Frequency (Hz)');
-    title('Frequency Modulation function','FontWeight','normal');ax = gca; ax.FontSize = fs;
+    figure; tiledlayout(1,2)
+    % nexttile; plot(t*1000, A_t, 'LineWidth', 3); 
+    % xlabel('Time(ms)'); ylabel('B_1 (μT)')
+    % title('Amplitude Function','FontWeight','normal');ax = gca; ax.FontSize = fs;
+    % 
+    % nexttile; plot(t*1000, omega1, 'LineWidth', 3);
+    % xlabel('Time(ms)'); ylabel('Frequency (Hz)');
+    % title('Frequency Modulation function','FontWeight','normal');ax = gca; ax.FontSize = fs;
     
     nexttile; surf(b1m, freqm, Mza, 'FaceColor','interp');
     xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{za}');ax = gca; ax.FontSize = fs;
@@ -73,7 +73,7 @@ elseif Params.NumPools == 2
     nexttile; surf(b1m, freqm, Mzb,'FaceColor','interp');
     xlabel('Rel. B1'); ylabel('Freq (Hz)'); zlabel('M_{zb}');ax = gca; ax.FontSize = fs;
     
-    set(gcf,'Position',[100 100 1200 800])
+    set(gcf,'Position',[100 100 1000 500])
 
     sgtitle(Params.Inv.shape, 'FontSize', fs+4,'FontWeight','bold')
 
