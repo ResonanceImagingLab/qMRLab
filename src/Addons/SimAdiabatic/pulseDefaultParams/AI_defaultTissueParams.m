@@ -1,44 +1,5 @@
-%function Params = AI_defaultTissueParams(Params)
-function tissueParams = AI_defaultTissueParams(B0, TissueType) 
-
-    tissueParams = zeros(1, 13); % 1 row for 1 combination, 13 columns for each parameter.
-
-    % Check the combination of B0 and TissueType
-    if B0 == 3
-        if strcmp(TissueType, 'GM')
-            % Fill the matrix with the parameters for GM at 3T
-            tissueParams = [1; 1/1.4; 50; 50e-3; 7.5e-4; 0.25; 11.5e-6; 1; 0.071];
-        elseif strcmp(TissueType, 'WM')
-            % Fill the matrix with the parameters for WM at 3T
-           tissueParams = [1; 1/0.85; 35; 35e-3; 1.25e-3; 0.25; 11.1e-6; 1; 0.155];
-        else
-            error('Invalid TissueType for 3T. Choose either "GM" or "WM".');
-        end
-    elseif B0 == 7
-        if strcmp(TissueType, 'GM')
-            % Fill the matrix with the parameters for GM at 7T
-            tissueParams = [1; 1/2; 33; 45e-3; 5.25e-4; 0.25; 11e-6; 1; 0.075];
-        elseif strcmp(TissueType, 'WM')
-            % Fill the matrix with the parameters for WM at 7T
-            tissueParams = [1; 1/1.4; 27; 45e-3; 5.25e-4; 0.25; 11.1e-6; 1; 0.155];
-        else
-            error('Invalid TissueType for 7T. Choose either "GM" or "WM".');
-        end
-    elseif B0 == 1.5
-        if strcmp(TissueType, 'GM')
-            % Fill the matrix with the parameters for GM at 1.5T
-            tissueParams = [1; 1/2; 25.7; 51e-3; 5.25e-4; 0.25; 11e-6; 1; 0.07];
-        elseif strcmp(TissueType, 'WM')
-            % Fill the matrix with the parameters for WM at 1.5T
-            tissueParams = [1; 1/0.55; 25; 35e-3; 5.25e-4; 0.25; 12e-6; 1.8; 0.16];
-        else
-            error('Invalid TissueType for 1.5T. Choose either "GM" or "WM".');
-        end
-    else
-        error('Invalid B0. Choose either 1.5, 3, or 7T.');
-    end
-end
 %% Sort based on field strength and tissue type
+function Params = AI_defaultTissueParams(Params)
 % currently only 3T and 7T are supported fields;
 % currently only 'GM' and 'WM' are the supported tissue types.
 
@@ -49,120 +10,120 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 %%%%%%%%%%%%%  3T %%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-% if Params.B0 == 3
-% 
-%     if strcmp(Params.TissueType, 'GM')
-%         Params.M0a = 1;
-%         Params.Raobs = 1/1.4; 
-%         Params.R = 50; % 
-%         Params.T2a = 50e-3; % Sled and Pike 2001
-%         Params.T1D = 7.5e-4; % Varma 2017 was 6ms
-%         Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
-%         Params.R1b = 0.25;
-%         Params.T2b = 11.5e-6; 
-%         Params.Ra = [];
-%         Params.M0b =  0.071;
-%         Params.D = 0.8e-3/1e6; % diffusion coefficient-> convert from mm^2/s to m^2/s
-% 
-%     elseif strcmp(Params.TissueType, 'WM')
-%         Params.M0a = 1;
-%         Params.Raobs = 1/0.85; 
-%         Params.R = 35;
-%         Params.T2a = 35e-3; % Sled and Pike 2001
-%         Params.T1D = 1.25e-3; % Varma 2017 was 6ms
-%         Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
-%         Params.R1b = 0.25;
-%         Params.T2b = 11.1e-6;
-%         Params.Ra = [];
-%         Params.M0b =  0.155;
-%         Params.D = 1e-3/1e6; % diffusion coefficient-> convert from mm^2/s to m^2/s
-% 
-%     else
-%         error('Please set Params.TissueType to either GM or WM, or build an additional field')
-%     end
+if Params.B0 == 3
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%%%%%%%%%%%%%  7T %%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-% elseif Params.B0 == 7
-% 
-%     if strcmp(Params.TissueType, 'GM')
-%         Params.M0a = 1;
-%         Params.Raobs = 1/2; 
-%         Params.R = 33; % 
-%         Params.T2a = 45e-3; 
-%         Params.T1D = 5.25e-4; % Varma 2017 was 6ms
-%         Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
-%         Params.R1b = 0.25;
-%         Params.T2b = 11e-6; 
-%         Params.Ra = [];
-%         Params.M0b =  0.075;
-%         Params.D = 0.8e-3/1e6; % diffusion coefficient-> convert from mm^2/s to m^2/s
-% 
-%     elseif strcmp(Params.TissueType, 'WM')
-%         Params.M0a = 1;
-%         Params.Raobs = 1/1.4; 
-%         Params.R = 27;
-%         Params.T2a = 45e-3; 
-%         Params.T1D = 5.25e-4; % Varma 2017 was 6ms
-%         Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
-%         Params.R1b = 0.25;
-%         Params.T2b = 11.1e-6;
-%         Params.Ra = [];
-%         Params.M0b =  0.155;
-%         Params.D = 1e-3/1e6; % diffusion coefficient-> convert from mm^2/s to m^2/s
-% 
-%     else
-%         error('Please set Params.TissueType to either GM or WM, or build an additional field')
-%     end
+    if strcmp(Params.TissueType, 'GM')
+        Params.M0a = 1;
+        Params.Raobs = 1/1.4; 
+        Params.R = 50; % 
+        Params.T2a = 50e-3; % Sled and Pike 2001
+        Params.T1D = 7.5e-4; % Varma 2017 was 6ms
+        Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
+        Params.R1b = 0.25;
+        Params.T2b = 11.5e-6; 
+        Params.Ra = [];
+        Params.M0b =  0.071;
+        Params.D = 0.8e-3/1e6; % diffusion coefficient-> convert from mm^2/s to m^2/s
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%%%%%%%%%%%%% 1.5T %%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+    elseif strcmp(Params.TissueType, 'WM')
+        Params.M0a = 1;
+        Params.Raobs = 1/0.85; 
+        Params.R = 35;
+        Params.T2a = 35e-3; % Sled and Pike 2001
+        Params.T1D = 1.25e-3; % Varma 2017 was 6ms
+        Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
+        Params.R1b = 0.25;
+        Params.T2b = 11.1e-6;
+        Params.Ra = [];
+        Params.M0b =  0.155;
+        Params.D = 1e-3/1e6; % diffusion coefficient-> convert from mm^2/s to m^2/s
+
+    else
+        error('Please set Params.TissueType to either GM or WM, or build an additional field')
+    end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%  7T %%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+elseif Params.B0 == 7
+
+    if strcmp(Params.TissueType, 'GM')
+        Params.M0a = 1;
+        Params.Raobs = 1/2; 
+        Params.R = 33; % 
+        Params.T2a = 45e-3; 
+        Params.T1D = 5.25e-4; % Varma 2017 was 6ms
+        Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
+        Params.R1b = 0.25;
+        Params.T2b = 11e-6; 
+        Params.Ra = [];
+        Params.M0b =  0.075;
+        Params.D = 0.8e-3/1e6; % diffusion coefficient-> convert from mm^2/s to m^2/s
+
+    elseif strcmp(Params.TissueType, 'WM')
+        Params.M0a = 1;
+        Params.Raobs = 1/1.4; 
+        Params.R = 27;
+        Params.T2a = 45e-3; 
+        Params.T1D = 5.25e-4; % Varma 2017 was 6ms
+        Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
+        Params.R1b = 0.25;
+        Params.T2b = 11.1e-6;
+        Params.Ra = [];
+        Params.M0b =  0.155;
+        Params.D = 1e-3/1e6; % diffusion coefficient-> convert from mm^2/s to m^2/s
+
+    else
+        error('Please set Params.TissueType to either GM or WM, or build an additional field')
+    end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%% 1.5T %%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 % Use the optimizations from: Levesque, I.R., Sled, J.G., Pike, G.B., 2011. 
 % Iterative optimization method for design of quantitative magnetization transfer 
 % imaging experiments. Magn. Reson. Med. 66, 635–643. https://doi.org/10.1002/mrm.23071
-% elseif Params.B0 == 1.5
-% 
-%     if strcmp(Params.TissueType, 'GM')
-%         Params.M0a = 1;
-%         Params.Raobs = 1/2; 
-%         Params.R = 25.7; % 
-%         Params.T2a = 51e-3; 
-%         Params.T1D = 5.25e-4; % Varma 2017 was 6ms
-%         Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
-%         Params.R1b = 0.25;
-%         Params.T2b = 11e-6; 
-%         Params.Ra = 1;
-%         Params.M0b =  0.07;
-%         Params.D = 0.8e-3/1e6; % diffusion coefficient-> convert from mm^2/s to m^2/s
-% 
-%     elseif strcmp(Params.TissueType, 'WM')
-%         Params.M0a = 1;
-%         Params.Raobs = 1/0.55; 
-%         Params.R = 25;
-%         Params.T2a = 35e-3; 
-%         Params.T1D = 5.25e-4; % Varma 2017 was 6ms
-%         Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
-%         Params.R1b = 0.25;
-%         Params.T2b = 12e-6;
-%         Params.Ra = 1.8;
-%         Params.M0b =  0.16;
-%         Params.D = 1e-3/1e6; % diffusion coefficient-> convert from mm^2/s to m^2/s
-% 
-%     else
-%         error('Please set Params.TissueType to either GM or WM, or build an additional field')
-%     end
-% 
-% else
-%     error('Please set Params.B0 to either 3,7, or build an additional field')
-% end
+elseif Params.B0 == 1.5
+
+    if strcmp(Params.TissueType, 'GM')
+        Params.M0a = 1;
+        Params.Raobs = 1/2; 
+        Params.R = 25.7; % 
+        Params.T2a = 51e-3; 
+        Params.T1D = 5.25e-4; % Varma 2017 was 6ms
+        Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
+        Params.R1b = 0.25;
+        Params.T2b = 11e-6; 
+        Params.Ra = 1;
+        Params.M0b =  0.07;
+        Params.D = 0.8e-3/1e6; % diffusion coefficient-> convert from mm^2/s to m^2/s
+
+    elseif strcmp(Params.TissueType, 'WM')
+        Params.M0a = 1;
+        Params.Raobs = 1/0.55; 
+        Params.R = 25;
+        Params.T2a = 35e-3; 
+        Params.T1D = 5.25e-4; % Varma 2017 was 6ms
+        Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
+        Params.R1b = 0.25;
+        Params.T2b = 12e-6;
+        Params.Ra = 1.8;
+        Params.M0b =  0.16;
+        Params.D = 1e-3/1e6; % diffusion coefficient-> convert from mm^2/s to m^2/s
+
+    else
+        error('Please set Params.TissueType to either GM or WM, or build an additional field')
+    end
+
+else
+    error('Please set Params.B0 to either 3,7, or build an additional field')
+end
 
 
-% if isempty(Params.Ra) % allow you to specify either Ra or Raobs
-%     Params.Ra = Params.Raobs - ((Params.R * Params.M0b * (Params.R1b - Params.Raobs)) / (Params.R1b - Params.Raobs + Params.R));
-%     if isnan(Params.Ra)
-%         Params.Ra = 1;
-%     end
-% end
+if isempty(Params.Ra) % allow you to specify either Ra or Raobs
+    Params.Ra = Params.Raobs - ((Params.R * Params.M0b * (Params.R1b - Params.Raobs)) / (Params.R1b - Params.Raobs + Params.R));
+    if isnan(Params.Ra)
+        Params.Ra = 1;
+    end
+end
 
