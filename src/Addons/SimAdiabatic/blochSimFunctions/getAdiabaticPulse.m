@@ -44,7 +44,7 @@ switch shape
         [rf_pulse, omega1, A_t, Params] = AI_hs1_pulse(Trf, Params);
     case 'Lorentz'
         [rf_pulse, omega1, A_t, Params] = AI_lorentz_pulse(Trf, Params);
-    case 'Gauss'
+    case 'Gaussian'
         [rf_pulse, omega1, A_t, Params] = AI_gauss_pulse(Trf, Params);
     case 'Hanning'
         [rf_pulse, omega1, A_t, Params] = AI_hanning_pulse(Trf, Params);
