@@ -19,7 +19,7 @@ function M_return = blochSimAdiabaticPulse_1pool( rf_pulse, Trf, delta,...
  
        
     %% If you wanted to do single pool:
-    nSamples = Params.Inv.nSamples;
+    nSamples = Params.nSamples;
    
     Mt = zeros(3, nSamples+1);
     Mt(:,1) = M_start; % start mag = [0 0 1];
@@ -27,7 +27,7 @@ function M_return = blochSimAdiabaticPulse_1pool( rf_pulse, Trf, delta,...
 
     % We will numerically evaluate this over time 
    
-    dt = Params.Inv.Trf/nSamples;
+    dt = Params.Trf/nSamples;
     
     R2a = 1/Params.T2a; %1000/80; % 80 ms
     R1a = Params.Ra; % 1; % 1000 ms

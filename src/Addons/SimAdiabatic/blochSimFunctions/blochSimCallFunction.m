@@ -14,7 +14,7 @@ if Params.NumPools == 1
     for i = 1:length(b1Rel)
         for j = 1:length(freqOff)
         
-            M_return = blochSimAdiabaticPulse_1pool( b1Rel(i)*rf_pulse, Params.Inv,  ...
+            M_return = blochSimAdiabaticPulse_1pool( b1Rel(i)*rf_pulse, Params,  ...
                             freqOff(j), Params, M_start, []);
 
             Mza(i,j) = M_return(3);
@@ -36,7 +36,7 @@ if Params.NumPools == 1
     
     set(gcf,'Position',[100 100 700 500])
 
-    sgtitle(Params.Inv.shape, 'FontSize', fs+4,'FontWeight','bold')
+    sgtitle(Params.shape, 'FontSize', fs+4,'FontWeight','bold')
 
 elseif Params.NumPools == 2
     M_start = [0, 0, 0, 0, Params.M0a, Params.M0b]';
@@ -50,7 +50,7 @@ elseif Params.NumPools == 2
     for i = 1:length(b1Rel)
         for j = 1:length(freqOff)
         
-            M_return = blochSimAdiabaticPulse_2pool( b1Rel(i)*rf_pulse, Params.Inv,  ...
+            M_return = blochSimAdiabaticPulse_2pool( b1Rel(i)*rf_pulse, Params,  ...
                             freqOff(j), Params, M_start, []);
 
             Mza(i,j) = M_return(5);
@@ -75,7 +75,7 @@ elseif Params.NumPools == 2
     
     set(gcf,'Position',[100 100 1000 500])
 
-    sgtitle(Params.Inv.shape, 'FontSize', fs+4,'FontWeight','bold')
+    sgtitle(Params.shape, 'FontSize', fs+4,'FontWeight','bold')
 
 else
     error('Define Params.NumPools to be = 1 or 2;')

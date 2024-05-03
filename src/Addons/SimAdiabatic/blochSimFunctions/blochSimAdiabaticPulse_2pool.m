@@ -28,7 +28,7 @@ function M_return = blochSimAdiabaticPulse_2pool( rf_pulse, PulseParams, delta,.
         Params.kr = (Params.R*Params.M0a);
     end
 
-    nSamples = PulseParams.nSamples;
+    nSamples = Params.nSamples;
     
     % Follow equations in Murase 2011 - Pull values from Params struct
     R2a = 1/Params.T2a; % 80 ms
@@ -43,7 +43,7 @@ function M_return = blochSimAdiabaticPulse_2pool( rf_pulse, PulseParams, delta,.
     
     Mt(:,1) = M_start; % start mag
     
-    dt = PulseParams.Trf/nSamples;
+    dt = Params.Trf/nSamples;
     
     for t = 1:nSamples
     
