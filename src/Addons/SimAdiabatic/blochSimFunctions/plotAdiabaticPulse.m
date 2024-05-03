@@ -47,4 +47,4 @@ tiledlayout(1,3)
 set(gcf,'Position',[100 100 1200 500])
 
 % Set title of pulse 
-sgtitle(Params.Inv.shape, 'FontSize', fs+4,'FontWeight','bold')
+sgtitle(Params.shape, 'FontSize', fs+4,'FontWeight','bold')
