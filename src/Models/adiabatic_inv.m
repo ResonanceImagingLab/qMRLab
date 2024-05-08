@@ -86,7 +86,7 @@ classdef adiabatic_inv < AbstractModel
 
         methods 
 
-            function obj = adiabatic_inv
+            function obj = adiabatic_inv()
                 obj.options = button2opts(obj.buttons);
                 obj = UpdateFields(obj);
                 obj = plotOptions(obj);
@@ -107,7 +107,7 @@ classdef adiabatic_inv < AbstractModel
 
                 % Set up Pulse Params into object container 
                 PulseOpt = pulseparams(obj);
-                obj.Prot.PulseParameters.Mat = [PulseOpt.beta, PulseOpt.A0, PulseOpt.n, PulseOpt.nSamples, PulseOpt.Q, PulseOpt.Trf]';
+                obj.Prot.PulseParameters.Mat = [PulseOpt.beta, PulseOpt.A0, PulseOpt.n, PulseOpt.nSamples, PulseOpt.Q, PulseOpt.Trf]' ;
 
                 % Call plotOptions function to connect changing fields 
                 plotOptions(obj);
