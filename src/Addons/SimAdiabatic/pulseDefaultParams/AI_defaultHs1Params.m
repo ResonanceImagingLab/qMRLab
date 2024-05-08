@@ -35,14 +35,6 @@ end
 
 return
 
-%PulseOpt = [672; 13.726; 1; 512; 5; 10.24];
-
-% PulseOpt = [PulseOpt.beta; ...
-%     PulseOpt.A0;...
-%      PulseOpt.n;...
-%      PulseOpt.nSamples;... 
-%      PulseOpt.Q; 
-%      PulseOpt.Trf];
 
 
 
