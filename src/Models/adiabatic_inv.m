@@ -56,91 +56,108 @@ classdef adiabatic_inv < AbstractModel
             MRIinputs = {}; % No data needs to be downloaded
             xnames = {}; % Box names for Fitting section which I am not using, still needs to be defined though   
             %voxelwise = 0; % No voxel wise fitting 
+            %  options= struct();
+            % previousOptions = struct();
 
         
             % Creates sections in protocol boxes: PulseParams and TissueParams
             Prot = struct('PulseParameters', struct('Format',{{'beta(rad/s)' ; 'A0'; 'n' ;'nSamples' ;'Q' ;'Trf'}} ...
-                ,'Mat',[]), ...
-                'DefaultTissueParams', struct('Format',{{'M0a'; 'R'; 'T2a'; 'R1b'; 'T2b'; 'Ra'; 'M0b'}},'Mat', []));
-
-        % Prot = struct('DefaultTissueParams', struct('Format',{{'M0a'; 'R'; 'T2a'; 'R1b'; 'T2b'; 'Ra'; 'M0b'}},'Mat', []), ... 
-        %     'PulseParameters', struct('Format',{{'beta(rad/s)' ; 'A0'; 'n' ;'nSamples' ;'Q' ;'Trf'}} ...
-        %     ,'Mat',[]));
+                ,'Mat',[672; 13.726; 1; 512; 5; 10.24/1000]), ...
+                'DefaultTissueParams', struct('Format',{{'M0a'; 'R'; 'T2a'; 'R1b'; 'T2b'; 'Ra'; 'M0b'}}, ...
+                'Mat', [1; 35; 35e-3; 0.25; 11.1e-6; 1; 0.155]));
 
     
             % Creating drop box options and push buttons in Options section 
             buttons = {'TissueType', {'WM', 'GM'},...
                 'B0', {'3', '7', '1.5'}, ...
                 'Pulse', {'Hs1', 'Lorentz', 'Gaussian', 'Hanning', 'Hsn', 'Sin40'},...
-                'PlotAdiabatic', 'pushbutton' ...
+                'PlotAdiabatic', 'pushbutton', ...
                 'BlochSim1Pool', 'pushbutton', ... 
                 'BlochSim2Pool', 'pushbutton',...
                 };
 
+
             % Set options as struct so when you call it a structure is created
             % for each button option 
             options= struct();
+            previousOptions = struct();
 
         end 
 
-
         methods 
 
-            function obj = adiabatic_inv()
+            function obj = adiabatic_inv() 
                 obj.options = button2opts(obj.buttons);
-                obj = UpdateFields(obj);
-                obj = plotOptions(obj);
+                obj.previousOptions = obj.options;
+                %obj = UpdateFields(obj);                
             end
 
-            function obj = UpdateFields(obj)            
-                % Set B0 and tissue type to options of the associated
-                % dropdown 
-                Params.B0 = str2double(obj.options.B0);
-                Params.TissueType = obj.options.TissueType;
 
-                % Fill in the associated Tissue params based on B0 and
-                % tissue type 
-                Params = AI_defaultTissueParams(Params);
+            function checkfields = checkupdatedfields(obj)
+                checkfields = ~isequal(obj.options.TissueType, obj.previousOptions.TissueType) || ... 
+                           ~isequal(obj.options.B0, obj.previousOptions.B0) || ...
+                           ~isequal(obj.options.Pulse, obj.previousOptions.Pulse)||...
+                           obj.options.PlotAdiabatic ~= obj.previousOptions.PlotAdiabatic||... ~does not equal
+                           obj.options.BlochSim1Pool ~= obj.previousOptions.BlochSim1Pool ||...
+                           obj.options.BlochSim2Pool ~= obj.previousOptions.BlochSim2Pool;
 
-                % Fill default tissue params into the object container
-                obj.Prot.DefaultTissueParams.Mat = [Params.M0a, Params.R, Params.T2a, Params.R1b, Params.T2b, Params.Ra, Params.M0b]';
+            end 
 
-                % Set up Pulse Params into object container 
-                PulseOpt = pulseparams(obj);
-                obj.Prot.PulseParameters.Mat = [PulseOpt.beta, PulseOpt.A0, PulseOpt.n, PulseOpt.nSamples, PulseOpt.Q, PulseOpt.Trf]' ;
+            function obj = UpdateFields(obj) 
+                if obj.checkupdatedfields()
+                    
+                    obj.previousOptions = obj.options;
 
-                % Call plotOptions function to connect changing fields 
-                plotOptions(obj);
-                
-            end
-                
+                    %Set B0 and tissue type to options of the associated
+                    %dropdown 
+                    Params.B0 = str2double(obj.options.B0);
+                    Params.TissueType = obj.options.TissueType;
 
-            function PulseParams = pulseparams(obj)
+                    % Fill in the associated Tissue params based on B0 and
+                    % tissue type 
+                    Params = AI_defaultTissueParams(Params);
+
+                    % Fill default tissue params into the object container
+                    obj.Prot.DefaultTissueParams.Mat = [Params.M0a, Params.R, Params.T2a, Params.R1b, Params.T2b, Params.Ra, Params.M0b]';
+
+                    % Set up Pulse Params into object container 
+                    PulseOpt = pulseparams(obj);
+                    obj.Prot.PulseParameters.Mat = [PulseOpt.beta, PulseOpt.A0, PulseOpt.n, PulseOpt.nSamples, PulseOpt.Q, PulseOpt.Trf]' ;
+                    
+                    % Call plotOptions function to connect changing fields 
+                    plotOptions(obj);
+                end 
+    
+            end 
+
+
+            function obj = pulseparams(obj)
                 pulseType = obj.options.Pulse; % set case name to pulse option dropdown 
 
             % Creating names for each pulse to call the params associated with
             % dropdown and object containers 
                 switch pulseType
                     case 'Hs1'
-                        PulseParams = AI_defaultHs1Params(obj.options);
+                        obj = AI_defaultHs1Params(obj.options);
                     case 'Lorentz'
-                        PulseParams = AI_defaultLorentzParams(obj.options);
+                        obj = AI_defaultLorentzParams(obj.options);
                     case 'Gaussian'
-                        PulseParams = AI_defaultGaussParams(obj.options);
+                        obj = AI_defaultGaussParams(obj.options);
                     case 'Hanning'
-                        PulseParams = AI_defaultHanningParams(obj.options);
+                        obj = AI_defaultHanningParams(obj.options);
                     case 'Hsn'
-                        PulseParams = AI_defaultHsnParams(obj.options);
+                        obj = AI_defaultHsnParams(obj.options);
                     case 'Sin40'
-                        PulseParams = AI_defaultSin40Params(obj.options);
+                        obj = AI_defaultSin40Params(obj.options);
                     otherwise
                         error('Unknown pulse type selected');
                 end
-             end
+            end
 
-          % Function to call plotting options when user presses pushbutton
-          % --> Beginning set up similar to that of adiabaticExample.m
-             function obj = plotOptions(obj)
+          %Function to call plotting options when user presses pushbutton
+          %--> Beginning set up similar to that of adiabaticExample.m
+          function obj = plotOptions(obj)
+              
                 Params.Trf = obj.Prot.PulseParameters.Mat(6);         % Trf
                 Params.nSamples = obj.Prot.PulseParameters.Mat(4);    % nSamples
                 Params.shape = obj.options.Pulse;                     % Pulse 
@@ -151,8 +168,10 @@ classdef adiabatic_inv < AbstractModel
 
              % If selecting PlotAdiabatic, call these functions and params
                 if obj.options.PlotAdiabatic
-                    Params.shape = obj.options.Pulse;                 % Pulse
+                    Params.shape = obj.options.Pulse;  
+                    %t = linspace(0, Params.Trf, Params.nSamples); % Pulse
                     plotAdiabaticPulse(t, inv_pulse, A_t, omega1, Params);
+                   
 
              % If selecting BlochSim1Pool, call these functions and params
                 elseif obj.options.BlochSim1Pool
@@ -160,9 +179,10 @@ classdef adiabatic_inv < AbstractModel
                     Params.M0a = obj.Prot.DefaultTissueParams.Mat(1); % M0a 
                     Params.T2a = obj.Prot.DefaultTissueParams.Mat(3); % T2a
                     Params.Ra = obj.Prot.DefaultTissueParams.Mat(6);  % Ra
-                    
+
                     Params.shape = obj.options.Pulse;                 % Pulse
                     blochSimCallFunction(inv_pulse, Params)
+                   
 
              % If selecting BlochSim2Pool, call these functions and params
                 elseif obj.options.BlochSim2Pool
@@ -174,26 +194,197 @@ classdef adiabatic_inv < AbstractModel
                     Params.T2b = obj.Prot.DefaultTissueParams.Mat(5); % T2b
                     Params.Ra = obj.Prot.DefaultTissueParams.Mat(6);  % Ra
                     Params.M0b = obj.Prot.DefaultTissueParams.Mat(7); % M0b 
-    
-                    Params.shape = obj.options.Pulse;                 % Pulse 
-                    blochSimCallFunction(inv_pulse, Params)
-                end 
-            end 
 
-        end  
+                    %Params.shape = obj.options.Pulse;                 % Pulse 
+                    blochSimCallFunction(inv_pulse, Params)
+                   
+                end
+             
+          end 
+
+        end    
 end 
  
 
+% 672; 1; 5; 13.726; 512; 10.24/1000
+% 1; 35; 35e-3; 0.25; 11.1e-6; 1; 0.155
+
+             %  function setupEventListeners(obj)
+             %    % Add listeners for each button press
+             %    obj.buttons{4,2}.Callback = @(~,~) obj.onButtonPress('PlotAdiabatic');
+             %    obj.buttons{5,2}.Callback = @(~,~) obj.onButtonPress('BlochSim1Pool');
+             %    obj.buttons{6,2}.Callback = @(~,~) obj.onButtonPress('BlochSim2Pool');
+             %  end
+             % 
+             %  function onButtonPress(obj, buttonName)
+             %    % This function is called when a button is pressed
+             %    %obj.UpdateFields(); % Update fields first to get the latest options
+             %    obj.plotOptions(buttonName);
+             %    switch buttonName
+             %        case 'PlotAdiabatic'
+             %            obj.plotOptions('PlotAdiabatic');
+             %        case 'BlochSim1Pool'
+             %            obj.plotOptions('BlochSim1Pool');
+             %        case 'BlochSim2Pool'
+             %            obj.plotOptions('BlochSim2Pool');
+             %        otherwise
+             %            error('Unknown button press');
+             %    end
+             %  end
+             % 
+             %  function plotOptions(obj,action)
+             %    %plotType = obj.options;
+             %    Params.Trf = obj.Prot.PulseParameters.Mat(6);         % Trf
+             %    Params.nSamples = obj.Prot.PulseParameters.Mat(4);    % nSamples
+             %    Params.shape = obj.options.Pulse;                     % Pulse 
+             % 
+             %    % Call getAdaiabatic for case to pulse
+             %    [inv_pulse, omega1, A_t, Params] = getAdiabaticPulse( Params.Trf, Params.shape, Params);
+             %    t = linspace(0, Params.Trf, Params.nSamples); 
+             % 
+             %    switch action
+             % % If selecting PlotAdiabatic, call these functions and params
+             %        case 'PlotAdiabatic'
+             %        %Params.shape = obj.options.Pulse;                 % Pulse
+             %        plotAdiabaticPulse(t, inv_pulse, A_t, omega1, Params);
+             %        %obj.options.PlotAdiabatic = false;
+             % 
+             % % If selecting BlochSim1Pool, call these functions and params
+             %        case 'BlochSim1Pool'
+             %        Params.NumPools = 1;
+             %        Params.M0a = obj.Prot.DefaultTissueParams.Mat(1); % M0a 
+             %        Params.T2a = obj.Prot.DefaultTissueParams.Mat(3); % T2a
+             %        Params.Ra = obj.Prot.DefaultTissueParams.Mat(6);  % Ra
+             % 
+             %        %Params.shape = obj.options.Pulse;                 % Pulse
+             %        blochSimCallFunction(inv_pulse, Params)
+             %        %obj.options.BlochSim1Pool = false;
+             % 
+             % % If selecting BlochSim2Pool, call these functions and params
+             %        case 'BlochSim2Pool'
+             %        Params.NumPools = 2;
+             %        Params.M0a = obj.Prot.DefaultTissueParams.Mat(1); % M0a
+             %        Params.R = obj.Prot.DefaultTissueParams.Mat(2);   % R
+             %        Params.T2a = obj.Prot.DefaultTissueParams.Mat(3); % T2a
+             %        Params.R1b = obj.Prot.DefaultTissueParams.Mat(4); % R1b
+             %        Params.T2b = obj.Prot.DefaultTissueParams.Mat(5); % T2b
+             %        Params.Ra = obj.Prot.DefaultTissueParams.Mat(6);  % Ra
+             %        Params.M0b = obj.Prot.DefaultTissueParams.Mat(7); % M0b 
+             % 
+             %        %Params.shape = obj.options.Pulse;                 % Pulse 
+             %        blochSimCallFunction(inv_pulse, Params)
+             %        %obj.options.BlochSim2Pool = false;
+             %    end 
+             % end
 
 
+                % obj.options.B0 = uicontrol('Style', 'popupmenu', 'String', {'3', '7', '1.5'}, ...
+                % 'Tag', 'B0', 'Callback', @(src, event) obj.dropdownCallback(src, event));
+                % 
+                % obj.options.TissueType = uicontrol('Style', 'popupmenu', 'String', {'WM', 'GM'}, ...
+                % 'Tag', 'TissueType', 'Callback', @(src, event) obj.dropdownCallback(src, event));
+                % 
+                % obj.options.Pulse = uicontrol('Style', 'popupmenu', 'String', {'Hs1', 'Lorentz', 'Gaussian', 'Hanning', 'Hsn', 'Sin40'}, ...
+                % 'Tag', 'Pulse', 'Callback', @(src, event) obj.dropdownCallback(src, event));
 
 
+            % PrevB0 = '3';
+            % PrevTissueType = 'WM';
+            % PrevPulse = 'Hs1';
+
+     %  function dropdownCallback(obj,src,event) 
+            %     ddValue = src.Value ;
+            % 
+            %     if strcmp(src.Tag, 'B0')
+            %         if ~strcmp(ddValue, obj.PrevB0)
+            %             obj.PrevB0 = ddValue;
+            %             obj.UpdateFields();
+            %         end 
+            %     elseif strcmp(src.Tag, 'TissueType')
+            %         if ~strcmp(ddValue, obj.PrevTissueType)
+            %             obj.prevTissueType = ddValue;
+            %             obj.UpdateFields();
+            %         end
+            %     elseif strcmp(src.Tag, 'Pulse')
+            %         if ~strcmp(ddValue, obj.PrevPulse)
+            %             obj.PrevPulse = ddValue;
+            %             obj.UpdateFields();
+            %         end 
+            %     end 
+            % end 
+
+            % 
+            %             function tissuetype = TissueTypedd(obj) 
+            %     tissuetype = obj.options.TissueType;
+            % end 
+            % 
+            % function b0 = B0dd(obj)
+            %     b0 = obj.options.B0;
+            % end 
+            % 
+            % function pulse = Pulsedd(obj)
+            %     pulse = obj.options.Pulse;
+            % end 
+
+            % function obj = ddCallbacks(obj)
+            %     set(obj.options.TissueType, 'Callback', @(src, event) obj.ddChange(src, event));
+            %     set(obj.options.B0, 'Callback', @(src, event) obj.ddChange(src, event));
+            %     set(obj.options.Pulse, 'Callback', @(src, event) obj.ddChange(src, event));
+            % end 
+            % 
+            % function ddChange(obj, src, ~)
+            %     switch src
+            %         case obj.options.TissueType
+            %             obj.options.TissueType = get(src, 'Value');
+            %         case obj.options.B0 
+            %             obj.options.B0 = get(src, 'Value');
+            %         case obj.options.Pulse
+            %             obj.options.Pulse = get(src,'Value');
+            %     end 
+            % 
+            %     obj = UpdateFields(obj);
+            % end             
 
 
+            % 
 
-
-
-
+            % 
+            %         % Read options
+            %     Params.B0 = str2double(obj.options.B0);
+            %     Params.TissueType = obj.options.TissueType;
+            % 
+            %     % Create flags to determine which fields need updating
+            %     updatePulseParams = false;
+            %     updateTissueParams = false;
+            % 
+            %     % Update default tissue parameters if TissueType or B0 has changed
+            %     if isfield(obj.options, 'TissueType') || isfield(obj.options, 'B0')
+            %         updateTissueParams = true;
+            %         Params = AI_defaultTissueParams(Params);
+            %     end
+            % 
+            %     % Update pulse parameters if Pulse option has changed
+            %     if isfield(obj.options, 'Pulse')
+            %         updatePulseParams = true;
+            %         PulseOpt = pulseparams(obj);
+            %     end
+            % 
+            %     % Update the Prot struct based on the flags
+            %     if updateTissueParams
+            %         obj.Prot.DefaultTissueParams.Mat = [Params.M0a, Params.R, Params.T2a, Params.R1b, Params.T2b, Params.Ra, Params.M0b]';
+            %     end
+            % 
+            %     if updatePulseParams
+            %         obj.Prot.PulseParameters.Mat = [PulseOpt.beta, PulseOpt.A0, PulseOpt.n, PulseOpt.nSamples, PulseOpt.Q, PulseOpt.Trf]';
+            %     end
+            % 
+            %     % Call plotOptions if necessary
+            %     if any([obj.options.PlotAdiabatic, obj.options.BlochSim1Pool, obj.options.BlochSim2Pool])
+            %         plotOptions(obj);
+            %     end
+            % 
+            % end
+            % 
 
 
 
