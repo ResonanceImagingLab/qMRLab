@@ -94,17 +94,42 @@ classdef adiabatic_inv < AbstractModel
 
 
             function checkfields = checkupdatedfields(obj)
-                checkfields = ~isequal(obj.options.TissueType, obj.previousOptions.TissueType) || ... 
+                % C.R. split in two
+                % checkfields = ~isequal(obj.options.TissueType, obj.previousOptions.TissueType) || ... 
+                %            ~isequal(obj.options.B0, obj.previousOptions.B0) || ...
+                %            ~isequal(obj.options.Pulse, obj.previousOptions.Pulse)||...
+                %            obj.options.PlotAdiabatic ~= obj.previousOptions.PlotAdiabatic||... % does not equal
+                %            obj.options.BlochSim1Pool ~= obj.previousOptions.BlochSim1Pool ||...
+                %            obj.options.BlochSim2Pool ~= obj.previousOptions.BlochSim2Pool;
+                
+                % This needs to be separated otherwise it will always reset
+                % params.
+                
+                if (~isequal(obj.options.TissueType, obj.previousOptions.TissueType) || ... 
                            ~isequal(obj.options.B0, obj.previousOptions.B0) || ...
-                           ~isequal(obj.options.Pulse, obj.previousOptions.Pulse)||...
-                           obj.options.PlotAdiabatic ~= obj.previousOptions.PlotAdiabatic||... % does not equal
+                           ~isequal(obj.options.Pulse, obj.previousOptions.Pulse))
+                    checkfields = 1; % reset params to defaults
+                elseif (obj.options.PlotAdiabatic ~= obj.previousOptions.PlotAdiabatic||... % does not equal
                            obj.options.BlochSim1Pool ~= obj.previousOptions.BlochSim1Pool ||...
-                           obj.options.BlochSim2Pool ~= obj.previousOptions.BlochSim2Pool;
+                           obj.options.BlochSim2Pool ~= obj.previousOptions.BlochSim2Pool)
+                    checkfields = 2; % run sims -> this needs to be moved to a new function C.R.
+                else 
+                    checkfields = 0;
+                end
+
+                % Debug C.R.
+                str = ['checkfields = ', num2str(checkfields)];
+                disp(str);
 
             end 
 
             function obj = UpdateFields(obj) 
-                if obj.checkupdatedfields()
+
+                % Debug C.R.
+                disp('Update Fields called with checkFields');
+                disp(obj.checkupdatedfields)
+    
+               if obj.checkupdatedfields == 1 % C.R. add checkfields
                     
                     obj.previousOptions = obj.options;
 
@@ -126,6 +151,9 @@ classdef adiabatic_inv < AbstractModel
                     
                     % Call plotOptions function to connect changing fields 
                     plotOptions(obj);
+
+                elseif obj.checkupdatedfields == 2 
+                    % run plots C.R. -> need new function
                 end 
     
             end 
