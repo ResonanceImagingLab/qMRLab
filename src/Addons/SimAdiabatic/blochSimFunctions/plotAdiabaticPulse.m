@@ -18,6 +18,7 @@ tiledlayout(1,3)
 
 % Plot Amplitude Function
     nexttile;
+    %t = linspace(0, Params.Trf, Params.nSamples); 
     plot(t*1000, A_t, 'LineWidth', 3); 
     xlabel('Time(ms)'); 
     ylabel('B_1 (μT)')
