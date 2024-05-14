@@ -137,6 +137,7 @@ methods
             obj.Prot.PulseParameters.Mat = [PulseOpt.beta, PulseOpt.A0, PulseOpt.n, PulseOpt.nSamples, PulseOpt.Q, PulseOpt.Trf]' ;
 
         elseif obj.checkupdatedfields == 2
+            % Call plotOptions function to run with Updated Fields 
             plotOptions(obj);
         end
 
