@@ -123,6 +123,7 @@ classdef adiabatic_inv < AbstractModel
 
             end 
 
+
             function obj = UpdateFields(obj) 
 
                 % Debug C.R.
@@ -130,7 +131,8 @@ classdef adiabatic_inv < AbstractModel
                 disp(obj.checkupdatedfields)
     
                if obj.checkupdatedfields == 1 % C.R. add checkfields
-                    
+
+                    %obj.Storedparams = Params;
                     obj.previousOptions = obj.options;
 
                     %Set B0 and tissue type to options of the associated
@@ -150,10 +152,10 @@ classdef adiabatic_inv < AbstractModel
                     obj.Prot.PulseParameters.Mat = [PulseOpt.beta, PulseOpt.A0, PulseOpt.n, PulseOpt.nSamples, PulseOpt.Q, PulseOpt.Trf]' ;
                     
                     % Call plotOptions function to connect changing fields 
-                    plotOptions(obj);
+                    %plotOptions(obj,Params);
 
-                elseif obj.checkupdatedfields == 2 
-                    % run plots C.R. -> need new function
+                elseif obj.checkupdatedfields == 2
+                    plotOptions(obj);
                 end 
     
             end 
@@ -182,52 +184,54 @@ classdef adiabatic_inv < AbstractModel
                 end
             end
 
+
           %Function to call plotting options when user presses pushbutton
           %--> Beginning set up similar to that of adiabaticExample.m
           function obj = plotOptions(obj)
-              
-                Params.Trf = obj.Prot.PulseParameters.Mat(6);         % Trf
-                Params.nSamples = obj.Prot.PulseParameters.Mat(4);    % nSamples
-                Params.shape = obj.options.Pulse;                     % Pulse 
+                    Params.Trf = obj.Prot.PulseParameters.Mat(6);         % Trf
+                    Params.nSamples = obj.Prot.PulseParameters.Mat(4);    % nSamples
+                    Params.PulseOpt.beta = obj.Prot.PulseParameters.Mat(1);
+                    Params.PulseOpt.A0 = obj.Prot.PulseParameters.Mat(2);
+                    Params.PulseOpt.n = obj.Prot.PulseParameters.Mat(3);
+                    Params.PulseOpt.Q = obj.Prot.PulseParameters.Mat(5);
+                    Params.shape = obj.options.Pulse; 
+                    
+                    %disp(Params.A0)
 
-                % Call getAdaiabatic for case to pulse
-                [inv_pulse, omega1, A_t, Params] = getAdiabaticPulse( Params.Trf, Params.shape, Params);
-                t = linspace(0, Params.Trf, Params.nSamples); 
+                     % Call getAdaiabatic for case to pulse
+                    [inv_pulse, omega1, A_t, Params] = getAdiabaticPulse( Params.Trf, Params.shape, Params);
+                    t = linspace(0, Params.Trf, Params.nSamples); 
+                    
 
-             % If selecting PlotAdiabatic, call these functions and params
-                if obj.options.PlotAdiabatic
-                    Params.shape = obj.options.Pulse;  
-                    %t = linspace(0, Params.Trf, Params.nSamples); % Pulse
-                    plotAdiabaticPulse(t, inv_pulse, A_t, omega1, Params);
-                   
+                % If selecting PlotAdiabatic, call these functions and params
+                    if obj.options.PlotAdiabatic
+                        plotAdiabaticPulse(t, inv_pulse, A_t, omega1, Params);                   
 
              % If selecting BlochSim1Pool, call these functions and params
-                elseif obj.options.BlochSim1Pool
-                    Params.NumPools = 1;
-                    Params.M0a = obj.Prot.DefaultTissueParams.Mat(1); % M0a 
-                    Params.T2a = obj.Prot.DefaultTissueParams.Mat(3); % T2a
-                    Params.Ra = obj.Prot.DefaultTissueParams.Mat(6);  % Ra
+                    elseif obj.options.BlochSim1Pool
+                        Params.NumPools = 1;
+                        Params.M0a = obj.Prot.DefaultTissueParams.Mat(1); % M0a 
+                        Params.T2a = obj.Prot.DefaultTissueParams.Mat(3); % T2a
+                        Params.Ra = obj.Prot.DefaultTissueParams.Mat(6);  % Ra
+    
+                        blochSimCallFunction(inv_pulse, Params)
 
-                    Params.shape = obj.options.Pulse;                 % Pulse
-                    blochSimCallFunction(inv_pulse, Params)
-                   
 
              % If selecting BlochSim2Pool, call these functions and params
-                elseif obj.options.BlochSim2Pool
-                    Params.NumPools = 2;
-                    Params.M0a = obj.Prot.DefaultTissueParams.Mat(1); % M0a
-                    Params.R = obj.Prot.DefaultTissueParams.Mat(2);   % R
-                    Params.T2a = obj.Prot.DefaultTissueParams.Mat(3); % T2a
-                    Params.R1b = obj.Prot.DefaultTissueParams.Mat(4); % R1b
-                    Params.T2b = obj.Prot.DefaultTissueParams.Mat(5); % T2b
-                    Params.Ra = obj.Prot.DefaultTissueParams.Mat(6);  % Ra
-                    Params.M0b = obj.Prot.DefaultTissueParams.Mat(7); % M0b 
+                    elseif obj.options.BlochSim2Pool
+                        Params.NumPools = 2;
+                        Params.M0a = obj.Prot.DefaultTissueParams.Mat(1); % M0a
+                        Params.R = obj.Prot.DefaultTissueParams.Mat(2);   % R
+                        Params.T2a = obj.Prot.DefaultTissueParams.Mat(3); % T2a
+                        Params.R1b = obj.Prot.DefaultTissueParams.Mat(4); % R1b
+                        Params.T2b = obj.Prot.DefaultTissueParams.Mat(5); % T2b
+                        Params.Ra = obj.Prot.DefaultTissueParams.Mat(6);  % Ra
+                        Params.M0b = obj.Prot.DefaultTissueParams.Mat(7); % M0b 
+    
+                        blochSimCallFunction(inv_pulse, Params)
+    
+                    end
 
-                    %Params.shape = obj.options.Pulse;                 % Pulse 
-                    blochSimCallFunction(inv_pulse, Params)
-                   
-                end
-             
           end 
 
         end    
