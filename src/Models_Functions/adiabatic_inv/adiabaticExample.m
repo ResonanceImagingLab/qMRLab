@@ -71,13 +71,13 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Trf, Params.nSamples);
-plotAdiabaticPulse(t, inv_pulse,A_t,omega1, Params);
+%plotAdiabaticPulse(t, inv_pulse,A_t,omega1, Params);
 
 % Plot Bloch Sim Results based on NumPools
-%blochSimCallFunction(inv_pulse,Params)
+blochSimCallFunction(inv_pulse,Params)
 
 % What happens in a non-adiabatic pulse 
-%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), Params);
 
 %--------------------------------------------------------------------------
 %% Lorentz
@@ -113,7 +113,7 @@ t = linspace(0, Params.Trf, Params.nSamples);
 blochSimCallFunction(inv_pulse, Params);
 
 % What happens in a non-adiabatic pulse 
-%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), Params);
 
 %--------------------------------------------------------------------------
 %% Gaussian
@@ -149,7 +149,7 @@ t = linspace(0, Params.Trf, Params.nSamples);
 blochSimCallFunction(inv_pulse, Params);
 
 % What happens in a non-adiabatic pulse 
-%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), Params);
 
 %--------------------------------------------------------------------------
 %% Hanning  
@@ -185,7 +185,7 @@ t = linspace(0, Params.Trf, Params.nSamples);
 blochSimCallFunction(inv_pulse, Params);
 
 % What happens in a non-adiabatic pulse 
-%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), Params);
 
 %--------------------------------------------------------------------------
 %% Hsn (Params set for n = 8) 
@@ -222,7 +222,7 @@ t = linspace(0, Params.Trf, Params.nSamples);
 blochSimCallFunction(inv_pulse, Params);
 
 % What happens in a non-adiabatic pulse 
-%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), Params);
 
 %--------------------------------------------------------------------------
 %% Sin40 (n = 40) 
@@ -260,7 +260,7 @@ t = linspace(0, Params.Trf, Params.nSamples);
 blochSimCallFunction(inv_pulse, Params);
 
 % What happens in a non-adiabatic pulse 
-%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), Params);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% WATER AND MACROMOLECULAR POOL %% 
@@ -303,7 +303,7 @@ t = linspace(0, Params.Trf, Params.nSamples);
 blochSimCallFunction(inv_pulse, Params)
 
 % What happens in a non-adiabatic pulse 
-%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), Params);
 
 %--------------------------------------------------------------------------
 %% Lorentz
@@ -340,7 +340,7 @@ t = linspace(0, Params.Trf, Params.nSamples);
 blochSimCallFunction(inv_pulse, Params);
 
 % What happens in a non-adiabatic pulse  
-%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), Params);
 
 %--------------------------------------------------------------------------
 %% Gaussian
@@ -377,7 +377,7 @@ t = linspace(0, Params.Trf, Params.nSamples);
 blochSimCallFunction(inv_pulse, Params);
 
 % What happens in a non-adiabatic pulse 
-%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), Params);
 
 %--------------------------------------------------------------------------
 %% Hanning 
@@ -414,7 +414,7 @@ t = linspace(0, Params.Trf, Params.nSamples);
 blochSimCallFunction(inv_pulse, Params);
 
 % What happens in a non-adiabatic pulse 
-%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), Params);
 
 %--------------------------------------------------------------------------
 %% Hsn (Params set for n = 8) 
@@ -452,7 +452,7 @@ t = linspace(0, Params.Trf, Params.nSamples);
 blochSimCallFunction(inv_pulse, Params);
 
 % What happens in a non-adiabatic pulse 
-%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), Params);
 
 %--------------------------------------------------------------------------
 %% Sin40 (n = 40) 
@@ -490,7 +490,7 @@ t = linspace(0, Params.Trf, Params.nSamples);
 blochSimCallFunction(inv_pulse, Params);
 
 % What happens in a non-adiabatic pulse 
-%blochSimCallFunction(abs(inv_pulse), t, A_t, 0, Params);
+%blochSimCallFunction(abs(inv_pulse), Params);
 
 
 
