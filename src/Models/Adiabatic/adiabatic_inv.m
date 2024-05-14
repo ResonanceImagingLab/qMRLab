@@ -102,18 +102,10 @@ methods
             checkfields = 0;
         end
 
-        % Debug C.R.
-        str = ['checkfields = ', num2str(checkfields)];
-        disp(str);
-
     end
 
 
     function obj = UpdateFields(obj)
-
-        % Debug C.R.
-        disp('Update Fields called with checkFields');
-        disp(obj.checkupdatedfields)
 
         if obj.checkupdatedfields == 1 % C.R. add checkfields
 
