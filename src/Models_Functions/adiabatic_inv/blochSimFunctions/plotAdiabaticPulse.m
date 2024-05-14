@@ -12,7 +12,7 @@ function plotAdiabaticPulse(t, inv_pulse, A_t, omega1, Params)
 % Written by Amie Demmans 2024
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-fs = 20; 
+fs = 18; 
 figure; 
 tiledlayout(1,3)
 
