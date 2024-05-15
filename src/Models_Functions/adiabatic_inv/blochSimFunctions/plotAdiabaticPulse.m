@@ -18,29 +18,28 @@ tiledlayout(1,3)
 
 % Plot Amplitude Function
     nexttile;
-    %t = linspace(0, Params.Trf, Params.nSamples); 
     plot(t*1000, A_t, 'LineWidth', 3); 
-    xlabel('Time(ms)'); 
-    ylabel('B_1 (μT)')
-    title('Amplitude Function','FontWeight','normal');
+    xlabel('T_{rf} (ms)'); 
+    ylabel('B_1 (μT)');
+    title('Amplitude Modulation','FontWeight','normal');
     ax = gca; 
     ax.FontSize = fs;
 
 % Plot Frequency Modulation Function
     nexttile; 
     plot(t*1000, omega1, 'LineWidth', 3);
-    xlabel('Time(ms)'); 
+    xlabel('T_{rf} (ms)'); 
     ylabel('Frequency (Hz)');
-    title('Frequency Modulation function','FontWeight','normal');
+    title('Frequency Modulation','FontWeight','normal');
     ax = gca; 
     ax.FontSize = fs;
 
  % Plot Phase Modulation Function 
     nexttile; 
     plot(t*1000, imag(inv_pulse), 'LineWidth', 3);
-    xlabel('Time(ms)'); 
+    xlabel('T_{rf} (ms)'); 
     ylabel('Frequency (Hz)');
-    title('Phase Modulation function','FontWeight','normal');
+    title('Phase Modulation', 'FontWeight','normal');
     ax = gca; 
     ax.FontSize = fs;
 
