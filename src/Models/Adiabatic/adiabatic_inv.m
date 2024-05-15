@@ -44,7 +44,7 @@ classdef adiabatic_inv < AbstractModel
 %
 % References:
 %   Please refer to getAdiabaticPulse.m for all references used to develop
-%     this module
+%     this module as well as individual pulse functions 
 %   In addition to the citing package: 
 %     Karakuzu A., Boudreau M., Duval T.,Boshkovski T., Leppert I.R., Cabana J.F., 
 %     Gagnon I., Beliveau P., Pike G.B., Cohen-Adad J., Stikov N. (2020), qMRLab: 
@@ -59,10 +59,10 @@ properties
 
 
     % Creates sections in protocol boxes: PulseParams and TissueParams
-    Prot = struct('PulseParameters', struct('Format',{{'beta(rad/s)' ; 'A0'; 'n' ;'nSamples' ;'Q' ;'Trf'}} ...
+    Prot = struct('PulseParameters', struct('Format',{{'beta (rad/s)' ; 'A0 (μT)'; 'n' ;'nSamples' ;'Q' ;'Trf (ms)'}} ...
         ,'Mat',[672; 13.726; 1; 512; 5; 10.24/1000]), ...
-        'DefaultTissueParams', struct('Format',{{'M0a'; 'R'; 'T2a'; 'R1b'; 'T2b'; 'Ra'; 'M0b'}}, ...
-        'Mat', [1; 35; 35e-3; 0.25; 11.1e-6; 1; 0.155]));
+        'DefaultTissueParams', struct('Format',{{'R'; 'Mza'; 'R1a'; 'T2a (ms)';  'Mzb';'R1b'; 'T2b (ms)'}}, ...
+        'Mat', [35; 1; 1.3240; 35e-3; 0.155; 0.25; 11.1e-6]));
 
 
     % Creating drop box options and push buttons in Options section
@@ -123,7 +123,7 @@ methods
             Params = AI_defaultTissueParams(Params);
 
             % Fill default tissue params into the object container
-            obj.Prot.DefaultTissueParams.Mat = [Params.M0a, Params.R, Params.T2a, Params.R1b, Params.T2b, Params.Ra, Params.M0b]';
+            obj.Prot.DefaultTissueParams.Mat = [Params.R, Params.M0a, Params.Ra, Params.T2a, Params.M0b, Params.R1b, Params.T2b]';
 
             % Set up Pulse Params into object container
             PulseOpt = pulseparams(obj);
@@ -189,21 +189,23 @@ methods
         elseif obj.options.BlochSim1Pool
             Params.NumPools = 1;
             Params.M0a = obj.Prot.DefaultTissueParams.Mat(1); % M0a
-            Params.T2a = obj.Prot.DefaultTissueParams.Mat(3); % T2a
-            Params.Ra = obj.Prot.DefaultTissueParams.Mat(6);  % Ra
+            Params.Ra = obj.Prot.DefaultTissueParams.Mat(3);  % Ra
+            Params.T2a = obj.Prot.DefaultTissueParams.Mat(4); % T2a
 
             blochSimCallFunction(inv_pulse, Params)
 
         % If selecting BlochSim2Pool, call these functions and params
         elseif obj.options.BlochSim2Pool
             Params.NumPools = 2;
-            Params.M0a = obj.Prot.DefaultTissueParams.Mat(1); % M0a
-            Params.R = obj.Prot.DefaultTissueParams.Mat(2);   % R
-            Params.T2a = obj.Prot.DefaultTissueParams.Mat(3); % T2a
-            Params.R1b = obj.Prot.DefaultTissueParams.Mat(4); % R1b
-            Params.T2b = obj.Prot.DefaultTissueParams.Mat(5); % T2b
-            Params.Ra = obj.Prot.DefaultTissueParams.Mat(6);  % Ra
-            Params.M0b = obj.Prot.DefaultTissueParams.Mat(7); % M0b
+            Params.R = obj.Prot.DefaultTissueParams.Mat(1);   % R
+            Params.M0a = obj.Prot.DefaultTissueParams.Mat(2); % M0a
+            Params.Ra = obj.Prot.DefaultTissueParams.Mat(3);  % Ra
+            Params.T2a = obj.Prot.DefaultTissueParams.Mat(4); % T2a
+            Params.M0b = obj.Prot.DefaultTissueParams.Mat(5); % M0b
+            Params.R1b = obj.Prot.DefaultTissueParams.Mat(6); % R1b
+            Params.T2b = obj.Prot.DefaultTissueParams.Mat(7); % T2b
+            
+           
 
             blochSimCallFunction(inv_pulse, Params)
 
