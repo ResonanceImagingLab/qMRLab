@@ -168,6 +168,7 @@ methods
         Params.Trf = obj.Prot.PulseParameters.Mat(6);         % Trf
         Params.nSamples = obj.Prot.PulseParameters.Mat(4);    % nSamples
         Params.shape = obj.options.Pulse;                     % pulseshape
+        
         % Call other pulse properties to allow editing 
         Params.PulseOpt.beta = obj.Prot.PulseParameters.Mat(1); % beta
         Params.PulseOpt.A0 = obj.Prot.PulseParameters.Mat(2);   % A0
