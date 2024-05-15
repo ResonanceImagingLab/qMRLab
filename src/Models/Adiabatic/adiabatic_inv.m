@@ -55,6 +55,7 @@ classdef adiabatic_inv < AbstractModel
 properties
     MRIinputs = {}; % No data needs to be downloaded
     xnames = {}; % Box names for Fitting section which I am not using, still needs to be defined though
+    voxelwise = 0; % No voxelwise fitting 
 
 
     % Creates sections in protocol boxes: PulseParams and TissueParams
