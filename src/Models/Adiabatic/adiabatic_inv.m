@@ -57,13 +57,11 @@ properties
     xnames = {}; % Box names for Fitting section which I am not using, still needs to be defined though
     voxelwise = 0; % No voxelwise fitting 
 
-
     % Creates sections in protocol boxes: PulseParams and TissueParams
     Prot = struct('PulseParameters', struct('Format',{{'beta (rad/s)' ; 'A0 (μT)'; 'n' ;'nSamples' ;'Q' ;'Trf (ms)'}} ...
-        ,'Mat',[672; 13.726; 1; 512; 5; 10.24/1000]), ...
-        'DefaultTissueParams', struct('Format',{{'R'; 'Mza'; 'R1a'; 'T2a (ms)';  'Mzb';'R1b'; 'T2b (ms)'}}, ...
-        'Mat', [35; 1; 1.3240; 35e-3; 0.155; 0.25; 11.1e-6]));
-
+        ,'Mat',[672; 13.726; 1; 512; 5; 10.24]), ...
+        'DefaultTissueParams', struct('Format',{{'R (1/s)'; 'Mza'; 'R1a (1/s)'; 'T2a (ms)';  'Mzb';'R1b (1/s)'; 'T2b (μs)'}}, ...
+        'Mat', [35; 1; 1.3240; 35; 0.155; 0.25; 11.1]));
 
     % Creating drop box options and push buttons in Options section
     buttons = {'TissueType', {'WM', 'GM'},...
@@ -73,7 +71,6 @@ properties
         'BlochSim1Pool', 'pushbutton', ...
         'BlochSim2Pool', 'pushbutton',...
         };
-
 
     % Set options and previousOptions as struct so when you call it
     % a structure is created for each button option
@@ -95,10 +92,10 @@ methods
                 ~isequal(obj.options.B0, obj.previousOptions.B0) || ...
                 ~isequal(obj.options.Pulse, obj.previousOptions.Pulse))
             checkfields = 1; % reset params to defaults
-        elseif (obj.options.PlotAdiabatic ~= obj.previousOptions.PlotAdiabatic||... % does not equal
+        elseif (obj.options.PlotAdiabatic ~= obj.previousOptions.PlotAdiabatic||... 
                 obj.options.BlochSim1Pool ~= obj.previousOptions.BlochSim1Pool ||...
                 obj.options.BlochSim2Pool ~= obj.previousOptions.BlochSim2Pool)
-            checkfields = 2; % run sims -> this needs to be moved to a new function C.R.
+            checkfields = 2; % run sims 
         else
             checkfields = 0;
         end
@@ -108,9 +105,9 @@ methods
 
     function obj = UpdateFields(obj)
 
-        if obj.checkupdatedfields == 1 % C.R. add checkfields
+        if obj.checkupdatedfields == 1 % Run updated fields 
 
-            %obj.Storedparams = Params;
+            % Set previous options equal to new options for tracking 
             obj.previousOptions = obj.options;
 
             %Set B0 and tissue type to options of the associated
@@ -123,11 +120,13 @@ methods
             Params = AI_defaultTissueParams(Params);
 
             % Fill default tissue params into the object container
-            obj.Prot.DefaultTissueParams.Mat = [Params.R, Params.M0a, Params.Ra, Params.T2a, Params.M0b, Params.R1b, Params.T2b]';
+            obj.Prot.DefaultTissueParams.Mat = [Params.R, Params.M0a, Params.Ra, Params.T2a*1000, ...
+                                                Params.M0b, Params.R1b, Params.T2b*1e6]';
 
             % Set up Pulse Params into object container
             PulseOpt = pulseparams(obj);
-            obj.Prot.PulseParameters.Mat = [PulseOpt.beta, PulseOpt.A0, PulseOpt.n, PulseOpt.nSamples, PulseOpt.Q, PulseOpt.Trf]' ;
+            obj.Prot.PulseParameters.Mat = [PulseOpt.beta, PulseOpt.A0, PulseOpt.n, PulseOpt.nSamples,...
+                                             PulseOpt.Q, PulseOpt.Trf*1000]' ;
 
         elseif obj.checkupdatedfields == 2
             % Call plotOptions function to run with Updated Fields 
@@ -188,7 +187,7 @@ methods
         % If selecting BlochSim1Pool, call these functions and params
         elseif obj.options.BlochSim1Pool
             Params.NumPools = 1;
-            Params.M0a = obj.Prot.DefaultTissueParams.Mat(1); % M0a
+            Params.M0a = obj.Prot.DefaultTissueParams.Mat(2); % M0a
             Params.Ra = obj.Prot.DefaultTissueParams.Mat(3);  % Ra
             Params.T2a = obj.Prot.DefaultTissueParams.Mat(4); % T2a
 
@@ -204,8 +203,6 @@ methods
             Params.M0b = obj.Prot.DefaultTissueParams.Mat(5); % M0b
             Params.R1b = obj.Prot.DefaultTissueParams.Mat(6); % R1b
             Params.T2b = obj.Prot.DefaultTissueParams.Mat(7); % T2b
-            
-           
 
             blochSimCallFunction(inv_pulse, Params)
 
