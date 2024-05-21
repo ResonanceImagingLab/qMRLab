@@ -61,7 +61,7 @@ function [rf_pulse, omega1, A_t, Params] = AI_hs1_pulse(Trf, Params)
     end
     
 Params.PulseOpt = AI_defaultHs1Params(Params.PulseOpt);
-
+Trf = Trf/1000;
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);
 tau = t-Trf/2;
@@ -73,6 +73,7 @@ A_t((t < 0 | t>Trf)) = 0;
 
 % Frequency modulation function 
 % Carrier frequency modulation function w(t):
+% NOTE: Q in Hs1 is NOT the same as in the other pulses, Q = mu
 omega1 = -Params.PulseOpt.Q.*Params.PulseOpt.beta .* ...
             tanh(Params.PulseOpt.beta .* (tau))./(2*pi); % 2pi to convert from rad/s to Hz
 

@@ -53,7 +53,7 @@ function [rf_pulse, omega1, A_t, Params] = AI_gauss_pulse( Trf, Params)
 %                   frequency vary with each pulse
 %
 % To be used with qMRlab
-% Written by Christopher Rowley 2023 & Amie Demmans 2024
+% Written by Amie Demmans & Christopher Rowley 2024
 
 
 % Function to fill default values;
@@ -62,7 +62,7 @@ function [rf_pulse, omega1, A_t, Params] = AI_gauss_pulse( Trf, Params)
     end
     
 Params.PulseOpt = AI_defaultGaussParams(Params.PulseOpt);
-
+Trf = Trf/1000;
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);
 tau = t-Trf/2;
@@ -72,8 +72,13 @@ A_t = Params.PulseOpt.A0 .* exp(-1*(Params.PulseOpt.beta.^2 .* tau.^2)./2);
 A_t((t < 0 | t>Trf)) = 0;
 % disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
 
-% Scaling Factor 
-lambda = (Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q);
+% Scaling Factor (lambda) 
+% --> Setting Q = 0 allows for viewing of RF pulse 
+if Params.PulseOpt.Q == 0 
+    lambda = 0;
+else 
+    lambda = (Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q);
+end 
 
 % Frequency modulation function 
 % Carrier frequency modulation function w(t):  

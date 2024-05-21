@@ -57,7 +57,7 @@ function [rf_pulse, omega1, A_t, Params] = AI_hsn_pulse(Trf, Params)
 %
 %
 % To be used with qMRlab
-% Written by Christopher Rowley 2023 and Amie Demmans 2024
+% Written by Amie Demmans & Christopher Rowley 2024
 
 
 % Function to fill default values;
@@ -66,7 +66,7 @@ function [rf_pulse, omega1, A_t, Params] = AI_hsn_pulse(Trf, Params)
     end
     
 Params.PulseOpt = AI_defaultHsnParams(Params.PulseOpt);
-
+Trf = Trf/1000;
 nSamples = Params.PulseOpt.nSamples;  
 t = linspace(0, Trf, nSamples);
 tau = t-Trf/2;
@@ -76,8 +76,13 @@ A_t =  Params.PulseOpt.A0* sech((Params.PulseOpt.beta .*tau).^Params.PulseOpt.n)
 A_t((t < 0 | t>Trf)) = 0;
 % disp( ['Average B1 of the pulse is:', num2str(mean(A_t))]) 
 
-% Scaling Factor 
-lambda = ((Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q))^2;
+% Scaling Factor (lambda) 
+% --> Setting Q = 0 allows for viewing of RF pulse 
+if Params.PulseOpt.Q == 0 
+    lambda = 0;
+else 
+    lambda = ((Params.PulseOpt.A0)^2 ./ (Params.PulseOpt.beta.*Params.PulseOpt.Q))^2;
+end
 
 % Frequency modulation function 
 % Carrier frequency modulation function w(t):
