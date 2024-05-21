@@ -2,7 +2,7 @@ function PulseOpt = AI_defaultSin40Params(PulseOpt)
 
 % Function designed to be used with the adiabatic pulse code
 % Fills in default values if they are not user-defined
-% If n is different than 40 these params will need to change as well 
+% If n is changed from 40 these params will also need to change 
 
 if(~isfield(PulseOpt,'beta') || isempty(PulseOpt.beta) || ~isfinite(PulseOpt.beta))
     % Default beta value in rad/s (modulation angular frequency)
@@ -30,10 +30,8 @@ if(~isfield(PulseOpt,'Q') || isempty(PulseOpt.Q) || ~isfinite(PulseOpt.Q))
 end
 
 if(~isfield(PulseOpt,'Trf') || isempty(PulseOpt.Trf) || ~isfinite(PulseOpt.Trf))
-    % Adiabatic pulse duration 
+    % Adiabatic pulse duration (ms)
     PulseOpt.Trf = 10/1000;       
 end
 
 return;
-
-%PulseOpt = [200; 12; 40; 512; 6.25e-7; 10/1000];

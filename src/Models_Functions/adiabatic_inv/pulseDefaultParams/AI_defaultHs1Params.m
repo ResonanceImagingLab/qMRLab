@@ -29,7 +29,7 @@ if(~isfield(PulseOpt,'nSamples') || isempty(PulseOpt.nSamples) || ~isfinite(Puls
 end
 
 if(~isfield(PulseOpt,'Trf') || isempty(PulseOpt.Trf) || ~isfinite(PulseOpt.Trf))
-    % Adiabatic pulse duration 
+    % Adiabatic pulse duration (ms)
     PulseOpt.Trf = 10.24/1000;       
 end
 

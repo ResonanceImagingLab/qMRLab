@@ -29,10 +29,8 @@ if(~isfield(PulseOpt,'Q') || isempty(PulseOpt.Q) || ~isfinite(PulseOpt.Q))
 end
 
 if(~isfield(PulseOpt,'Trf') || isempty(PulseOpt.Trf) || ~isfinite(PulseOpt.Trf))
-    % Adiabatic pulse duration 
+    % Adiabatic pulse duration (ms)
     PulseOpt.Trf = 10/1000;       
 end
 
 return;
-
-%PulseOpt = [175; 14; 1; 512; 4.2e-4; 10/1000];
