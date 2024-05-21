@@ -28,11 +28,12 @@ function M_return = blochSimAdiabaticPulse_2pool( rf_pulse, PulseParams, delta,.
         Params.kr = (Params.R*Params.M0a);
     end
 
+    %% If you wanted to do 2 pool: 
     nSamples = Params.nSamples;
     
     % Follow equations in Murase 2011 - Pull values from Params struct
-    R2a = 1/Params.T2a; % 80 ms
-    R2b = 1/Params.T2b; % 12 us
+    R2a = 1/(Params.T2a/1000); % 80 ms
+    R2b = 1/(Params.T2b/1e6); % 12 us
     R1a = Params.Ra; % 1000 ms
     R1b = Params.R1b; % 1000 ms
     kr = Params.kr;
@@ -43,7 +44,7 @@ function M_return = blochSimAdiabaticPulse_2pool( rf_pulse, PulseParams, delta,.
     
     Mt(:,1) = M_start; % start mag
     
-    dt = Params.Trf/nSamples;
+    dt = (Params.Trf/1000)/nSamples;
     
     for t = 1:nSamples
     
@@ -66,16 +67,7 @@ function M_return = blochSimAdiabaticPulse_2pool( rf_pulse, PulseParams, delta,.
     M_return = Mt(:,end);
 return;
 
-% figure; tiledlayout(1,2); nexttile;
-% plot(0:dt:Trf, Mt(5,:), 'LineWidth',3); 
-% xlabel('Time(s)'); ylabel('M_z Water'); ax = gca; ax.FontSize = 20;
-% nexttile;
-% plot(0:dt:Trf, Mt(6,:), 'LineWidth',3); 
-% xlabel('Time(s)'); ylabel('M_z Bound'); ax = gca; ax.FontSize = 20;
-% set(gcf,'Position',[100 100 800 500])
-% 
-% % Proportion saturation
-% disp(['Relative Sat on MTpool from Inversion Pulse:', num2str(Mt(6,end)/Mt(6,1))]);
+
 
 
 
