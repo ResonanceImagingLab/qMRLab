@@ -27,7 +27,7 @@ function [rf_pulse, omega1, A_t, Params] = getAdiabaticPulse( Trf, shape, Params
 %
 %   --optional args--
 %   Params: Struct. Contains optional parameters for pulse shapes. Need
-%   Params.x as in adiabaticExample. 
+%   Params.x as in adiabatic_inv (qMRLab) and adiabaticExample. 
 %
 %   All references listed below code 
 %   
