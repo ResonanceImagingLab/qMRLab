@@ -52,6 +52,7 @@ Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
 Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
+Params.T2a = Params.T2a*1000; % (ms)
 Params.NumPools = 1; % water pool only
 
 % Define Hyperbolic Secant Parameter
@@ -60,7 +61,7 @@ Params.PulseOpt.n = 1; % default 1
 Params.PulseOpt.Q = 5; % default 5
 Params.PulseOpt.A0 = 13.726; % default 13.726 micro Tesla
 Params.nSamples = 512; % default 512
-Params.Trf = 10.24/1000; % default 10.24 ms
+Params.Trf = 10.24; % default 10.24 ms
 Params.shape = 'Hs1';
 
 
@@ -71,10 +72,10 @@ Params.dispFigure = 0;
 
 % To check your pulse: Plot  
 t = linspace(0, Params.Trf, Params.nSamples);
-%plotAdiabaticPulse(t, inv_pulse,A_t,omega1, Params);
+plotAdiabaticPulse(t, inv_pulse,A_t,omega1, Params);
 
 % Plot Bloch Sim Results based on NumPools
-blochSimCallFunction(inv_pulse,Params)
+%blochSimCallFunction(inv_pulse,Params)
 
 % What happens in a non-adiabatic pulse 
 %blochSimCallFunction(abs(inv_pulse), Params);
@@ -90,6 +91,7 @@ Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % White matter
 Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
+Params.T2a = Params.T2a*1000; % (ms)
 Params.NumPools = 1; % water pool 
 
 % Define Lorentz Parameters
@@ -97,7 +99,7 @@ Params.PulseOpt.beta = 850;  % default 850 rad/s
 Params.PulseOpt.A0 = 18; % default 18 micro Tesla
 Params.PulseOpt.Q = 1e-4; % default 1e-4
 Params.nSamples = 512; % default 512
-Params.Trf = 20/1000; % default 20 ms
+Params.Trf = 20; % default 20 ms
 Params.shape = 'Lorentz';
 
 % Apply inversion pulse by calling GetAdiabatic 
@@ -126,6 +128,7 @@ Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter
 Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
+Params.T2a = Params.T2a*1000; % (ms)
 Params.NumPools = 1; % water pool 
 
 % Define Gaussian Parameters
@@ -133,8 +136,8 @@ Params.PulseOpt.beta = 550; % default 550 rad/s
 Params.PulseOpt.A0 = 14; % default 14 micro Tesla
 Params.PulseOpt.Q = 1e-4; % default 1e-4
 Params.nSamples = 512; % default 512
-Params.Trf = 10/1000; % default 10 ms
-Params.shape = 'Gauss';
+Params.Trf = 10; % default 10 ms
+Params.shape = 'Gaussian';
 
 % Apply inversion pulse by calling GetAdiabatic 
 Params.dispFigure = 0;
@@ -162,6 +165,7 @@ Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
 Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
+Params.T2a = Params.T2a*1000; % (ms)
 Params.NumPools = 1; % water pool 
 
 % Define Hanning Parameters
@@ -169,7 +173,7 @@ Params.PulseOpt.beta = 175; % default 175 rad/s
 Params.PulseOpt.A0 = 14; % default 14 micro Tesla 
 Params.PulseOpt.Q = 4.2e-4; % default 4.2e-4 
 Params.nSamples = 512; % default 512
-Params.Trf = 10/1000; % default 10 ms
+Params.Trf = 10; % default 10 ms
 Params.shape = 'Hanning';
 
 % Apply inversion pulse by calling GetAdiabatic 
@@ -198,6 +202,7 @@ Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
 Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
+Params.T2a = Params.T2a*1000; % (ms)
 Params.NumPools = 1; % water pool 
 
 % Define Hyperbolic Secant Parameter
@@ -206,7 +211,7 @@ Params.PulseOpt.n = 8; % default 8
 Params.PulseOpt.Q = 3.9e-4; % default 4e-4
 Params.PulseOpt.A0 = 11; % default 10 micro Tesla
 Params.nSamples = 512; % default 512
-Params.Trf = 10/1000; % default 10.24 ms
+Params.Trf = 10.24; % default 10.24 ms
 Params.shape = 'Hsn';
 
 % Apply Inversion pulse by calling GetAdiabatic
@@ -235,6 +240,7 @@ Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter 
 Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
+Params.T2a = Params.T2a*1000; % (ms)
 Params.NumPools = 1; % water pool 
 
 % Define Hyperbolic Secant Parameter
@@ -243,7 +249,7 @@ Params.PulseOpt.n = 40; % default 40
 Params.PulseOpt.A0 = 12; % default 12 micro Tesla
 Params.PulseOpt.Q = 6.25e-7; % default 6.3e-7
 Params.nSamples = 512; % default 512
-Params.Trf = 10/1000; % default 10 ms
+Params.Trf = 10; % default 10 ms
 Params.shape = 'Sin40';
 
 
@@ -278,6 +284,8 @@ Params.TissueType = 'WM'; % white matter
 Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
+Params.T2a = Params.T2a*1000; % (ms)
+Params.T2b = Params.T2b*1e6; % (micro sec)
 Params.NumPools = 2; % water pool and macromolecular pool 
 
 % Define Hyperbolic Secant Parameter
@@ -286,7 +294,7 @@ Params.PulseOpt.n = 1; % default 1
 Params.PulseOpt.Q = 5; % default 5
 Params.PulseOpt.A0 = 13.726; % default 13.726 micro Tesla
 Params.nSamples = 512; % default 512
-Params.Trf = 10.24/1000; % default 10.24 ms
+Params.Trf = 10.24; % default 10.24 ms
 Params.shape = 'Hs1';
 
 
@@ -317,6 +325,8 @@ Params.TissueType = 'WM'; % white matter
 Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
+Params.T2a = Params.T2a*1000; % (ms)
+Params.T2b = Params.T2b*1e6; % (micro sec)
 Params.NumPools = 2; % water pool and macromolecular pool
 
 % Define Lorentz Parameters
@@ -324,7 +334,7 @@ Params.PulseOpt.beta = 850;  % default 850 rad/s
 Params.PulseOpt.A0 = 18; % default 18 micro Tesla
 Params.PulseOpt.Q = 1e-4; % default 1e-4
 Params.nSamples = 512; % default 512
-Params.Trf = 20/1000; % default 20 ms
+Params.Trf = 20; % default 20 ms
 Params.shape = 'Lorentz';
 
 % Apply inversion pulse by calling GetAdiabatic 
@@ -354,6 +364,8 @@ Params.TissueType = 'WM'; % white matter
 Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
+Params.T2a = Params.T2a*1000; % (ms)
+Params.T2b = Params.T2b*1e6; % (micro sec)
 Params.NumPools = 2; % water pool and macromolecular pool
 
 % Define Gaussian Parameters
@@ -361,8 +373,8 @@ Params.PulseOpt.beta = 550; % default 550 rad/s
 Params.PulseOpt.A0 = 14; % default 14 micro Tesla
 Params.PulseOpt.Q = 1e-4; % default 1e-4
 Params.nSamples = 512; % default 512
-Params.Trf = 10/1000; % default 10 ms
-Params.shape = 'Gauss';
+Params.Trf = 10; % default 10 ms
+Params.shape = 'Gaussian';
 
 % Apply inversion pulse by calling GetAdiabatic 
 Params.dispFigure = 0;
@@ -391,6 +403,8 @@ Params.TissueType = 'WM'; % white matter
 Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool) 
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
+Params.T2a = Params.T2a*1000; % (ms)
+Params.T2b = Params.T2b*1e6; % (micro sec)
 Params.NumPools = 2; % water pool and macromolecular pool 
 
 % Define Hanning Parameters
@@ -398,7 +412,7 @@ Params.PulseOpt.beta = 175; % default 200 rad/s
 Params.PulseOpt.A0 = 14; % default 14 micro Tesla 
 Params.PulseOpt.Q = 4.2e-4; % default 4.2e-4 
 Params.nSamples = 512; % default 512
-Params.Trf = 10/1000; % default 10 ms
+Params.Trf = 10; % default 10 ms
 Params.shape = 'Hanning';
 
 % Apply inversion pulse by calling GetAdiabatic 
@@ -427,7 +441,9 @@ Params.B0 = 3; % Tesla
 Params.TissueType = 'WM'; % white matter
 Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
-Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool) 
+Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
+Params.T2a = Params.T2a*1000; % (ms)
+Params.T2b = Params.T2b*1e6; % (micro sec)
 Params.NumPools = 2; % water pool and macromolecular pool 
 
 % Define Hyperbolic Secant Parameter
@@ -436,7 +452,7 @@ Params.PulseOpt.n = 8; % default 8
 Params.PulseOpt.Q = 3.9e-4; % default 4e-4
 Params.PulseOpt.A0 = 11; % default 10 micro Tesla
 Params.nSamples = 512; % default 512
-Params.Trf = 10/1000; % default 10.24 ms
+Params.Trf = 10; % default 10.24 ms
 Params.shape = 'Hsn';
 
 % Apply Inversion pulse by calling GetAdiabatic
@@ -466,6 +482,8 @@ Params.TissueType = 'WM'; % white matter
 Params = AI_defaultTissueParams(Params);
 Params.Ra = 1; % 1000ms (longitudinal relaxation rate water pool)
 Params.R1b = 1; % 1000ms (longitudinal relaxation rate macromolecular pool)
+Params.T2a = Params.T2a*1000; % (ms)
+Params.T2b = Params.T2b*1e6; % (micro sec)
 Params.NumPools = 2; % water pool and macromolecular pool 
 
 % Define Hyperbolic Secant Parameter
@@ -474,7 +492,7 @@ Params.PulseOpt.n = 40; % default 40
 Params.PulseOpt.A0 = 12; % default 12 micro Tesla
 Params.PulseOpt.Q = 6.25e-7; % default 6.3e-7
 Params.nSamples = 512; % default 512
-Params.Trf = 10/1000; % default 10 ms
+Params.Trf = 10; % default 10 ms
 Params.shape = 'Sin40';
 
 % Apply Inversion pulse by calling GetAdiabatic
