@@ -3,8 +3,8 @@ function plotAdiabaticPulse(t, inv_pulse, A_t, omega1, Params)
 
 %% Adiabatic Pulse Plot function 
 %
-% Called in adiabaticExample.m to check the amplitude, frequency and phase
-% modulation of your pulse 
+% Called in  adiabativ_inv (qMRLab) and adiabaticExample.m to check the 
+% amplitude, frequency and phase modulation of your pulse 
 %
 %   inv_pulse denotes the adiabatic inversion pulse and can be found from
 %   the individual pulse functions listed in getAdiabaticPulse.m 
@@ -18,7 +18,7 @@ tiledlayout(1,3)
 
 % Plot Amplitude Function
     nexttile;
-    plot(t*1000, A_t, 'LineWidth', 3); 
+    plot(t, A_t, 'LineWidth', 3); 
     xlabel('T_{rf} (ms)'); 
     ylabel('B_1 (μT)');
     title('Amplitude Modulation','FontWeight','normal');
@@ -27,7 +27,7 @@ tiledlayout(1,3)
 
 % Plot Frequency Modulation Function
     nexttile; 
-    plot(t*1000, omega1, 'LineWidth', 3);
+    plot(t, omega1, 'LineWidth', 3);
     xlabel('T_{rf} (ms)'); 
     ylabel('Frequency (Hz)');
     title('Frequency Modulation','FontWeight','normal');
@@ -36,7 +36,7 @@ tiledlayout(1,3)
 
  % Plot Phase Modulation Function 
     nexttile; 
-    plot(t*1000, imag(inv_pulse), 'LineWidth', 3);
+    plot(t, imag(inv_pulse), 'LineWidth', 3);
     xlabel('T_{rf} (ms)'); 
     ylabel('Frequency (Hz)');
     title('Phase Modulation', 'FontWeight','normal');
