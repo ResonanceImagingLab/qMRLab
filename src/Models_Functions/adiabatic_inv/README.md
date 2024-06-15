@@ -39,12 +39,43 @@ The functions included in this package are designed to display six different adi
  - hsn (n=2-8)
  - sin40
 
-The following section will take you step-by-step how this document works. 
+These pulses have been implemented as a model into qMRLab GUI as well as in a separate MATLAB file called adiabaticExample.m The following sections will take you step-by-step how to work the GUI and adiabaticExample.m. 
 
 ## Software Requirements 
 Tested on MATLAB_R2022a. May work on earlier versions  
 
-## Step-by-step tutorial 
+## Step-by-step tutorial (qMRLab GUI) 
+1. Download qMRLab
+2. Add qMRlab to your MATLAB path
+   - addpath("c:\matlab\MyFolder")
+3. Run `qMRLab` in your command window on MATLAB
+4. Within qMRLab under 'Method', open the dropdown and select `adiabatic_inv`
+   - a new OptionsGUI will open that is associated with adiabatic_inv and this is what you will be working with
+   - you can collapse the qMRLab window now if you would like
+### Within adiabatic_inv OptionsGUI ...
+- The *Protocol* section (left side) lists the default Pulse Parameters and default Tissue Parameters for the desired pulse
+  - **NOTE:** the default pulse parameters start for an Hs1 pulse
+- The *Options* section (right side) contains drop down menus for...
+  - **Tissue Type:** WM (white matter) or GM (grey matter)
+  - **B0 :** 3T, 7T or 1.5T
+  - **Pulse:** Hs1, Lorentz, Gaussian, Hanning, Hsn, or Sin40
+- *Options* also contain 3 pushbuttons that trigger plotting functions
+  - **PlotAdiabatic:** View the amplitude, frequency and phase modulation pulse
+  - **BlochSim1Pool:** View the inversion characteristics of a 1 pool model over a range of $B_1^+$ amd $B_0$ inhomogeneity values                             using Bloch simulations
+  - **BlochSim2Pool:** View the inversion characteristics of a 2 pool model over a range of $B_1^+$ amd $B_0$ inhomogeneity values                             using Bloch simulations
+- The user can select any of the different drop down options and can edit any of the fields in PulseParameters or DefaultTissueParam sections to see what happens to the different plotting simulations
+  - If a dropdown is changed, the parameters automatically revert back to the default, even if a change was made beforehand 
+- Expected figures for the default values of Hs1 for each plotting options are:
+#### PlotAdiabatic 
+<img width="1191" alt="Screenshot 2024-05-14 at 3 13 27 PM" src="https://github.com/ResonanceImagingLab/qMRLab/assets/154541326/fd8e18f3-a900-4db3-b336-ce511efb7689">
+
+#### BlochSim1Pool
+<img width="683" alt="Screenshot 2024-05-14 at 3 14 29 PM" src="https://github.com/ResonanceImagingLab/qMRLab/assets/154541326/179c962e-57a6-4fd7-8893-9bbe16118cbd">
+
+#### BlochSim2Pool 
+<img width="972" alt="Screenshot 2024-05-14 at 3 15 12 PM" src="https://github.com/ResonanceImagingLab/qMRLab/assets/154541326/88011a91-4927-48f5-804f-f153c41aaf6c">
+
+## Step-by-step tutorial (adiabaticExample.m)
 1. Download qMRLab
 2. Add qMRlab to your MATLAB path
    - addpath("c:\matlab\MyFolder")
@@ -59,7 +90,7 @@ Tested on MATLAB_R2022a. May work on earlier versions
     - The default parameters are commented out on the side so if you forget you can always go back to the original
     - These parameters are also defined in the defaultPulseParams.m functions for each respective pulse
 - Three different plotting options are available to you:
-  1. Plot adiabatic pulse including amplitude and frequency modulation functions
+  1. Plot adiabatic pulse including amplitude, frequency, and phase modulation functions
   2. Plot adiabatic inversion pulses by calling the Bloch sim results for 1 pool or 2 pool
   3. Plot RF pulse by removing frequency (ω<sub>1</sub>)
 - Option 2 is currently the only option uncommented as it is the main goal of this learning tool but uncomment the other options as you please
@@ -73,25 +104,24 @@ Tested on MATLAB_R2022a. May work on earlier versions
 2. Run the first set of initial parameters from Params.B0 = 3 to Params.NumPools = 1 by highlighting the specified values, right click and select "Evaluate section in command window" 
     -  If you want to see the Default tissue params: `open defaultCortexTissueParams` into command window
 3. Run the specified pulse parameters from Params.Inv.PulseOpt.beta = 550 to Params.Inv.shape = 'Hs1' by repeating step 2 
-4. Apply the inversion pulse by calling `[inv_pulse, omega1, A_t, ~] = getAdiabaticPulse(Params.Inv.Trf, Params.Inv.shape, Params.Inv`
+4. Apply the inversion pulse by calling `[inv_pulse, omega1, A_t, ~] = getAdiabaticPulse(Params.Trf, Params.shape, Params`
     - You can run this step by highlighting --> Right click --> "Evaluate section in command window"
-    - or copy and paste this line into the command window
     - `open getAdiabaticPulse`
-5. Define your time array: `t = linspace(0, Params.Inv.Trf, Params.Inv.nSamples)`
+5. Define your time array: `t = linspace(0, Params.Trf, Params.nSamples)`
 6. Select the desired plotting option you wish to see
-    - `plotAdiabaticPulse(t, inv_pulse, Params)`
-    - `blochSimCallFunction(inv_pulse, t, A_t, omega1, Params)`
-    - `blochSimCallFunction(abs(inv_pulse), t, A_t, omega1, Params)`
+    - `plotAdiabaticPulse(t, inv_pulse, A_t, omega1, Params)`
+    - `blochSimCallFunction(inv_pulse,  Params)`
+    - `blochSimCallFunction(abs(inv_pulse), Params)`
 7. To open any function: `open` and then the name of the desired function (refer to step 2) OR highlight pulse name-->right click-->select **Open "function name"** 
 8. Expected plots for each plotting function are displayed below in order they are listed in step 6
-   ##### plotAdiabaticPulse
-    <img width="1197" alt="Screenshot 2024-04-14 at 4 07 41 PM" src="https://github.com/ResonanceImagingLab/qMRLab/assets/154541326/3e52fffc-fe2d-45f0-868c-23dc66ade43f">
+##### plotAdiabaticPulse
+   <img width="1112" alt="Screenshot 2024-05-14 at 3 20 29 PM" src="https://github.com/ResonanceImagingLab/qMRLab/assets/154541326/2c74af6b-9b15-47fd-914e-ac0890166344">
 
-   ##### blochSimCallFunction Adiabatic Inv
-   <img width="1197" alt="Screenshot 2024-04-14 at 4 10 55 PM" src="https://github.com/ResonanceImagingLab/qMRLab/assets/154541326/7ba7cf61-93b2-4173-ae05-7fad2802d0a8">
+##### blochSimCallFunction Adiabatic Inv
+   <img width="683" alt="Screenshot 2024-05-14 at 3 14 29 PM" src="https://github.com/ResonanceImagingLab/qMRLab/assets/154541326/179c962e-57a6-4fd7-8893-9bbe16118cbd">
 
-   ##### blochSimCallFunction RF pulse
-   <img width="1197" alt="Screenshot 2024-04-14 at 4 12 04 PM" src="https://github.com/ResonanceImagingLab/qMRLab/assets/154541326/05095348-93ea-4d09-ac46-9d7a7a1af7e3">
+ ##### blochSimCallFunction RF pulse  
+<img width="683" alt="Screenshot 2024-05-14 at 3 22 19 PM" src="https://github.com/ResonanceImagingLab/qMRLab/assets/154541326/8a548431-f3de-4f33-b2c2-1a94c36816e5">
 
 ## Questions to ask yourself 
 &#x2610;  What happens if I increase or decrease beta? 
