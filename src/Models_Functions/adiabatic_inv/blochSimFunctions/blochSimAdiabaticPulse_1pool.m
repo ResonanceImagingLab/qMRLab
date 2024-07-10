@@ -4,14 +4,19 @@ function M_return = blochSimAdiabaticPulse_1pool( rf_pulse, Trf, delta,...
 
 % 'rf_pulse' is a 1xnSamples vector that stores the B1 in microtesla over
 %            time
-% 'Trf' is the pulse duration in seconds
-% 'PulseOpt' contains pulse details. Only PulseOpt.nSamples is needed here
+% PulseParams structure containing:
+%   Trf -> is the pulse duration in seconds
+%   nSamples -> number of samples in the pulse. Typically 512 (or multiple
+%               of 256)
+% 'Params' stores the tissue parameters for the simluation
 % 'delta' is used to see the offset frequency to do a frequency sweep 
 %  'M_start' is the magnetization vector just before the start of the pulse
-%            (3x1)
-%  'B' is the thermal equilibrium magnetization vector (3x1)
+%            (6x1)
+%  'B' is the thermal equilibrium magnetization vector (6x1)
 %
 % Written by Christopher Rowley 2023
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
     if ~exist('B','var') || isempty(B) 
         B = [0,0,Params.Ra*Params.M0a]';
     end
@@ -19,7 +24,7 @@ function M_return = blochSimAdiabaticPulse_1pool( rf_pulse, Trf, delta,...
  
        
     %% If you wanted to do single pool:
-    nSamples = Params.Inv.nSamples;
+    nSamples = Params.nSamples;
    
     Mt = zeros(3, nSamples+1);
     Mt(:,1) = M_start; % start mag = [0 0 1];
@@ -27,9 +32,9 @@ function M_return = blochSimAdiabaticPulse_1pool( rf_pulse, Trf, delta,...
 
     % We will numerically evaluate this over time 
    
-    dt = Params.Inv.Trf/nSamples;
+    dt = (Params.Trf/1000)/nSamples;
     
-    R2a = 1/Params.T2a; %1000/80; % 80 ms
+    R2a = 1/(Params.T2a/1000); %1000/80; % 80 ms
     R1a = Params.Ra; % 1; % 1000 ms
   
     for t = 1:nSamples
@@ -38,7 +43,6 @@ function M_return = blochSimAdiabaticPulse_1pool( rf_pulse, Trf, delta,...
         % 42.577 = gyromagnetic ratio of H
 
         % Generate RF matrix
-
         A_rf =[ -R2a,   -2*pi*delta, -imag(w1); ...       % Water X
                 2*pi*delta,    -R2a, real(w1);...        % Water Y
                 imag(w1),  -real(w1), -R1a];   %  Water Z
@@ -51,11 +55,6 @@ function M_return = blochSimAdiabaticPulse_1pool( rf_pulse, Trf, delta,...
     end
 
     M_return = Mt(:,end);
-    % figure; plot(0:dt:Trf, Mt(3,:), 'LineWidth',3);
-    % hold on
-    % plot(0:dt:Trf, Mt(1,:), 'LineWidth',3);
-    % plot(0:dt:Trf, Mt(2,:), 'LineWidth',3);
-    % legend('M_z', 'M_x', 'M_y');
 
 return;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

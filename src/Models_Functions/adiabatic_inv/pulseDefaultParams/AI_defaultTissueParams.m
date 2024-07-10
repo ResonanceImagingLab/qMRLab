@@ -1,6 +1,5 @@
-function Params = defaultCortexTissueParams(Params)
-
 %% Sort based on field strength and tissue type
+function Params = AI_defaultTissueParams(Params)
 % currently only 3T and 7T are supported fields;
 % currently only 'GM' and 'WM' are the supported tissue types.
 
@@ -43,9 +42,9 @@ if Params.B0 == 3
         error('Please set Params.TissueType to either GM or WM, or build an additional field')
     end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%%%%%%%%%%%%%  7T %%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%  7T %%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 elseif Params.B0 == 7
 
     if strcmp(Params.TissueType, 'GM')
@@ -78,9 +77,9 @@ elseif Params.B0 == 7
         error('Please set Params.TissueType to either GM or WM, or build an additional field')
     end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%%%%%%%%%%%%% 1.5T %%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%% 1.5T %%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 % Use the optimizations from: Levesque, I.R., Sled, J.G., Pike, G.B., 2011. 
 % Iterative optimization method for design of quantitative magnetization transfer 
 % imaging experiments. Magn. Reson. Med. 66, 635–643. https://doi.org/10.1002/mrm.23071
@@ -121,10 +120,10 @@ else
 end
 
 
-% if isempty(Params.Ra) % allow you to specify either Ra or Raobs
-%     Params.Ra = Params.Raobs - ((Params.R * Params.M0b * (Params.R1b - Params.Raobs)) / (Params.R1b - Params.Raobs + Params.R));
-%     if isnan(Params.Ra)
-%         Params.Ra = 1;
-%     end
-% end
+if isempty(Params.Ra) % allow you to specify either Ra or Raobs
+    Params.Ra = Params.Raobs - ((Params.R * Params.M0b * (Params.R1b - Params.Raobs)) / (Params.R1b - Params.Raobs + Params.R));
+    if isnan(Params.Ra)
+        Params.Ra = 1;
+    end
+end
 

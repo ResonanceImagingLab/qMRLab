@@ -13,9 +13,9 @@ if(~isfield(PulseOpt,'n') || isempty(PulseOpt.n) || ~isfinite(PulseOpt.n))
     PulseOpt.n = 1;       
 end
 
-if(~isfield(PulseOpt,'mu') || isempty(PulseOpt.mu) || ~isfinite(PulseOpt.mu))
+if(~isfield(PulseOpt,'Q') || isempty(PulseOpt.Q) || ~isfinite(PulseOpt.Q))
     % Default phase modulation parameter
-    PulseOpt.mu = 5;       
+    PulseOpt.Q = 5;       
 end
 
 if(~isfield(PulseOpt,'A0') || isempty(PulseOpt.A0) || ~isfinite(PulseOpt.A0))
@@ -28,4 +28,28 @@ if(~isfield(PulseOpt,'nSamples') || isempty(PulseOpt.nSamples) || ~isfinite(Puls
     PulseOpt.nSamples = 512;       
 end
 
-return;
+if(~isfield(PulseOpt,'Trf') || isempty(PulseOpt.Trf) || ~isfinite(PulseOpt.Trf))
+    % Adiabatic pulse duration (ms)
+    PulseOpt.Trf = 10.24/1000;       
+end
+
+return
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
