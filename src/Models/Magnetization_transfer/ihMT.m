@@ -20,7 +20,7 @@ classdef ihMT < AbstractModel
                                     'Mat', [8000; 7; 1.14; 6; 80; 0.000768; 11.6; 9; ...
                                     0.06; 0.0003; 2; 1]));
 
-        % Params.numExcitation is absed on TurboFactor and Dummy Echo 
+        % Params.numExcitation is based on TurboFactor and Dummy Echo 
         % freqpattern ill make into dropdown in buttons probably b/c I
         % can't put it in Prot unless it is a number
         % CR_getSeqParams_3prot.m
@@ -33,7 +33,7 @@ classdef ihMT < AbstractModel
         % fitValues_dual = load('fitValues_dualAlt.mat');
         % fitValues_single = load('fitValues_single.mat');
 
-        buttons = {'FreqPattern',{'single','dualAlternate','dualContinuous'},...
+        buttons = {'DataDirectory', "/folder/where/data/is" ,'FreqPattern',{'single','dualAlternate','dualContinuous'},...
             'Run Sequence Simulations','pushbutton'};
        
 
