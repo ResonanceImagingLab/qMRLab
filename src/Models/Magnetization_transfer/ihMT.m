@@ -39,7 +39,7 @@ classdef ihMT < AbstractModel
             'PANEL', 'CorrectMTsat',3,...
             'DataDirectory', 0,...
             'OutputDirectory',0,...
-            'Run correctMTsat', 'pushbutton'};
+            'Run MTsat Correction', 'pushbutton'};
 
         options = struct(); 
 
@@ -49,9 +49,14 @@ methods
 
     function obj = ihMT()
         obj.options = button2opts(obj.buttons);
+        %obj = UpdateFields(obj);
     end 
 
     function obj = UpdateFields(obj)
+        % Need to do something like this to get datadir as pathdata 
+        %obj.options.SequenceSimulations_DataDirectory = uigetdir(pwd, 'Select Directory where images are');
+        %obj.options.SequenceSimulations_DataDirectory = DataPath;
+        % -> DataPath is name of directory one you load the Path data 
 
     end 
 
