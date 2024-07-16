@@ -1,8 +1,10 @@
 function [Params, outputSamplingTable] = ihMT_getSeqParams_3prot(Params)
 
-Params.B0 = 3;
+%Params.B0 = 3;
+Params.B0 = str2double(obj.options.B0);
 Params.MTC = 1; % Magnetization Transfer Contrast
-Params.TissueType = 'GM';
+%Params.TissueType = 'GM';
+Params.TissueType = obj.options.TissueType;
 Params = ihMT_defaultCortexTissueParams(Params);
 Params = ihMT_calcImagingParams(Params);
 
