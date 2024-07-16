@@ -4,7 +4,7 @@
 % necessary packages. 
 
 
-function [fitValues, img_fn] = ihMT_simSeq_M0b_R1obs_3prot(obj)
+function [fitValues, img_fn] = ihMT_simSeq_M0b_R1obs_3prot(obj,Params)
 
 %DATADIR = 'Image/Directory';
 DATADIR = '/Users/amiedemmans/Desktop/GitHubOptimizeIHMTimaging/kspaceWeighting/Atlas_reference/';
@@ -15,25 +15,28 @@ load( strcat( '/Users/amiedemmans/Desktop/GitHub/OptimizeIHMTimaging/kspaceWeigh
 %OutputDir =  'directory/outputs';
 OutputDir = '/Users/amiedemmans/Desktop/GitHub/OptimizeIHMTimaging/b1Correction/SeqSim2';
 
-turboF = [8,80,200];
-b1 = 0:0.75:18;
-M0b = 0:0.03:0.18; 
+%turboF = [8,80,200];
+%b1 = 0:0.75:18;
+b1 = linspace(0,Params.b1,18);
+M0b = 0:0.03:Params.M0b; 
 T1obs = horzcat(0.6:0.075:2,2.1:0.4:3); %600ms to 4500ms to cover WM to CSF. 
 Raobs = 1./T1obs;
 
+% Do I need this original for loop anymore?? I dont think so since I dont
+% need to loop over multiple params (turboF)
 
-for z = 1:length(turboF)
-
+%for z = 1:length(turboF)
+if strcmp(obj.options.SequenceSimulations_FreqPattern, 'single')
     tic
     clear Params outputSamplingTable;
 
-    [Params, outputSamplingTable] = ihMT_getSeqParams_3prot(turboF(z));
+    [Params, outputSamplingTable] = ihMT_getSeqParams_3prot(obj);
 
     % Loop variables:
     Params.M0b =  []; % going to loop over this
     Params.Raobs = [];
     Params.Ra = [];
-    Params.satFlipAngle = 9.35; %wrong integrate
+    Params.satFlipAngle = Params.pulseDur*360*42.58; 
 
     % gm_m = brain_m;
     % fft_gm_m = fft_brain_m;
