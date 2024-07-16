@@ -4,6 +4,8 @@
 % necessary packages. 
 
 
+%function [fitValues, img_fn] = ihMT_simSeq_M0b_R1obs_3prot()
+
 %DATADIR = 'Image/Directory';
 DATADIR = '/Users/amiedemmans/Desktop/GitHubOptimizeIHMTimaging/kspaceWeighting/Atlas_reference/';
 
