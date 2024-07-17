@@ -32,11 +32,11 @@ classdef ihMT < AbstractModel
             'B0', {'3', '7', '1.5'}, ...
             'FreqPattern',{'dualAlternate','dualContinuous'},...
             'Run Sequence Simulations','pushbutton',...
-            'PANEL', 'R1vsM0b_Mapping',3,...
+            'PANEL', 'R1vsM0b Mapping',3,...
             'DataDirectory', 0,...
             'OutputDirectory',0,...
             'Run R1vsM0b Mapping','pushbutton',...
-            'PANEL', 'Calculate_ihMTsat',3,...
+            'PANEL', 'Calculate ihMTsat',3,...
             'DataDirectory', 0,...
             'OutputDirectory',0,...
             'Run ihMTsat Calculation', 'pushbutton'};
@@ -53,10 +53,22 @@ methods
     end 
 
     function obj = UpdateFields(obj)
-        % Need to do something like this to get datadir as pathdata 
-        %obj.options.SequenceSimulations_DataDirectory = uigetdir(pwd, 'Select Directory where images are');
-        %obj.options.SequenceSimulations_DataDirectory = DataPath;
-        % -> DataPath is name of directory one you load the Path data 
+
+        if obj.options.SequenceSimulations_RunSequenceSimulations
+            obj.options.SequenceSimulations_DataDirectory = uigetdir(pwd, 'Select directory where images are');
+            obj.options.SequenceSimulations_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
+            %ihMT_simSeq_M0b_R1obs_3prot(obj.Params);
+        end 
+
+        if obj.options.R1vsM0bMapping_RunR1vsM0bMapping
+            obj.options.R1vsM0bMapping_DataDirectory = uigetdir(pwd, 'Select directory where fit vals are');
+            obj.options.R1vsM0bMapping_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
+        end 
+
+        if obj.options.CalculateihMTsat_RunihMTsatCalculation
+            obj.options.CalculateihMTsat_DataDirectory = uigetdir(pwd, 'Select directory where R1vsM0b vals are');
+            obj.options.CalculateihMTsat_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
+        end 
 
     end 
 
