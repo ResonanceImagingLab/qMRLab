@@ -19,14 +19,14 @@ Params.TR = 1.14; % total repetition time = MT pulse train and readout.
 Params.numSatPulse = 6;
 Params.TurboFactor = 80;
 Params.pulseDur = 0.768/1000; %duration of 1 MT pulse in seconds
-Params.b1 = 11.6; % microTesla
-Params.satTrainPerBoost = 9;
-Params.TR_MT = 0.06;    
+Params.satFlipAngle = 11.6; % microTesla  
 Params.freqPattern = 'single'; % options: 'single', 'dualAlternate', 'dualContinuous'
 Params.pulseGapDur = 0.3/1000; %ms gap between MT pulses in train % C.R. new, shift from 1ms to 0.5
 Params.DummyEcho = 2;
-Params.numExcitation = Params.TurboFactor + Params.DummyEcho; % number of readout lines/TR
 Params.boosted = 1;
+Params.satTrainPerBoost = 9;
+Params.TR_MT = 0.06;  
+Params.numExcitation = Params.TurboFactor + Params.DummyEcho; % number of readout lines/TR
 
 % MT parameters that will be consistent:
 Params.SatPulseShape = 'gausshann';

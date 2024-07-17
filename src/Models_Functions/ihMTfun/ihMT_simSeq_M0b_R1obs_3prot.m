@@ -16,9 +16,9 @@ load( strcat( '/Users/amiedemmans/Desktop/GitHub/OptimizeIHMTimaging/kspaceWeigh
 OutputDir = '/Users/amiedemmans/Desktop/GitHub/OptimizeIHMTimaging/b1Correction/SeqSim2';
 
 %turboF = [8,80,200];
-%b1 = 0:0.75:18;
-b1 = linspace(0,Params.b1,18);
-M0b = 0:0.03:Params.M0b; 
+b1 = 0:0.75:18;
+%b1 = linspace(0,Params.b1,18);
+M0b = 0:0.03:0.18; % put actual valye back
 T1obs = horzcat(0.6:0.075:2,2.1:0.4:3); %600ms to 4500ms to cover WM to CSF. 
 Raobs = 1./T1obs;
 
@@ -26,7 +26,7 @@ Raobs = 1./T1obs;
 % need to loop over multiple params (turboF)
 
 %for z = 1:length(turboF)
-if strcmp(obj.options.SequenceSimulations_FreqPattern, 'single')
+%if strcmp(obj.options.SequenceSimulations_FreqPattern, 'single')
     tic
     clear Params outputSamplingTable;
 
@@ -36,7 +36,7 @@ if strcmp(obj.options.SequenceSimulations_FreqPattern, 'single')
     Params.M0b =  []; % going to loop over this
     Params.Raobs = [];
     Params.Ra = [];
-    Params.satFlipAngle = Params.pulseDur*360*42.58; 
+    %Params.satFlipAngle = Params.pulseDur*360*42.58; 
 
     % gm_m = brain_m;
     % fft_gm_m = fft_brain_m;
@@ -55,7 +55,13 @@ if strcmp(obj.options.SequenceSimulations_FreqPattern, 'single')
                 Params.Raobs = Raobs(k);
                 temp = ihMT_blochSimFlashSequence_v2(Params,'freqPattern','single', 'satFlipAngle', b1(i)*Params.SatFlipAngle);       
                 GRE_sigs(i,j,k) = ihMT_generate_BSF_scaling_v1( temp, Params, outputSamplingTable, gm_m, fft_gm_m) ;
-                temp = ihMT_blochSimFlashSequence_v2(Params,'freqPattern','dualAlternate', 'satFlipAngle', b1(i)*Params.SatFlipAngle);  
+
+                if strcmp(obj.options.SequenceSimulations_FreqPattern, 'dualAlternate')
+                    temp = ihMT_blochSimFlashSequence_v2(Params,'freqPattern','dualAlternate', 'satFlipAngle', b1(i)*Params.satFlipAngle);
+                elseif strcmp(obj.options.SequenceSimulations_FreqPattern, 'dualContinuous')
+                    temp = ihMT_blochSimFlashSequence_v2(Params,'freqPattern','dualContinuous', 'satFlipAngle', b1(i)*Params.satFlipAngle);
+                end
+
                 GRE_sigd(i,j,k) = ihMT_generate_BSF_scaling_v1( temp, Params, outputSamplingTable, gm_m, fft_gm_m) ;
             end
         end
@@ -79,10 +85,10 @@ if strcmp(obj.options.SequenceSimulations_FreqPattern, 'single')
 
 
 
-    MTsatValue_fn = fullfile(OutputDir, strcat('MTsat_sim_S_',num2str(turboF(z)),'.mat')); 
+    MTsatValue_fn = fullfile(OutputDir, strcat('MTsat_sim_S','.mat')); 
     save(MTsatValue_fn,'MTsat_sim_S') % MTsat_sim_S, out{}m '.mat'
 
-    MTsatValue_fn = fullfile(OutputDir, strcat('MTsat_sim_D_',num2str(turboF(z)),'.mat')); 
+    MTsatValue_fn = fullfile(OutputDir, strcat('MTsat_sim_D','.mat')); 
     save(MTsatValue_fn,'MTsat_sim_D')
 
 
@@ -101,10 +107,10 @@ if strcmp(obj.options.SequenceSimulations_FreqPattern, 'single')
     fitValues.Params = Params; % export params to reference later if desired
     fitValues.numTerms = numTerms; % for fitting later...
 
-    fitValue_fn = fullfile(OutputDir, strcat('fitValues_S_',num2str(turboF(z)),'.mat')); 
+    fitValue_fn = fullfile(OutputDir, strcat('fitValues_S','.mat')); 
     save(fitValue_fn,'fitValues')
 
-    img_fn = fullfile(OutputDir, strcat('simFig_S_',num2str(turboF(z)),'.png')); 
+    img_fn = fullfile(OutputDir, strcat('simFig_S','.png')); 
     ihMT_generateFitSimFigures(M0b(1:6), b1, Raobs, MTsat_sim_S(:,1:6,:), fit_SS_eqn, img_fn)
 
 
@@ -119,17 +125,17 @@ if strcmp(obj.options.SequenceSimulations_FreqPattern, 'single')
     fitValues.Params = Params; % export params to reference later if desired
     fitValues.numTerms = numTerms; % for fitting later...
 
-    fitValue_fn = fullfile(OutputDir, strcat('fitValues_D_',num2str(turboF(z)),'.mat'));
+    fitValue_fn = fullfile(OutputDir, strcat('fitValues_D','.mat'));
     save(fitValue_fn,'fitValues')
 
-    img_fn = fullfile(OutputDir, strcat('simFig_D_',num2str(turboF(z)),'.png')); 
+    img_fn = fullfile(OutputDir, strcat('simFig_D','.png')); 
     ihMT_generateFitSimFigures( M0b(1:6), b1, Raobs, MTsat_sim_D(:,1:6,:), fit_SS_eqn, img_fn)
 
 
     str = ['Done turbofactor =',num2str(turboF(z))];
     disp(str)
     toc
-end
+%end
 
 
 
