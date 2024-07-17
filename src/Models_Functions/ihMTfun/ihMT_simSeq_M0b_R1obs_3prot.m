@@ -4,16 +4,18 @@
 % necessary packages. 
 
 
-function [fitValues, img_fn] = ihMT_simSeq_M0b_R1obs_3prot(obj,Params)
+function [fitValues, img_fn] = ihMT_simSeq_M0b_R1obs_3prot(obj)
 
 %DATADIR = 'Image/Directory';
-DATADIR = '/Users/amiedemmans/Desktop/GitHubOptimizeIHMTimaging/kspaceWeighting/Atlas_reference/';
+%DATADIR = '/Users/amiedemmans/Desktop/GitHubOptimizeIHMTimaging/kspaceWeighting/Atlas_reference/';
 
-load( strcat( '/Users/amiedemmans/Desktop/GitHub/OptimizeIHMTimaging/kspaceWeighting/Atlas_reference/','GM_seg_MNI_152_image.mat'))
-load( strcat( '/Users/amiedemmans/Desktop/GitHub/OptimizeIHMTimaging/kspaceWeighting/Atlas_reference/','GM_seg_MNI_152_kspace.mat'))
+%load( strcat( '/Users/amiedemmans/Desktop/GitHub/OptimizeIHMTimaging/kspaceWeighting/Atlas_reference/','GM_seg_MNI_152_image.mat'))
+load(strcat(obj.options.SequenceSimulations_DataDirectory, '/GM_seg_MNI_152_image.mat'))
+load(strcat(obj.options.SequenceSimulations_DataDirectory,'/GM_seg_MNI_152_kspace.mat'))
 
 %OutputDir =  'directory/outputs';
-OutputDir = '/Users/amiedemmans/Desktop/GitHub/OptimizeIHMTimaging/b1Correction/SeqSim2';
+%OutputDir = '/Users/amiedemmans/Desktop/GitHub/OptimizeIHMTimaging/b1Correction/SeqSim2';
+OutputDir = obj.options.SequenceSimulations_OutputDirectory;
 
 %turboF = [8,80,200];
 b1 = 0:0.75:18;
@@ -26,7 +28,7 @@ Raobs = 1./T1obs;
 % need to loop over multiple params (turboF)
 
 %for z = 1:length(turboF)
-%if strcmp(obj.options.SequenceSimulations_FreqPattern, 'single')
+
     tic
     clear Params outputSamplingTable;
 
