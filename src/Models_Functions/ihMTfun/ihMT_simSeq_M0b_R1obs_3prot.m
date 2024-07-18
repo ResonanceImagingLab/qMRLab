@@ -20,7 +20,7 @@ OutputDir = obj.options.SequenceSimulations_OutputDirectory;
 %turboF = [8,80,200];
 b1 = 0:0.75:18;
 %b1 = linspace(0,Params.b1,18);
-M0b = 0:0.03:0.18; % put actual valye back
+M0b = 0:0.03:0.18; 
 T1obs = horzcat(0.6:0.075:2,2.1:0.4:3); %600ms to 4500ms to cover WM to CSF. 
 Raobs = 1./T1obs;
 

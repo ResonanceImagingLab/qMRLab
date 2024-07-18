@@ -18,26 +18,26 @@ if Params.B0 == 3
         Params.Raobs = 1/1.4; 
         Params.R = 50; % 
         Params.T2a = 50e-3; % Sled and Pike 2001
-        Params.T1D = 7.5e-4; % Varma 2017 was 6ms
-        Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
+        Params.T1D = 7.5e-4; % Varma 2017 was 6ms 
         Params.R1b = 0.25;
         Params.T2b = 11.5e-6; 
         Params.Ra = [];
         Params.M0b =  0.071;
         Params.D = 0.8e-3/1e6; % diffusion coefficient-> convert from mm^2/s to m^2/s
+        Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
 
     elseif strcmp(Params.TissueType, 'WM')
         Params.M0a = 1;
         Params.Raobs = 1/0.85; 
         Params.R = 35;
         Params.T2a = 35e-3; % Sled and Pike 2001
-        Params.T1D = 5.25e-4; % Varma 2017 was 6ms
-        Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
+        Params.T1D = 5.25e-4; % Varma 2017 was 6ms       
         Params.R1b = 0.25;
         Params.T2b = 11.1e-6;
         Params.Ra = [];
         Params.M0b =  0.0155;
         Params.D = 1e-3/1e6; % diffusion coefficient-> convert from mm^2/s to m^2/s
+        Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
 
     else
         error('Please set Params.TissueType to either GM or WM, or build an additional field')
@@ -54,12 +54,12 @@ elseif Params.B0 == 7
         Params.R = 33; % 
         Params.T2a = 45e-3; 
         Params.T1D = 5.25e-4; % Varma 2017 was 6ms
-        Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
         Params.R1b = 0.25;
         Params.T2b = 11e-6; 
         Params.Ra = [];
         Params.M0b =  0.075;
         Params.D = 0.8e-3/1e6; % diffusion coefficient-> convert from mm^2/s to m^2/s
+        Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
 
     elseif strcmp(Params.TissueType, 'WM')
         Params.M0a = 1;
@@ -67,12 +67,12 @@ elseif Params.B0 == 7
         Params.R = 27;
         Params.T2a = 45e-3; 
         Params.T1D = 5.25e-4; % Varma 2017 was 6ms
-        Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
         Params.R1b = 0.25;
         Params.T2b = 11.1e-6;
         Params.Ra = [];
         Params.M0b =  0.155;
         Params.D = 1e-3/1e6; % diffusion coefficient-> convert from mm^2/s to m^2/s
+        Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
 
     else
         error('Please set Params.TissueType to either GM or WM, or build an additional field')
@@ -91,13 +91,13 @@ elseif Params.B0 == 1.5
         Params.Raobs = 1/2; 
         Params.R = 25.7; % 
         Params.T2a = 51e-3; 
-        Params.T1D = 5.25e-4; % Varma 2017 was 6ms
-        Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
+        Params.T1D = 5.25e-4; % Varma 2017 was 6ms 
         Params.R1b = 0.25;
         Params.T2b = 11e-6; 
         Params.Ra = 1;
         Params.M0b =  0.07;
         Params.D = 0.8e-3/1e6; % diffusion coefficient-> convert from mm^2/s to m^2/s
+        Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
 
     elseif strcmp(Params.TissueType, 'WM')
         Params.M0a = 1;
@@ -105,12 +105,12 @@ elseif Params.B0 == 1.5
         Params.R = 25;
         Params.T2a = 35e-3; 
         Params.T1D = 5.25e-4; % Varma 2017 was 6ms
-        Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
         Params.R1b = 0.25;
         Params.T2b = 12e-6;
         Params.Ra = 1.8;
         Params.M0b =  0.16;
         Params.D = 1e-3/1e6; % diffusion coefficient-> convert from mm^2/s to m^2/s
+        Params.lineshape = 'SuperLorentzian'; % or 'SuperLorentzian';
 
     else
         error('Please set Params.TissueType to either GM or WM, or build an additional field')
