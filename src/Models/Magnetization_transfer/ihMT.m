@@ -13,11 +13,11 @@ classdef ihMT < AbstractModel
         voxelwise = 0; % 0, if the analysis is done matricially
         % 1, if the analysis is done voxel per voxel
         % Protocol
-        Prot = struct('PulseSequenceParams', struct('Format',{{'delta' ; 'flipAngle' ; 'TR' ; 'numSatPulse' ; 'TurboFactor' ; 'pulseDur' ; 'satFlipAngle' ; ...
+        Prot = struct('PulseSequenceParams', struct('Format',{{'MTC'; 'delta' ; 'flipAngle' ; 'TR' ; 'numSatPulse' ; 'TurboFactor' ; 'pulseDur' ; 'satFlipAngle' ; ...
                                      'pulseGapDur' ; 'DummyEcho' ; 'LowDutyCycle'; 'satTrainPerBoost' ; 'TR_MT'}}, ...
-                                    'Mat', [8000; 7; 1.14; 6; 80; 0.768/1000; 11.6; 0.3/1000; 2; 1; 9; 0.06]), ...
-                      'TissueParams', struct('Format',{{'M0a'; 'Raobs'; 'R'; 'T2a'; 'T1D'; 'R1b'; 'T2b'; 'Ra'; 'M0b'; 'D'}}, ...
-                      'Mat', [1; 1/1.4; 50; 50e-3; 7.5e-4; 0.25; 11.5e-6; 1; 0.071; 0.8e-3/1e6]));
+                                    'Mat', [1; 8000; 7; 1.14; 6; 80; 0.768/1000; 11.6; 0.3/1000; 2; 1; 9; 0.06]), ...
+                      'TissueParams', struct('Format',{{'M0a'; 'Raobs'; 'R'; 'T2a'; 'T1D'; 'R1b'; 'T2b'; 'M0b'; 'D'}}, ...
+                      'Mat', [ 1; 1/1.4; 50; 50e-3; 7.5e-4; 0.25; 11.5e-6; 0.071; 0.8e-3/1e6]));
 
         % Params.numExcitation is based on TurboFactor and Dummy Echo 
         % freqpattern ill make into dropdown in buttons probably b/c I
@@ -58,15 +58,15 @@ methods
         Params.TissueType = obj.options.SequenceSimulations_TissueType;
         Params = ihMT_defaultCortexTissueParams(Params);
         obj.Prot.TissueParams.Mat = [Params.M0a, Params.Raobs, Params.R, Params.T2a, ...
-                                    Params.T1D, Params.R1b, Params.T2b, Params.Ra,...
+                                    Params.T1D, Params.R1b, Params.T2b, ...
                                     Params.M0b, Params.D]';
 
         if obj.options.SequenceSimulations_RunSequenceSimulations
             obj.options.SequenceSimulations_DataDirectory = uigetdir(pwd, 'Select directory where images are');
             obj.options.SequenceSimulations_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
-            
+            [Params, outputSamplingTable] = ihMT_getSeqParams_3prot(obj);
 
-            %ihMT_simSeq_M0b_R1obs_3prot(obj.Params);
+            ihMT_simSeq_M0b_R1obs_3prot(obj);
         end 
 
         if obj.options.R1vsM0bMapping_RunR1vsM0bMapping
