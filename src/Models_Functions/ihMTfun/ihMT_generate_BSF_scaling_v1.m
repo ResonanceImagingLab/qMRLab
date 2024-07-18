@@ -18,6 +18,7 @@ outKspace_s = ihMT_interpolateMissingGrappaLines( outKspace_s);
 
 %% Assume constant values in readout direction 
 sim3d_m = repmat(outKspace_s, [1,1,Params.Slices]);
+disp(sim3d_m);
 
 %% Scale the k-space by brain weighting to get 'Brain-spread-function'
 bsf = sim3d_m .* fft_gm_m;

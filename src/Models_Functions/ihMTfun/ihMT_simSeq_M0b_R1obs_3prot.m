@@ -32,16 +32,16 @@ Raobs = 1./T1obs;
     tic
     clear Params outputSamplingTable;
 
-    [Params, outputSamplingTable] = ihMT_getSeqParams_3prot(obj);
-
+    [Params, outputSamplingTable] = ihMT_getSeqParams_3prot(obj.options);
+    %[Params, outputSamplingTable] = PulseOpt;
     % Loop variables:
     Params.M0b =  []; % going to loop over this
     Params.Raobs = [];
     Params.Ra = [];
     %Params.satFlipAngle = Params.pulseDur*360*42.58; 
 
-    % gm_m = brain_m;
-    % fft_gm_m = fft_brain_m;
+     gm_m = brain_m;
+     fft_gm_m = fft_brain_m;
 
     GRE_sigd = zeros(size(b1,2),size(M0b,2),size(Raobs,2));
     GRE_sigs = zeros(size(b1,2),size(M0b,2),size(Raobs,2));
@@ -55,7 +55,7 @@ Raobs = 1./T1obs;
             
             for k = 1:size(Raobs,2)
                 Params.Raobs = Raobs(k);
-                temp = ihMT_blochSimFlashSequence_v2(Params,'freqPattern','single', 'satFlipAngle', b1(i)*Params.SatFlipAngle);       
+                temp = ihMT_blochSimFlashSequence_v2(Params,'freqPattern','single', 'satFlipAngle', b1(i)*Params.satFlipAngle);       
                 GRE_sigs(i,j,k) = ihMT_generate_BSF_scaling_v1( temp, Params, outputSamplingTable, gm_m, fft_gm_m) ;
 
                 if strcmp(obj.options.SequenceSimulations_FreqPattern, 'dualAlternate')
