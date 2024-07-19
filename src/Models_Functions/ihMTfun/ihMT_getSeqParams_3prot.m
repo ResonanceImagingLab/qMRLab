@@ -1,10 +1,10 @@
 function [Params, outputSamplingTable] = ihMT_getSeqParams_3prot(Params)
 
-Params.B0 = 3;
+%Params.B0 = 3;
 Params.MTC = 1; % Magnetization Transfer Contrast
 %Params.MTC = obj.Prot.PulseSequenceParams.Mat(1);
-Params.TissueType = 'GM';
-Params = ihMT_defaultCortexTissueParams(Params);
+%Params.TissueType = 'GM';
+%Params = ihMT_defaultCortexTissueParams(Params);
 Params = ihMT_calcImagingParams(Params);
 
 Params.WExcDur = 0.1/1000; % duration of water pulse

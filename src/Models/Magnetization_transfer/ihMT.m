@@ -60,7 +60,7 @@ methods
         obj.Prot.TissueParams.Mat = [Params.M0a, Params.Raobs, Params.R, Params.T2a, ...
                                     Params.T1D, Params.R1b, Params.T2b, ...
                                     Params.M0b, Params.D]';
-        % PulseOpt = getPulseSeqParams(obj);
+        % [PulseOpt, ~] = ihMT_getSeqParams_3prot(Params);
         % obj.Prot.PulseParameters.Mat = [PulseOpt.MTC, PulseOpt.delta, PulseOpt.flipAngle, PulseOpt.TR, PulseOpt.numSatPulse,...
         %                                 PulseOpt.TurboFactor, PulseOpt.pulseDur, PulseOpt.satFlipAngle, PulseOpt.pulseGapDur, ...
         %                                 PulseOpt.DummyEcho, PulseOpt.boosted, PulseOpt.satTrainPerBoost, PulseOpt.TR_MT]';
@@ -85,23 +85,6 @@ methods
 
     end 
 
-    function PulseOpt = getPulseSeqParams(obj)
-        obj = ihMT_getSeqParams_3prot(obj);
-
-        PulseOpt.MTC = obj.Prot.PulseSequenceParams.Mat(1);
-        PulseOpt.delta = obj.Prot.PulseSequenceParams.Mat(2);
-        PulseOpt.flipAngle = obj.Prot.PulseSequenceParams.Mat(3);
-        PulseOpt.TR = obj.Prot.PulseSequenceParams.Mat(4);
-        PulseOpt.numSatPulse = obj.Prot.PulseSequenceParams.Mat(5);
-        PulseOpt.TurboFactor = obj.Prot.PulseSequenceParams.Mat(6);
-        PulseOpt.pulseDur = obj.Prot.PulseSequenceParams.Mat(7);
-        PulseOpt.satFlipAngle = obj.Prot.PulseSequenceParams.Mat(8);
-        PulseOpt.pulseGapDur = obj.Prot.PulseSequenceParams.Mat(9);
-        PulseOpt.DummyEcho = obj.Prot.PulseSequenceParams.Mat(10);
-        PulseOpt.boosted = obj.Prot.PulseSequenceParams.Mat(11);
-        PulseOpt.satTrainPerBoost = obj.Prot.PulseSequenceParams.Mat(12);
-        PulseOpt.TR_MT = obj.Prot.PulseSequenceParams.Mat(13);
-    end
 
 end
 
@@ -140,7 +123,24 @@ end
 
 
 
-
+% Something I was trying 
+    % function PulseOpt = getPulseSeqParams(obj)
+    %     obj = ihMT_getSeqParams_3prot(obj);
+    % 
+    %     PulseOpt.MTC = obj.Prot.PulseSequenceParams.Mat(1);
+    %     PulseOpt.delta = obj.Prot.PulseSequenceParams.Mat(2);
+    %     PulseOpt.flipAngle = obj.Prot.PulseSequenceParams.Mat(3);
+    %     PulseOpt.TR = obj.Prot.PulseSequenceParams.Mat(4);
+    %     PulseOpt.numSatPulse = obj.Prot.PulseSequenceParams.Mat(5);
+    %     PulseOpt.TurboFactor = obj.Prot.PulseSequenceParams.Mat(6);
+    %     PulseOpt.pulseDur = obj.Prot.PulseSequenceParams.Mat(7);
+    %     PulseOpt.satFlipAngle = obj.Prot.PulseSequenceParams.Mat(8);
+    %     PulseOpt.pulseGapDur = obj.Prot.PulseSequenceParams.Mat(9);
+    %     PulseOpt.DummyEcho = obj.Prot.PulseSequenceParams.Mat(10);
+    %     PulseOpt.boosted = obj.Prot.PulseSequenceParams.Mat(11);
+    %     PulseOpt.satTrainPerBoost = obj.Prot.PulseSequenceParams.Mat(12);
+    %     PulseOpt.TR_MT = obj.Prot.PulseSequenceParams.Mat(13);
+    % end
 
 
 

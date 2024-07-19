@@ -19,21 +19,19 @@ OutputDir = obj.options.SequenceSimulations_OutputDirectory;
 
 %turboF = [8,80,200];
 b1 = 0:0.75:18;
-%b1 = linspace(0,Params.b1,18);
 M0b = 0:0.03:0.18; 
 T1obs = horzcat(0.6:0.075:2,2.1:0.4:3); %600ms to 4500ms to cover WM to CSF. 
 Raobs = 1./T1obs;
 
-% Do I need this original for loop anymore?? I dont think so since I dont
-% need to loop over multiple params (turboF)
-
 %for z = 1:length(turboF)
 
+% Took about 2.5 hours to run 
     tic
-    clear Params outputSamplingTable;
+    %clear Params outputSamplingTable;
+
 
     [Params, outputSamplingTable] = ihMT_getSeqParams_3prot(obj.options);
-    %[Params, outputSamplingTable] = PulseOpt;
+
     % Loop variables:
     Params.M0b =  []; % going to loop over this
     Params.Raobs = [];
@@ -134,8 +132,6 @@ Raobs = 1./T1obs;
     ihMT_generateFitSimFigures( M0b(1:6), b1, Raobs, MTsat_sim_D(:,1:6,:), fit_SS_eqn, img_fn)
 
 
-    str = ['Done turbofactor =',num2str(turboF(z))];
-    disp(str)
     toc
 %end
 
