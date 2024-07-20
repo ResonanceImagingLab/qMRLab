@@ -42,6 +42,7 @@ classdef ihMT < AbstractModel
             'Run ihMTsat Calculation', 'pushbutton'};
 
         options = struct(); 
+        previousOptions = struct();
 
     end 
 
@@ -49,38 +50,65 @@ methods
 
     function obj = ihMT()
         obj.options = button2opts(obj.buttons);
+        obj.previousOptions = obj.options;
         %obj = UpdateFields(obj);
+    end 
+
+    function checkfields = checkupdatedfields(obj)
+        if (~isequal(obj.options.SequenceSimulations_TissueType, obj.previousOptions.SequenceSimulations_TissueType) || ...
+                ~isequal(obj.options.SequenceSimulations_B0, obj.previousOptions.SequenceSimulations_B0)||...
+                ~isequal(obj.options.SequenceSimulations_DataDirectory, obj.previousOptions.SequenceSimulations_DataDirectory)||...
+                ~isequal(obj.options.SequenceSimulations_OutputDirectory, obj.previousOptions.SequenceSimulations_OutputDirectory)||...
+                ~isequal(obj.options.SequenceSimulations_FreqPattern, obj.previousOptions.SequenceSimulations_FreqPattern)||...
+                ~isequal(obj.options.SequenceSimulations_RunSequenceSimulations, obj.previousOptions.SequenceSimulations_RunSequenceSimulations)||...
+                ~isequal(obj.options.R1vsM0bMapping_DataDirectory, obj.previousOptions.R1vsM0bMapping_DataDirectory)||...
+                ~isequal(obj.options.R1vsM0bMapping_OutputDirectory, obj.previousOptions.R1vsM0bMapping_OutputDirectory)||...
+                ~isequal(obj.options.R1vsM0bMapping_RunR1vsM0bMapping, obj.previousOptions.R1vsM0bMapping_RunR1vsM0bMapping)||...
+                ~isequal(obj.options.CalculateihMTsat_DataDirectory, obj.previousOptions.CalculateihMTsat_DataDirectory)||...
+                ~isequal(obj.options.CalculateihMTsat_OutputDirectory, obj.previousOptions.CalculateihMTsat_OutputDirectory)||...
+                ~isequal(obj.options.CalculateihMTsat_RunihMTsatCalculation, obj.previousOptions.CalculateihMTsat_RunihMTsatCalculation))
+
+            checkfields = 1; 
+        else
+            checkfields = 0;
+        end 
     end 
 
     function obj = UpdateFields(obj)
 
-        Params.B0 = str2double(obj.options.SequenceSimulations_B0);
-        Params.TissueType = obj.options.SequenceSimulations_TissueType;
-        Params = ihMT_defaultCortexTissueParams(Params);
-        obj.Prot.TissueParams.Mat = [Params.M0a, Params.Raobs, Params.R, Params.T2a, ...
-                                    Params.T1D, Params.R1b, Params.T2b, ...
-                                    Params.M0b, Params.D]';
-        % [PulseOpt, ~] = ihMT_getSeqParams_3prot(Params);
-        % obj.Prot.PulseParameters.Mat = [PulseOpt.MTC, PulseOpt.delta, PulseOpt.flipAngle, PulseOpt.TR, PulseOpt.numSatPulse,...
-        %                                 PulseOpt.TurboFactor, PulseOpt.pulseDur, PulseOpt.satFlipAngle, PulseOpt.pulseGapDur, ...
-        %                                 PulseOpt.DummyEcho, PulseOpt.boosted, PulseOpt.satTrainPerBoost, PulseOpt.TR_MT]';
+        if obj.checkupdatedfields == 1
 
-        if obj.options.SequenceSimulations_RunSequenceSimulations
-            obj.options.SequenceSimulations_DataDirectory = uigetdir(pwd, 'Select directory where images are');
-            obj.options.SequenceSimulations_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
-            
+            obj.previousOptions = obj.options;
 
-            ihMT_simSeq_M0b_R1obs_3prot(obj);
-        end 
+            Params.B0 = str2double(obj.options.SequenceSimulations_B0);
+            Params.TissueType = obj.options.SequenceSimulations_TissueType;
+            Params = ihMT_defaultCortexTissueParams(Params);
+            obj.Prot.TissueParams.Mat = [Params.M0a, Params.Raobs, Params.R, Params.T2a, ...
+                                        Params.T1D, Params.R1b, Params.T2b, ...
+                                        Params.M0b, Params.D]';
+            PulseOpt = ihMT_pulseSeqParams(obj.options);
+            obj.Prot.PulseSequenceParams.Mat = [PulseOpt.MTC, PulseOpt.delta, PulseOpt.flipAngle, PulseOpt.TR, PulseOpt.numSatPulse,...
+                                            PulseOpt.TurboFactor, PulseOpt.pulseDur, PulseOpt.satFlipAngle, PulseOpt.pulseGapDur, ...
+                                            PulseOpt.DummyEcho, PulseOpt.boosted, PulseOpt.satTrainPerBoost, PulseOpt.TR_MT]';
+    
+            if obj.options.SequenceSimulations_RunSequenceSimulations
+                obj.options.SequenceSimulations_DataDirectory = uigetdir(pwd, 'Select directory where images are');
+                obj.options.SequenceSimulations_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
+                
+    
+                ihMT_simSeq_M0b_R1obs_3prot(obj);
+            end 
+    
+            if obj.options.R1vsM0bMapping_RunR1vsM0bMapping
+                obj.options.R1vsM0bMapping_DataDirectory = uigetdir(pwd, 'Select directory where fit vals are');
+                obj.options.R1vsM0bMapping_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
+            end 
+    
+            if obj.options.CalculateihMTsat_RunihMTsatCalculation
+                obj.options.CalculateihMTsat_DataDirectory = uigetdir(pwd, 'Select directory where R1vsM0b vals are');
+                obj.options.CalculateihMTsat_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
+            end 
 
-        if obj.options.R1vsM0bMapping_RunR1vsM0bMapping
-            obj.options.R1vsM0bMapping_DataDirectory = uigetdir(pwd, 'Select directory where fit vals are');
-            obj.options.R1vsM0bMapping_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
-        end 
-
-        if obj.options.CalculateihMTsat_RunihMTsatCalculation
-            obj.options.CalculateihMTsat_DataDirectory = uigetdir(pwd, 'Select directory where R1vsM0b vals are');
-            obj.options.CalculateihMTsat_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
         end 
 
     end 
