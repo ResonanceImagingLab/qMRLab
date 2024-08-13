@@ -60,15 +60,17 @@ methods
                 ~isequal(obj.options.SequenceSimulations_DataDirectory, obj.previousOptions.SequenceSimulations_DataDirectory)||...
                 ~isequal(obj.options.SequenceSimulations_OutputDirectory, obj.previousOptions.SequenceSimulations_OutputDirectory)||...
                 ~isequal(obj.options.SequenceSimulations_FreqPattern, obj.previousOptions.SequenceSimulations_FreqPattern)||...
-                ~isequal(obj.options.SequenceSimulations_RunSequenceSimulations, obj.previousOptions.SequenceSimulations_RunSequenceSimulations)||...
                 ~isequal(obj.options.R1vsM0bMapping_DataDirectory, obj.previousOptions.R1vsM0bMapping_DataDirectory)||...
                 ~isequal(obj.options.R1vsM0bMapping_OutputDirectory, obj.previousOptions.R1vsM0bMapping_OutputDirectory)||...
-                ~isequal(obj.options.R1vsM0bMapping_RunR1vsM0bMapping, obj.previousOptions.R1vsM0bMapping_RunR1vsM0bMapping)||...
                 ~isequal(obj.options.CalculateihMTsat_DataDirectory, obj.previousOptions.CalculateihMTsat_DataDirectory)||...
-                ~isequal(obj.options.CalculateihMTsat_OutputDirectory, obj.previousOptions.CalculateihMTsat_OutputDirectory)||...
-                ~isequal(obj.options.CalculateihMTsat_RunihMTsatCalculation, obj.previousOptions.CalculateihMTsat_RunihMTsatCalculation))
+                ~isequal(obj.options.CalculateihMTsat_OutputDirectory, obj.previousOptions.CalculateihMTsat_OutputDirectory))   
 
             checkfields = 1; 
+        elseif (~isequal(obj.options.SequenceSimulations_RunSequenceSimulations, obj.previousOptions.SequenceSimulations_RunSequenceSimulations)||...
+                 ~isequal(obj.options.R1vsM0bMapping_RunR1vsM0bMapping, obj.previousOptions.R1vsM0bMapping_RunR1vsM0bMapping)||...
+                 ~isequal(obj.options.CalculateihMTsat_RunihMTsatCalculation, obj.previousOptions.CalculateihMTsat_RunihMTsatCalculation))
+            checkfields = 2;
+
         else
             checkfields = 0;
         end 
@@ -90,20 +92,19 @@ methods
             obj.Prot.PulseSequenceParams.Mat = [PulseOpt.MTC, PulseOpt.delta, PulseOpt.flipAngle, PulseOpt.TR, PulseOpt.numSatPulse,...
                                             PulseOpt.TurboFactor, PulseOpt.pulseDur, PulseOpt.satFlipAngle, PulseOpt.pulseGapDur, ...
                                             PulseOpt.DummyEcho, PulseOpt.boosted, PulseOpt.satTrainPerBoost, PulseOpt.TR_MT]';
-    
+        elseif obj.checkupdatedfields == 2
+         
             if obj.options.SequenceSimulations_RunSequenceSimulations
                 obj.options.SequenceSimulations_DataDirectory = uigetdir(pwd, 'Select directory where images are');
                 obj.options.SequenceSimulations_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved'); 
     
-                ihMT_simSeq_M0b_R1obs_3prot(obj);
-            end 
+                ihMT_simSeq_M0b_R1obs_3prot(obj); 
     
-            if obj.options.R1vsM0bMapping_RunR1vsM0bMapping
+            elseif obj.options.R1vsM0bMapping_RunR1vsM0bMapping
                 obj.options.R1vsM0bMapping_DataDirectory = uigetdir(pwd, 'Select directory where fit vals are');
                 obj.options.R1vsM0bMapping_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
-            end 
     
-            if obj.options.CalculateihMTsat_RunihMTsatCalculation
+            elseif obj.options.CalculateihMTsat_RunihMTsatCalculation
                 obj.options.CalculateihMTsat_DataDirectory = uigetdir(pwd, 'Select directory where R1vsM0b vals are');
                 obj.options.CalculateihMTsat_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
             end 
