@@ -1,4 +1,4 @@
-function [Params, outputSamplingTable] = ihMT_getSeqParams_3prot(Params)
+function [Params, outputSamplingTable] = ihMT_getSeqParams(Params)
 
 %Params.B0 = 3;
 %Params.MTC = 1; % Magnetization Transfer Contrast
@@ -13,8 +13,6 @@ Params.echospacing = 7.66/1000;
 Params.PerfectSpoiling = 1;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% For Params listed in this section need to change into this format:
 
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
