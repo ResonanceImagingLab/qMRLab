@@ -53,7 +53,7 @@ Raobs = 1./T1obs;
     Params.satTrainPerBoost = obj.Prot.PulseSequenceParams.Mat(12);
     Params.TR_MT = obj.Prot.PulseSequenceParams.Mat(13);
 
-    [Params, outputSamplingTable] = ihMT_getSeqParams_3prot(Params);
+    [Params, outputSamplingTable] = ihMT_getSeqParams(Params);
 
 
     % Loop variables:
