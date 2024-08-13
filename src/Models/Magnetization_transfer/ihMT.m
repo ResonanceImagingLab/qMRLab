@@ -93,8 +93,7 @@ methods
     
             if obj.options.SequenceSimulations_RunSequenceSimulations
                 obj.options.SequenceSimulations_DataDirectory = uigetdir(pwd, 'Select directory where images are');
-                obj.options.SequenceSimulations_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
-                
+                obj.options.SequenceSimulations_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved'); 
     
                 ihMT_simSeq_M0b_R1obs_3prot(obj);
             end 
