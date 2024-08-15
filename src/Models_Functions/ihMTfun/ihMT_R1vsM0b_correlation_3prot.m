@@ -1,14 +1,22 @@
+function ihMT_R1vsM0b_correlation_3prot(obj)
 %% Generate the M0B mapping to R1 from simulation results and acquired data
 
-addpath(genpath('Directory/niak-master' ))
-addpath(genpath('Directory/NeuroImagingMatlab'))
-addpath(genpath( 'Directory/MP2RAGE'   ))
+% Dont need any of these anymore --> Am I adding imshow3Dfull to qMRLab? 
+% If not then need to keep NeuroImagingMatlab to add path 
+%addpath(genpath('Directory/niak-master' ))
+%addpath(genpath('Directory/NeuroImagingMatlab'))
+%addpath(genpath( 'Directory/MP2RAGE'   )) 
 
-OutputDir = 'Directory\b1Correction\outputs';
+%  NOTE: niak_read_vol replaced with minc_read  %
+%  NOTE: niak_write_vol replaced with minc_write %
+
+
+% Where outputs will be saved/ previous results are 
+OutputDir = obj.options.R1vsM0bMapping_OutputDirectory;
 %% Load images:
 
-
-DATADIR = 'Image/Directory';
+% Where Images are you will be using 
+DATADIR = obj.options.R1vsM0bMapping_DataDirectory;
 
 %image names:
 % in the order of dual, hfa, neg, lfa, pos
@@ -20,84 +28,31 @@ mtw_fn = {'dual_reg.mnc' 'pos_reg.mnc' 'neg_reg.mnc' 'noMT_reg.mnc' ...         
 
 for i = 1:size(mtw_fn,2)
     fn = fullfile(DATADIR,mtw_fn{i});
-    [hdr, img] = niak_read_vol(fn);
+    [hdr, img] = minc_read(fn); % niak_read_vol
     comb_mtw(:,:,:,i) = img; %.img;
 end
 
 
 %% Load the mask
 fn = fullfile(DATADIR,'itkmask.nii.gz');
-[~, mask] = niak_read_vol(fn);
+[~, mask] = minc_read(fn);
 mask1 = permute(mask,[2 3 1]); % conversion between minc and nii reorients it
 
+% If making a mask 
+% mask = zeros(size(lfa)); 
+% mask(lfa>175) = 1;
+
 %% Some B1 issues so lets try and load that
-[~, b1] = niak_read_vol(fullfile(DATADIR,'resampled_b1field.mnc')); 
+[~, b1] = minc_read(fullfile(DATADIR,'resampled_b1field.mnc')); 
 b1 = double(b1);
 b1 = limitHandler(b1, 0.5,1.4);
 b1 = ihMT_imgaussfilt3_withMask(b1, mask1, 5); %light smoothing to the map
 
 figure; imshow3Dfull(b1, [0.6 1.2],jet)
 
-%% Run MP-PCA denoising
-comb_mtw = double(comb_mtw);
-all_PCAcorr = MPdenoising(comb_mtw); % MPdenoising already exists 
-
-
-%% separate the images then average the MTw ones
-dual = all_PCAcorr(:,:,:,1);
-pos  = all_PCAcorr(:,:,:,2);
-neg = all_PCAcorr(:,:,:,3);
-noMT = all_PCAcorr(:,:,:,4);
-
-dual2 = all_PCAcorr(:,:,:,5);
-pos2  = all_PCAcorr(:,:,:,6);
-neg2 = all_PCAcorr(:,:,:,7);
-noMT2 = all_PCAcorr(:,:,:,8);
-
-dual3 = all_PCAcorr(:,:,:,9);
-pos3  = all_PCAcorr(:,:,:,10);
-neg3 = all_PCAcorr(:,:,:,11);
-noMT3 = all_PCAcorr(:,:,:,12);
-
-sp_mp2r_inv1  = all_PCAcorr(:,:,:,13);
-sp_mp2r_inv2 = all_PCAcorr(:,:,:,14);
-sp_mp2r_uni  = all_PCAcorr(:,:,:,15);
-
-
-%% Now from the MP2RAGE:
-  
-MP2RAGE.B0 = 3;           % in Tesla
-MP2RAGE.TR = 5;           % MP2RAGE TR in seconds
-MP2RAGE.TRFLASH = 6.4e-3; % TR of the GRE readout
-MP2RAGE.TIs = [0.94 2.83];% inversion times - time between middle of refocusing pulse and excitatoin of the k-space center encoding
-MP2RAGE.NZslices = [ceil(175/2) floor(175/2)];%  should be two values, number of excitations before k-space center, and number after. [Slices Per Slab * [PartialFourierInSlice-0.5  0.5] ]
-MP2RAGE.FlipDegrees = [4 5];% Flip angle of the two readouts in degrees
-
-
-MP2RAGEimg.img = sp_mp2r_uni; % load_untouch_nii(MP2RAGE.filenameUNI);
-MP2RAGEINV2img.img = sp_mp2r_inv2; % load_untouch_nii(MP2RAGE.filenameINV2);
-B1.img = b1;
-brain.img = mask1;
-
-tic
-[ spT1map, spMP2RAGEcorrected, spAppmap2] = ihMT_T1B1correctpackageTFL_withM0( B1, MP2RAGEimg, MP2RAGEINV2img, MP2RAGE, brain, 0.96);
-toc
-
-spT1_map = spT1map.img;
-spApp_mp2 = spAppmap2.img ;
-
-spT1_map = limitHandler(spT1_map);
-spApp_mp2 = double(limitHandler(spApp_mp2));
-
-figure; imshow3Dfull(spT1_map, [300 2500],jet)
-figure; imshow3Dfull(spApp_mp2 , [00 6000])
-
-hdr.file_name = fullfile(DATADIR,'matlab/sparseMP2RAGE_T1.mnc.gz'); niak_write_vol(hdr, spT1_map);
-hdr.file_name = fullfile(DATADIR,'matlab/sparseMP2RAGE_M0.mnc.gz'); niak_write_vol(hdr, spApp_mp2);
-
 
 %% Mask -> bet result touched up in itk, then threshold CSF and some dura
-
+% Does this go away because mp2rage section is gone 
 mask = mask1;
 mask(spT1_map > 2500) = 0;
 mask(spT1_map < 650) = 0;
@@ -241,17 +196,17 @@ figure; imshow3Dfull(M0b_80_dual, [0 0.15],jet)
 
 % export
 mkdir(fullfile(OutputDir,'processing'))
-hdr.file_name = fullfile(OutputDir,'processing/M0b_8_dual.mnc.gz'); niak_write_vol(hdr,M0b_8_dual);
-hdr.file_name = fullfile(OutputDir,'processing/M0b_8_pos.mnc.gz'); niak_write_vol(hdr,M0b_8_pos);
-hdr.file_name = fullfile(OutputDir,'processing/M0b_8_neg.mnc.gz'); niak_write_vol(hdr,M0b_8_neg);
+hdr.file_name = fullfile(OutputDir,'processing/M0b_8_dual.mnc.gz'); minc_write(hdr,M0b_8_dual); % Need to add filename for each minc_write %
+hdr.file_name = fullfile(OutputDir,'processing/M0b_8_pos.mnc.gz'); minc_write(hdr,M0b_8_pos);
+hdr.file_name = fullfile(OutputDir,'processing/M0b_8_neg.mnc.gz'); minc_write(hdr,M0b_8_neg);
 
-hdr.file_name = fullfile(OutputDir,'processing/M0b_200_dual.mnc.gz'); niak_write_vol(hdr,M0b_200_dual);
-hdr.file_name = fullfile(OutputDir,'processing/M0b_200_pos.mnc.gz'); niak_write_vol(hdr,M0b_200_pos);
-hdr.file_name = fullfile(OutputDir,'processing/M0b_200_neg.mnc.gz'); niak_write_vol(hdr,M0b_200_neg);
+hdr.file_name = fullfile(OutputDir,'processing/M0b_200_dual.mnc.gz'); minc_write(hdr,M0b_200_dual);
+hdr.file_name = fullfile(OutputDir,'processing/M0b_200_pos.mnc.gz'); minc_write(hdr,M0b_200_pos);
+hdr.file_name = fullfile(OutputDir,'processing/M0b_200_neg.mnc.gz'); minc_write(hdr,M0b_200_neg);
 
-hdr.file_name = fullfile(OutputDir,'processing/M0b_80_dual.mnc.gz'); niak_write_vol(hdr,M0b_80_dual);
-hdr.file_name = fullfile(OutputDir,'processing/M0b_80_pos.mnc.gz'); niak_write_vol(hdr,M0b_80_pos);
-hdr.file_name = fullfile(OutputDir,'processing/M0b_80_neg.mnc.gz'); niak_write_vol(hdr,M0b_80_neg);
+hdr.file_name = fullfile(OutputDir,'processing/M0b_80_dual.mnc.gz'); minc_write(hdr,M0b_80_dual);
+hdr.file_name = fullfile(OutputDir,'processing/M0b_80_pos.mnc.gz'); minc_write(hdr,M0b_80_pos);
+hdr.file_name = fullfile(OutputDir,'processing/M0b_80_neg.mnc.gz'); minc_write(hdr,M0b_80_neg);
 
 
 %% With M0B maps made, correlate with R1 and update the fitValues file. 
@@ -347,23 +302,23 @@ figure; imshow3Dfull(ihmt3_c , [0 0.08], jet)
 
 %% Other things, save if you want
 
-hdr.file_name = strcat(DATADIR,'matlab/MTsat_dual_1.mnc.gz'); niak_write_vol(hdr, sat_dual1_c);
-hdr.file_name = strcat(DATADIR,'matlab/MTsat_pos_1.mnc.gz'); niak_write_vol(hdr, sat_pos1_c);
-hdr.file_name = strcat(DATADIR,'matlab/MTsat_neg_1.mnc.gz'); niak_write_vol(hdr, sat_neg1_c);
-hdr.file_name = strcat(DATADIR,'matlab/ihMTsat_1.mnc.gz'); niak_write_vol(hdr, ihmt1_c);
+hdr.file_name = strcat(DATADIR,'matlab/MTsat_dual_1.mnc.gz'); minc_write(hdr, sat_dual1_c);
+hdr.file_name = strcat(DATADIR,'matlab/MTsat_pos_1.mnc.gz'); minc_write(hdr, sat_pos1_c);
+hdr.file_name = strcat(DATADIR,'matlab/MTsat_neg_1.mnc.gz'); minc_write(hdr, sat_neg1_c);
+hdr.file_name = strcat(DATADIR,'matlab/ihMTsat_1.mnc.gz'); minc_write(hdr, ihmt1_c);
 
-hdr.file_name = strcat(DATADIR,'matlab/MTsat_dual_2.mnc.gz'); niak_write_vol(hdr, sat_dual2_c);
-hdr.file_name = strcat(DATADIR,'matlab/MTsat_pos_2.mnc.gz'); niak_write_vol(hdr, sat_pos2_c);
-hdr.file_name = strcat(DATADIR,'matlab/MTsat_neg_2.mnc.gz'); niak_write_vol(hdr, sat_neg2_c);
-hdr.file_name = strcat(DATADIR,'matlab/ihMTsat_2.mnc.gz'); niak_write_vol(hdr, ihmt2_c);
+hdr.file_name = strcat(DATADIR,'matlab/MTsat_dual_2.mnc.gz'); minc_write(hdr, sat_dual2_c);
+hdr.file_name = strcat(DATADIR,'matlab/MTsat_pos_2.mnc.gz'); minc_write(hdr, sat_pos2_c);
+hdr.file_name = strcat(DATADIR,'matlab/MTsat_neg_2.mnc.gz'); minc_write(hdr, sat_neg2_c);
+hdr.file_name = strcat(DATADIR,'matlab/ihMTsat_2.mnc.gz'); minc_write(hdr, ihmt2_c);
 
-hdr.file_name = strcat(DATADIR,'matlab/MTsat_dual_3.mnc.gz'); niak_write_vol(hdr, sat_dual3_c);
-hdr.file_name = strcat(DATADIR,'matlab/MTsat_pos_3.mnc.gz'); niak_write_vol(hdr, sat_pos3_c);
-hdr.file_name = strcat(DATADIR,'matlab/MTsat_neg_3.mnc.gz'); niak_write_vol(hdr, sat_neg3_c);
-hdr.file_name = strcat(DATADIR,'matlab/ihMTsat_3.mnc.gz'); niak_write_vol(hdr, ihmt3_c);
+hdr.file_name = strcat(DATADIR,'matlab/MTsat_dual_3.mnc.gz'); minc_write(hdr, sat_dual3_c);
+hdr.file_name = strcat(DATADIR,'matlab/MTsat_pos_3.mnc.gz'); minc_write(hdr, sat_pos3_c);
+hdr.file_name = strcat(DATADIR,'matlab/MTsat_neg_3.mnc.gz'); minc_write(hdr, sat_neg3_c);
+hdr.file_name = strcat(DATADIR,'matlab/ihMTsat_3.mnc.gz'); minc_write(hdr, ihmt3_c);
 
 
-hdr.file_name = strcat(DATADIR,'matlab/b1.mnc.gz'); niak_write_vol(hdr, b1);
+hdr.file_name = strcat(DATADIR,'matlab/b1.mnc.gz'); minc_write(hdr, b1);
 
 
 
@@ -408,7 +363,63 @@ set(gcf,'position',[10,400,1000,600])
 
 
 
+%% Stuff that's not needed 
+%% Run MP-PCA denoising
+% comb_mtw = double(comb_mtw);
+% all_PCAcorr = MPdenoising(comb_mtw); % MPdenoising already exists 
 
+
+%% separate the images then average the MTw ones
+% dual = all_PCAcorr(:,:,:,1);
+% pos  = all_PCAcorr(:,:,:,2);
+% neg = all_PCAcorr(:,:,:,3);
+% noMT = all_PCAcorr(:,:,:,4);
+% 
+% dual2 = all_PCAcorr(:,:,:,5);
+% pos2  = all_PCAcorr(:,:,:,6);
+% neg2 = all_PCAcorr(:,:,:,7);
+% noMT2 = all_PCAcorr(:,:,:,8);
+% 
+% dual3 = all_PCAcorr(:,:,:,9);
+% pos3  = all_PCAcorr(:,:,:,10);
+% neg3 = all_PCAcorr(:,:,:,11);
+% noMT3 = all_PCAcorr(:,:,:,12);
+% 
+% sp_mp2r_inv1  = all_PCAcorr(:,:,:,13);
+% sp_mp2r_inv2 = all_PCAcorr(:,:,:,14);
+% sp_mp2r_uni  = all_PCAcorr(:,:,:,15);
+
+
+%% Now from the MP2RAGE:
+  
+% MP2RAGE.B0 = 3;           % in Tesla
+% MP2RAGE.TR = 5;           % MP2RAGE TR in seconds
+% MP2RAGE.TRFLASH = 6.4e-3; % TR of the GRE readout
+% MP2RAGE.TIs = [0.94 2.83];% inversion times - time between middle of refocusing pulse and excitatoin of the k-space center encoding
+% MP2RAGE.NZslices = [ceil(175/2) floor(175/2)];%  should be two values, number of excitations before k-space center, and number after. [Slices Per Slab * [PartialFourierInSlice-0.5  0.5] ]
+% MP2RAGE.FlipDegrees = [4 5];% Flip angle of the two readouts in degrees
+% 
+% 
+% MP2RAGEimg.img = sp_mp2r_uni; % load_untouch_nii(MP2RAGE.filenameUNI);
+% MP2RAGEINV2img.img = sp_mp2r_inv2; % load_untouch_nii(MP2RAGE.filenameINV2);
+% B1.img = b1;
+% brain.img = mask1;
+% 
+% tic
+% [ spT1map, spMP2RAGEcorrected, spAppmap2] = ihMT_T1B1correctpackageTFL_withM0( B1, MP2RAGEimg, MP2RAGEINV2img, MP2RAGE, brain, 0.96);
+% toc
+% 
+% spT1_map = spT1map.img;
+% spApp_mp2 = spAppmap2.img ;
+% 
+% spT1_map = limitHandler(spT1_map);
+% spApp_mp2 = double(limitHandler(spApp_mp2));
+% 
+% figure; imshow3Dfull(spT1_map, [300 2500],jet)
+% figure; imshow3Dfull(spApp_mp2 , [00 6000])
+% 
+% hdr.file_name = fullfile(DATADIR,'matlab/sparseMP2RAGE_T1.mnc.gz'); niak_write_vol(hdr, spT1_map);
+% hdr.file_name = fullfile(DATADIR,'matlab/sparseMP2RAGE_M0.mnc.gz'); niak_write_vol(hdr, spApp_mp2);
 
 
 

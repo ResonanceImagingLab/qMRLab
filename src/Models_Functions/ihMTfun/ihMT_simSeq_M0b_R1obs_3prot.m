@@ -10,8 +10,8 @@ function ihMT_simSeq_M0b_R1obs_3prot(obj)
 %DATADIR = '/Users/amiedemmans/Desktop/GitHubOptimizeIHMTimaging/kspaceWeighting/Atlas_reference/';
 
 %load( strcat( '/Users/amiedemmans/Desktop/GitHub/OptimizeIHMTimaging/kspaceWeighting/Atlas_reference/','GM_seg_MNI_152_image.mat'))
-load(strcat(obj.options.SequenceSimulations_DataDirectory, '/GM_seg_MNI_152_image.mat'))
-load(strcat(obj.options.SequenceSimulations_DataDirectory,'/GM_seg_MNI_152_kspace.mat'))
+load(strcat(obj.options.SequenceSimulations_AtlasDirectory, '/GM_seg_MNI_152_image.mat'))
+load(strcat(obj.options.SequenceSimulations_AtlasDirectory,'/GM_seg_MNI_152_kspace.mat'))
 
 %OutputDir =  'directory/outputs';
 %OutputDir = '/Users/amiedemmans/Desktop/GitHub/OptimizeIHMTimaging/b1Correction/SeqSim2';
