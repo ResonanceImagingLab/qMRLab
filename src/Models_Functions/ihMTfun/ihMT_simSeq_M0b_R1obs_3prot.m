@@ -6,15 +6,15 @@
 
 function ihMT_simSeq_M0b_R1obs_3prot(obj)
 
-%DATADIR = 'Image/Directory';
-%DATADIR = '/Users/amiedemmans/Desktop/GitHubOptimizeIHMTimaging/kspaceWeighting/Atlas_reference/';
+
 
 %load( strcat( '/Users/amiedemmans/Desktop/GitHub/OptimizeIHMTimaging/kspaceWeighting/Atlas_reference/','GM_seg_MNI_152_image.mat'))
+% AtlasDirectory = directory where atlas images are 
 load(strcat(obj.options.SequenceSimulations_AtlasDirectory, '/GM_seg_MNI_152_image.mat'))
 load(strcat(obj.options.SequenceSimulations_AtlasDirectory,'/GM_seg_MNI_152_kspace.mat'))
 
-%OutputDir =  'directory/outputs';
 %OutputDir = '/Users/amiedemmans/Desktop/GitHub/OptimizeIHMTimaging/b1Correction/SeqSim2';
+% OutputDir = directory where results will be saved 
 OutputDir = obj.options.SequenceSimulations_OutputDirectory;
 
 %turboF = [8,80,200];
@@ -52,6 +52,9 @@ Raobs = 1./T1obs;
     Params.boosted = obj.Prot.PulseSequenceParams.Mat(11);
     Params.satTrainPerBoost = obj.Prot.PulseSequenceParams.Mat(12);
     Params.TR_MT = obj.Prot.PulseSequenceParams.Mat(13);
+    Params.echoSpacing = obj.Prot.PulseSequenceParams.Mat(14);
+    
+    Params.SatPulseShape = obj.options.SequenceSimulations_SatPulseShape;
 
     [Params, outputSamplingTable] = ihMT_getSeqParams(Params);
 

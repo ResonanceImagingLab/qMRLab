@@ -9,7 +9,7 @@ Params.lineshape = 'SuperLorentzian';
 Params = ihMT_calcImagingParams(Params);
 
 Params.WExcDur = 0.1/1000; % duration of water pulse
-Params.echospacing = 7.66/1000;
+%Params.echospacing = 7.66/1000;
 Params.PerfectSpoiling = 1;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -21,7 +21,7 @@ Params.numExcitation = Params.TurboFactor + Params.DummyEcho; % number of readou
 Params.freqPattern = 'single'; % options: 'single', 'dualAlternate', 'dualContinuous'
 
 % MT parameters that will be consistent:
-Params.SatPulseShape = 'gausshann';
+%Params.SatPulseShape = 'gausshann';
 Params.PulseOpt.bw = 0.3./Params.pulseDur; % override default Hann pulse shape.
 Params.TD_MT =  Params.TR_MT - Params.numSatPulse* (Params.pulseDur + Params.pulseGapDur) ;   
 Params = ihMT_calcVariableImagingParams(Params);

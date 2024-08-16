@@ -65,6 +65,11 @@ if(~isfield(Params,'TR_MT') || isempty(Params.TR_MT) || ~isfinite(Params.TR_MT))
     Params.TR_MT = 0.06;       
 end
 
+if(~isfield(Params,'echoSpacing') || isempty(Params.echoSpacing) || ~isfinite(Params.echoSpacing))
+    % Default ...
+    Params.TR_MT = 7.66/1000;       
+end
+
 
 
 
