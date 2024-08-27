@@ -4,18 +4,20 @@ function ihMT_R1vsM0b_correlation_3prot(obj)
 %  NOTE: niak_read_vol replaced with minc_read  %
 %  NOTE: niak_write_vol replaced with minc_write %
 
-
-% Where outputs will be saved/ previous results are 
-OutputDir = obj.options.R1vsM0bMapping_OutputDirectory;
-%OutputDir = '/Users/amiedemmans/Desktop/GitHub/qMRLab_test_dir/Test1';
 %% Load images:
 
 % Where Images are you will be using 
-DATADIR = obj.options.R1vsM0bMapping_DataDirectory;
-%DATADIR = '/Users/amiedemmans/Desktop/GitHub/Image_files/ihMT_images_from_chris/';
+%DATADIR = obj.options.R1vsM0bMapping_DataDirectory;
+DATADIR = '/Users/amiedemmans/Desktop/GitHub/Image_files/ihMT_images_from_chris/matlab/';
+
+
+% Where outputs will be saved/ previous results are 
+%OutputDir = obj.options.R1vsM0bMapping_OutputDirectory;
+OutputDir = '/Users/amiedemmans/Desktop/GitHub/qMRLab_test_dir/Test1';
+
 
 %image names:
-mtw_fn = {'dual_reg.mnc' 'pos_reg.mnc' 'neg_reg.mnc' 'sparseMP2RAGE_M0.mnc' 'sparseMP2RAGE_T1.mnc'};
+mtw_fn = {'dual_reg.mnc' 'pos_reg.mnc' 'neg_reg.mnc' 'sparseMP2RAGE_M0.mnc.gz' 'sparseMP2RAGE_T1.mnc.gz'};
 
 for i = 1:size(mtw_fn,2)
     fn = fullfile(DATADIR,mtw_fn{i});
@@ -27,7 +29,7 @@ end
 %% Load the mask
 fn = fullfile(DATADIR,'itkmask.mnc');
 [~, mask] = minc_read(fn);
-mask1 = permute(mask,[2 3 1]); % conversion between minc and nii reorients it
+%mask1 = permute(mask,[2 3 1]); % conversion between minc and nii reorients it
 
 % If making a mask 
 % mask = zeros(size(lfa)); 
@@ -37,9 +39,10 @@ mask1 = permute(mask,[2 3 1]); % conversion between minc and nii reorients it
 [~, b1] = minc_read(fullfile(DATADIR,'resampled_b1field.mnc')); 
 b1 = double(b1);
 b1 = limitHandler(b1, 0.5,1.4);
-b1 = ihMT_imgaussfilt3_withMask(b1, mask1, 5); %light smoothing to the map
+b1 = permute(b1, [3 1 2]);
+b1 = ihMT_imgaussfilt3_withMask(b1, mask, 5); %light smoothing to the map
 
-figure; imshow3Dfull(b1, [0.6 1.2],jet)
+%figure; imshow3Dfull(b1, [0.6 1.2],jet)
 
 %% List the images 
 dual = comb_mtw(:,:,:,1);
@@ -53,25 +56,31 @@ spT1_map = comb_mtw(:,:,:,5);
 %% Mask -> bet result touched up in itk, then threshold CSF and some dura
 % Does this go away because mp2rage section is gone 
 %mask = mask1;
-mask(spT1_map > 2500) = 0;
-mask(spT1_map < 650) = 0;
-mask(isnan(spT1_map)) = 0;
-mask = bwareaopen(mask, 10000,6);
-figure; imshow3Dfullseg(spT1_map, [300 2500],mask)
+% mask(spT1_map > 2500) = 0;
+% mask(spT1_map < 400) = 0;
+% mask(isnan(spT1_map)) = 0;
+% mask = bwareaopen(mask, 10000,6);
+% figure; imshow3Dfullseg(spT1_map, [300 2500],mask)
 
 
 %% Compute MTsat ihMTsat
 
 %% Protocol 
-flipA = obj.Prot.PulseSequenceParams.Mat(3);
-TR = obj.Prot.PulseSequenceParams.Mat(4);
-DummyEcho = obj.Prot.PulseSequenceParams.Mat(10);
-echoSpacing = obj.Prot.PulseSequenceParams.Mat(14);
-numExcitation = obj.Prot.PulseSequenceParams.Mat(6) + DummyEcho;
+% flipA = obj.Prot.PulseSequenceParams.Mat(3);
+% TR = obj.Prot.PulseSequenceParams.Mat(4)*1000;
+% DummyEcho = obj.Prot.PulseSequenceParams.Mat(10);
+% echoSpacing = obj.Prot.PulseSequenceParams.Mat(14)*1000;
+% numExcitation = obj.Prot.PulseSequenceParams.Mat(6) + DummyEcho;
+flipA = 7; 
+TR = 1.14*1000;
+%TR = 23;
+DummyEcho = 2; 
+echoSpacing = 0.0077*1000;
+numExcitation = 10-DummyEcho;
 
-sat_dual1 = ihMT_calcMTsatThruLookupTablewithDummyV3( dual, b1, spT1_map, mask1,spApp_mp2, echoSpacing, numExcitation, TR, flipA, DummyEcho);
-sat_pos1  = ihMT_calcMTsatThruLookupTablewithDummyV3( pos, b1, spT1_map, mask1, spApp_mp2, echoSpacing, numExcitation, TR, flipA, DummyEcho);
-sat_neg1  = ihMT_calcMTsatThruLookupTablewithDummyV3( neg, b1, spT1_map, mask1, spApp_mp2, echoSpacing, numExcitation, TR, flipA, DummyEcho);
+sat_dual = ihMT_calcMTsatThruLookupTablewithDummyV3( dual, b1, spT1_map, mask,spApp_mp2, echoSpacing, numExcitation, TR, flipA, DummyEcho);
+sat_pos  = ihMT_calcMTsatThruLookupTablewithDummyV3( pos, b1, spT1_map, mask, spApp_mp2, echoSpacing, numExcitation, TR, flipA, DummyEcho);
+sat_neg  = ihMT_calcMTsatThruLookupTablewithDummyV3( neg, b1, spT1_map, mask, spApp_mp2, echoSpacing, numExcitation, TR, flipA, DummyEcho);
 
 % figure; imshow3Dfull(sat_dual1 , [0 0.06], jet); figure; imshow3Dfull(sat_pos1 , [0 0.05], jet);  figure; imshow3Dfull(sat_neg1 , [0 0.05], jet); 
 
@@ -86,7 +95,10 @@ fitValues_D = fitValues_D.fitValues;
 
 % need to convert to 1/s from 1/ms -> ONLY USE MP2RAGE values, VFA are too
 % far off.
-R1_s = (1./spT1_map) *1000;
+%R1_s = (1./spT1_map) *1000; 
+%% This isn't working because dividing by zero --> messing everything up %%
+% getting values of inf so when get to line 164 it doesnt work
+R1_s = (1./spT1_map);
 
 % initialize matrices
 M0b_dual = zeros(size(sat_dual1));
@@ -98,44 +110,45 @@ M0b_neg = zeros(size(sat_dual1));
 axialStart = 126; % 65
 axialStop = axialStart+3;%115;
 % check
-figure; imshow3Dfull(sat_dual1(:,axialStart:axialStop,:) , [0 0.06], jet)
+figure; imshow3Dfull(sat_dual(:,axialStart:axialStop,:) , [0 0.06], jet)
 
 b1_1 = obj.Prot.PulseSequenceParams.Mat(8);
-
+b1_1 = 11.6;
 tic %  
-for i = 1:size(sat_dual1,1) % went to 149
+for i = 1:size(sat_dual,1) % went to 149
     
     for j = axialStart:axialStop % 1:size(sat_dual,2) % for axial slices
-        for k =  1:size(sat_dual1,3) % sagital slices  65
+        for k =  1:size(sat_dual,3) % sagital slices  65
             
             if mask(i,j,k) > 0 %&& dual_s(i,j,k,3) > 0
                                 
-                 [M0b_dual(i,j,k), ~,  ~]  = ihMT_fit_M0b_v2( b1_1*b1(i,j,k), R1_s(i,j,k), sat_dual1(i,j,k), fitValues_D);
-                 [M0b_pos(i,j,k),  ~,  ~]  = ihMT_fit_M0b_v2( b1_1*b1(i,j,k), R1_s(i,j,k), sat_pos1(i,j,k), fitValues_S);               
-                 [M0b_neg(i,j,k),  ~,  ~]  = ihMT_fit_M0b_v2( b1_1*b1(i,j,k), R1_s(i,j,k), sat_neg1(i,j,k), fitValues_S);
+                 [M0b_dual(i,j,k), ~,  ~]  = ihMT_fit_M0b_v2( b1_1*b1(i,j,k), R1_s(i,j,k), sat_dual(i,j,k), fitValues_D);
+                 [M0b_pos(i,j,k),  ~,  ~]  = ihMT_fit_M0b_v2( b1_1*b1(i,j,k), R1_s(i,j,k), sat_pos(i,j,k), fitValues_S);               
+                 [M0b_neg(i,j,k),  ~,  ~]  = ihMT_fit_M0b_v2( b1_1*b1(i,j,k), R1_s(i,j,k), sat_neg(i,j,k), fitValues_S);
                  
             end
         end
     end
-    disp(i)
+    disp(i/size(sat_dual,1) *100)
+    toc 
 end
-toc %% this took 30hours for 1mm isotropic full brain dataset. * was running fitting in another matlab
+%% this took 30hours for 1mm isotropic full brain dataset. * was running fitting in another matlab
     % instance, so could be easily sped up running on its own and/or adding
     % the parfor loop. 
 
 
 figure; imshow3Dfull(M0b_pos, [0 0.15],jet)
-    
+figure; imshow3Dfull(M0b_neg, [0 0.15], jet)  
 figure; imshow3Dfull(M0b_dual, [0 0.15],jet)
 
 % export
-%mkdir(fullfile(OutputDir,'processing'))
-%hdr.file_name = fullfile(OutputDir,'processing/M0b_dual.mnc.gz'); 
-minc_write('M0b_dual.mnc.gz', hdr, M0b_dual); % Need to add filename for each minc_write %
-%hdr.file_name = fullfile(OutputDir,'processing/M0b_pos.mnc.gz');
-minc_write('M0b_pos.mnc.gz', hdr, M0b_pos);
-%hdr.file_name = fullfile(OutputDir,'processing/M0b_neg.mnc.gz'); 
-minc_write('M0b_neg.mnc.gz', hdr, M0b_neg);
+mkdir(fullfile(OutputDir,'processing'))
+hdr.file_name = fullfile(OutputDir,'processing/M0b_dual.mnc.gz'); 
+minc_write(hdr.file_name, hdr, M0b_dual); % Need to add filename for each minc_write %
+hdr.file_name = fullfile(OutputDir,'processing/M0b_pos.mnc.gz');
+minc_write(hdr.file_name, hdr, M0b_pos);
+hdr.file_name = fullfile(OutputDir,'processing/M0b_neg.mnc.gz'); 
+minc_write(hdr.file_name, hdr, M0b_neg);
 
 
 %% With M0B maps made, correlate with R1 and update the fitValues file. 
@@ -143,14 +156,14 @@ minc_write('M0b_neg.mnc.gz', hdr, M0b_neg);
 % use this fake mask to get rid of dura. 
 tempMask = mask;
 tempMask = imerode(tempMask, strel('sphere',2));
-figure; imshow3Dfullseg(M0b_200_dual, [0 0.15],tempMask)
+figure; imshow3Dfullseg(M0b_dual, [0 0.15],tempMask)
 
 mkdir(fullfile(OutputDir,'figures'));
 
 % Optimized Approach
-fitValues_D  = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_8_dual, tempMask, fitValues_D, fullfile(OutputDir,'figures/R1vsM0b_8_dual.png'), fullfile(OutputDir,'fitValues_D_8.mat'));
-fitValues_SP = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_8_pos, tempMask, fitValues_S, fullfile(OutputDir,'figures/R1vsM0b_8_pos.png'), fullfile(OutputDir,'fitValues_SP_8.mat'));
-fitValues_SN = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_8_neg, tempMask, fitValues_S, fullfile(OutputDir,'figures/R1vsM0b_8_neg.png'), fullfile(OutputDir,'fitValues_SN_8.mat'));
+fitValues_D  = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_dual, tempMask, fitValues_D, fullfile(OutputDir,'figures/R1vsM0b_dual.png'), fullfile(OutputDir,'fitValues_D.mat'));
+fitValues_SP = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_pos, tempMask, fitValues_S, fullfile(OutputDir,'figures/R1vsM0b_pos.png'), fullfile(OutputDir,'fitValues_SP.mat'));
+fitValues_SN = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_neg, tempMask, fitValues_S, fullfile(OutputDir,'figures/R1vsM0b_neg.png'), fullfile(OutputDir,'fitValues_SN.mat'));
 
 
 %% Now use these results to B1 correct the data:
@@ -158,48 +171,42 @@ OutputDir = DATADIR;
 
 b1_1 = obj.Prot.PulseSequenceParams.Mat(8);
 
-corr_prot1_d = MTsat_B1corr_factor_map(b1, R1_s, b1_1, fitValues_D);
-corr_prot1_p = MTsat_B1corr_factor_map(b1, R1_s, b1_1, fitValues_SP);
-corr_prot1_n = MTsat_B1corr_factor_map(b1, R1_s, b1_1, fitValues_SN);
+corr_prot_d = MTsat_B1corr_factor_map(b1, R1_s, b1_1, fitValues_D);
+corr_prot_p = MTsat_B1corr_factor_map(b1, R1_s, b1_1, fitValues_SP);
+corr_prot_n = MTsat_B1corr_factor_map(b1, R1_s, b1_1, fitValues_SN);
 
 
 % Part 2, apply correction map
-sat_dual1_c = (sat_dual1 + sat_dual1.* corr_prot1_d) .* mask1;
-sat_pos1_c  = (sat_pos1 + sat_pos1.* corr_prot1_p) .* mask1;
-sat_neg1_c  = (sat_neg1 + sat_neg1.* corr_prot1_n) .* mask1;
-ihmt1_c      = sat_dual1_c - (sat_pos1_c + sat_neg1_c)/2;
+sat_dual_c = (sat_dual + sat_dual.* corr_prot_d) .* mask1;
+sat_pos_c  = (sat_pos + sat_pos.* corr_prot_p) .* mask1;
+sat_neg_c  = (sat_neg + sat_neg.* corr_prot_n) .* mask1;
+ihmt_c      = sat_dual_c - (sat_pos_c + sat_neg_c)/2;
 
 
-ihmt1_c = double(limitHandler(ihmt1_c,0, 0.05));
+ihmt_c = double(limitHandler(ihmt_c,0, 0.05));
 
-ihmt1_c( ihmt1_c >= 0.05) = 0;
+ihmt_c( ihmt_c >= 0.05) = 0;
 
 %% View results
 figure; imshow3Dfull(sat_dual1_c , [0 0.06], jet); 
 figure; imshow3Dfull(sat_pos1_c , [0 0.06], jet)
 figure; imshow3Dfull(sat_neg1_c , [0 0.06], jet); 
 
-figure; imshow3Dfull(ihmt1_c , [0 0.06], jet)
+figure; imshow3Dfull(ihmt_c , [0 0.06], jet)
 
 %% Other things, save if you want
+mkdir(strcat(DATADIR,'R1vsM0b_results') )
+ 
+hdr.file_name = strcat(DATADIR,'R1vsM0b_results/MTsat_dual_1.mnc.gz'); minc_write(hdr.file_name, hdr, sat_dual_c);
+hdr.file_name = strcat(DATADIR,'R1vsM0b_results/MTsat_pos_1.mnc.gz'); minc_write(hdr.file_name, hdr, sat_pos_c);
+hdr.file_name = strcat(DATADIR,'R1vsM0b_results/MTsat_neg_1.mnc.gz'); minc_write(hdr.file_name, hdr, sat_neg_c);
+hdr.file_name = strcat(DATADIR,'R1vsM0b_results/ihMTsat_1.mnc.gz'); minc_write(hdr.file_name, hdr, ihmt_c);
 
-%hdr.file_name = strcat(DATADIR,'matlab/MTsat_dual_1.mnc.gz'); 
-minc_write('MTsat_dual_1.mnc.gz', hdr, sat_dual1_c);
-%hdr.file_name = strcat(DATADIR,'matlab/MTsat_pos_1.mnc.gz');
-minc_write('MTsat_pos_1.mnc.gz', hdr, sat_pos1_c);
-%hdr.file_name = strcat(DATADIR,'matlab/MTsat_neg_1.mnc.gz'); 
-minc_write('MTsat_neg_1.mnc.gz', hdr, sat_neg1_c);
-%hdr.file_name = strcat(DATADIR,'matlab/ihMTsat_1.mnc.gz');
-minc_write('ihMTsat_1.mnc.gz', hdr, ihmt1_c);
-
-%hdr.file_name = strcat(DATADIR,'matlab/b1.mnc.gz'); 
-minc_write('b1.mnc.gz', hdr, b1);
-
-
+hdr.file_name = strcat(DATADIR,'R1vsM0b_results/b1.mnc.gz'); minc_write(hdr.file_name, hdr, b1);
 
 %% 
 
-ihmtSlice1 = squeeze( ihmt1_c(:,126,:));
+ihmtSlice1 = squeeze( ihmt_c(:,126,:));
 
 figure; imagesc(ihmtSlice1); axis image;
 colormap(gray)
