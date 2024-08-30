@@ -8,7 +8,8 @@ classdef ihMT < AbstractModel
     end
 
     properties 
-        MRIinputs = {'MTw_dual', 'MTw_single_pos', 'MTw_single_neg' , 'T1map', 'S0map', 'B1map', 'Mask'};
+        %MRIinputs = {'MTw_dual', 'MTw_single_pos', 'MTw_single_neg' , 'T1map', 'S0map', 'B1map', 'Mask'};
+        MRIinputs = {'dual_reg', 'pos_reg', 'neg_reg', 'sparseMP2RAGE_T1', 'sparseMP2RAGE_M0'};
         xnames = {};
         voxelwise = 0; % 0, if the analysis is done matricially
         % 1, if the analysis is done voxel per voxel
