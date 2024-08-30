@@ -149,11 +149,27 @@ classdef BrowserSet
             tmp = [];
             if ~isempty(obj.FullFile)
                 [~,~,ext] = fileparts(obj.FullFile);
+
+                 % Need to unzip the file to run properly for minc vs NIFTI
+                if strcmp(ext, '.gz')
+                    unzipFile = [obj.FullFile(1:end-3)]; % Remove the .gz extension
+                    gunzip(obj.FullFile, fileparts(obj.FullFile));
+                    obj.FullFile = unzipFile;
+                    [~,~,ext] = fileparts(obj.FullFile); % Update file extension after unzip
+                    % Delete the unzipped file
+                    delete(unzipFile);
+                    obj.FullFile = get(obj.FileBox, 'String'); % Reset obj.FullFile to original zipped file
+                end
+
                 if strcmp(ext,'.mat')
                     mat = load(obj.FullFile);
                     mapName = fieldnames(mat);
                     tmp = mat.(mapName{1});
-                elseif strcmp(ext,'.nii') || strcmp(ext,'.gz') || strcmp(ext,'.img')
+                % Adding .mnc files
+                elseif strcmp(ext, '.mnc') 
+                    [hdr, tmp] = minc_read(obj.FullFile);
+                
+                elseif strcmp(ext,'.nii') || strcmp(ext,'.img')
                     intrp = 'linear';
                     [tmp, hdr] = nii_load(obj.FullFile,0,intrp);
                 elseif strcmp(ext,'.tiff') || strcmp(ext,'.tif')
