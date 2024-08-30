@@ -7,17 +7,18 @@ function ihMT_R1vsM0b_correlation_3prot(obj)
 %% Load images:
 
 % Where Images are you will be using 
-%DATADIR = obj.options.R1vsM0bMapping_DataDirectory;
-DATADIR = '/Users/amiedemmans/Desktop/GitHub/Image_files/ihMT_images_from_chris/matlab/';
+DATADIR = obj.options.R1vsM0bMapping_DataDirectory;
+%DATADIR = '/Users/amiedemmans/Desktop/GitHub/Image_files/ihMT_images_from_chris/matlab/';
 
 
 % Where outputs will be saved/ previous results are 
-%OutputDir = obj.options.R1vsM0bMapping_OutputDirectory;
-OutputDir = '/Users/amiedemmans/Desktop/GitHub/qMRLab_test_dir/Test1';
+OutputDir = obj.options.R1vsM0bMapping_OutputDirectory;
+%OutputDir = '/Users/amiedemmans/Desktop/GitHub/qMRLab_test_dir/Test1';
 
 
 %image names:
-mtw_fn = {'dual_reg.mnc' 'pos_reg.mnc' 'neg_reg.mnc' 'sparseMP2RAGE_M0.mnc.gz' 'sparseMP2RAGE_T1.mnc.gz'};
+%mtw_fn = {'dual_reg.mnc' 'pos_reg.mnc' 'neg_reg.mnc' 'sparseMP2RAGE_M0.mnc.gz' 'sparseMP2RAGE_T1.mnc.gz'};
+mtw_fn = {data.MTw_dual, data.MTw_single_pos, data.MTw_single_neg, data.T1map, data.S0map};
 
 for i = 1:size(mtw_fn,2)
     fn = fullfile(DATADIR,mtw_fn{i});
@@ -54,10 +55,10 @@ spT1_map = comb_mtw(:,:,:,5);
 
 
 %% Mask -> bet result touched up in itk, then threshold CSF and some dura
-% Does this go away because mp2rage section is gone 
+% AMIE- move to just before M0b maps  
 %mask = mask1;
 % mask(spT1_map > 2500) = 0;
-% mask(spT1_map < 400) = 0;
+% mask(spT1_map < 650) = 0;
 % mask(isnan(spT1_map)) = 0;
 % mask = bwareaopen(mask, 10000,6);
 % figure; imshow3Dfullseg(spT1_map, [300 2500],mask)
@@ -71,7 +72,7 @@ spT1_map = comb_mtw(:,:,:,5);
 % DummyEcho = obj.Prot.PulseSequenceParams.Mat(10);
 % echoSpacing = obj.Prot.PulseSequenceParams.Mat(14)*1000;
 % numExcitation = obj.Prot.PulseSequenceParams.Mat(6) + DummyEcho;
-flipA = 7; 
+flipA = 6; 
 TR = 1.14*1000;
 %TR = 23;
 DummyEcho = 2; 
@@ -95,15 +96,16 @@ fitValues_D = fitValues_D.fitValues;
 
 % need to convert to 1/s from 1/ms -> ONLY USE MP2RAGE values, VFA are too
 % far off.
-%R1_s = (1./spT1_map) *1000; 
+R1_s = (1./spT1_map) *1000; 
 %% This isn't working because dividing by zero --> messing everything up %%
 % getting values of inf so when get to line 164 it doesnt work
-R1_s = (1./spT1_map);
+%R1_s = (1./spT1_map);
+R1_s(isinf(R1_s)) = 0; % This I think fixed it 
 
 % initialize matrices
-M0b_dual = zeros(size(sat_dual1));
-M0b_pos = zeros(size(sat_dual1));
-M0b_neg = zeros(size(sat_dual1));
+M0b_dual = zeros(size(sat_dual));
+M0b_pos = zeros(size(sat_dual));
+M0b_neg = zeros(size(sat_dual));
 
 
 %% SPEED IT UP BY DOING A FEW AXIAL SLICES
@@ -112,9 +114,9 @@ axialStop = axialStart+3;%115;
 % check
 figure; imshow3Dfull(sat_dual(:,axialStart:axialStop,:) , [0 0.06], jet)
 
-b1_1 = obj.Prot.PulseSequenceParams.Mat(8);
-b1_1 = 11.6;
-tic %  
+%b1_1 = obj.Prot.PulseSequenceParams.Mat(8);
+b1_1 = 11.6; %AMIE
+tic %  ~ 2hrs to run 
 for i = 1:size(sat_dual,1) % went to 149
     
     for j = axialStart:axialStop % 1:size(sat_dual,2) % for axial slices
@@ -122,7 +124,7 @@ for i = 1:size(sat_dual,1) % went to 149
             
             if mask(i,j,k) > 0 %&& dual_s(i,j,k,3) > 0
                                 
-                 [M0b_dual(i,j,k), ~,  ~]  = ihMT_fit_M0b_v2( b1_1*b1(i,j,k), R1_s(i,j,k), sat_dual(i,j,k), fitValues_D);
+                 [M0b_dual(i,j,k), ~,  ~]  = ihMT_fit_M0b_v2( b1(i,j,k), R1_s(i,j,k), sat_dual(i,j,k), fitValues_D);
                  [M0b_pos(i,j,k),  ~,  ~]  = ihMT_fit_M0b_v2( b1_1*b1(i,j,k), R1_s(i,j,k), sat_pos(i,j,k), fitValues_S);               
                  [M0b_neg(i,j,k),  ~,  ~]  = ihMT_fit_M0b_v2( b1_1*b1(i,j,k), R1_s(i,j,k), sat_neg(i,j,k), fitValues_S);
                  
@@ -132,6 +134,10 @@ for i = 1:size(sat_dual,1) % went to 149
     disp(i/size(sat_dual,1) *100)
     toc 
 end
+[~, M0b_dual] = minc_read('M0b_dual.mnc.gz');
+[~, M0b_pos] = minc_read('M0b_pos.mnc.gz');
+[~, M0b_neg] = minc_read('M0b_neg.mnc.gz');
+
 %% this took 30hours for 1mm isotropic full brain dataset. * was running fitting in another matlab
     % instance, so could be easily sped up running on its own and/or adding
     % the parfor loop. 
