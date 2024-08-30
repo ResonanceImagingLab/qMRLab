@@ -18,7 +18,7 @@ load(strcat(obj.options.SequenceSimulations_AtlasDirectory,'/GM_seg_MNI_152_kspa
 OutputDir = obj.options.SequenceSimulations_OutputDirectory;
 
 %turboF = [8,80,200];
-b1 = 0:0.75:18;
+b1 = linspace(0, 1.5, 30); % relative B1 field
 M0b = 0:0.03:0.18; 
 T1obs = horzcat(0.6:0.075:2,2.1:0.4:3); %600ms to 4500ms to cover WM to CSF. 
 Raobs = 1./T1obs;
@@ -29,34 +29,34 @@ Raobs = 1./T1obs;
     tic
     %clear Params outputSamplingTable;
 
-    Params.M0a = obj.Prot.TissueParams.Mat(1);
-    Params.Raobs = obj.Prot.TissueParams.Mat(2);
-    Params.R = obj.Prot.TissueParams.Mat(3);
-    Params.T2a = obj.Prot.TissueParams.Mat(4);
-    Params.T1D = obj.Prot.TissueParams.Mat(5);
-    Params.R1b = obj.Prot.TissueParams.Mat(6);
-    Params.T2b = obj.Prot.TissueParams.Mat(7);
-    Params.M0b = obj.Prot.TissueParams.Mat(8);
-    Params.D = obj.Prot.TissueParams.Mat(9);
+    % Params.M0a = obj.Prot.TissueParams.Mat(1);
+    % Params.Raobs = obj.Prot.TissueParams.Mat(2);
+    % Params.R = obj.Prot.TissueParams.Mat(3);
+    % Params.T2a = obj.Prot.TissueParams.Mat(4);
+    % Params.T1D = obj.Prot.TissueParams.Mat(5);
+    % Params.R1b = obj.Prot.TissueParams.Mat(6);
+    % Params.T2b = obj.Prot.TissueParams.Mat(7);
+    % Params.M0b = obj.Prot.TissueParams.Mat(8);
+    % Params.D = obj.Prot.TissueParams.Mat(9);
+    % 
+    % Params.MTC = obj.Prot.PulseSequenceParams.Mat(1);
+    % Params.delta = obj.Prot.PulseSequenceParams.Mat(2);  % delta 
+    % Params.flipAngle = obj.Prot.PulseSequenceParams.Mat(3);
+    % Params.TR = obj.Prot.PulseSequenceParams.Mat(4);
+    % Params.numSatPulse = obj.Prot.PulseSequenceParams.Mat(5);
+    % Params.TurboFactor = obj.Prot.PulseSequenceParams.Mat(6);
+    % Params.pulseDur = obj.Prot.PulseSequenceParams.Mat(7);
+    % Params.satFlipAngle = obj.Prot.PulseSequenceParams.Mat(8);
+    % Params.pulseGapDur = obj.Prot.PulseSequenceParams.Mat(9);
+    % Params.DummyEcho = obj.Prot.PulseSequenceParams.Mat(10);
+    % Params.boosted = obj.Prot.PulseSequenceParams.Mat(11);
+    % Params.satTrainPerBoost = obj.Prot.PulseSequenceParams.Mat(12);
+    % Params.TR_MT = obj.Prot.PulseSequenceParams.Mat(13);
+    % Params.echoSpacing = obj.Prot.PulseSequenceParams.Mat(14);
+    % 
+    % Params.SatPulseShape = obj.options.SequenceSimulations_SatPulseShape;
 
-    Params.MTC = obj.Prot.PulseSequenceParams.Mat(1);
-    Params.delta = obj.Prot.PulseSequenceParams.Mat(2);  % delta 
-    Params.flipAngle = obj.Prot.PulseSequenceParams.Mat(3);
-    Params.TR = obj.Prot.PulseSequenceParams.Mat(4);
-    Params.numSatPulse = obj.Prot.PulseSequenceParams.Mat(5);
-    Params.TurboFactor = obj.Prot.PulseSequenceParams.Mat(6);
-    Params.pulseDur = obj.Prot.PulseSequenceParams.Mat(7);
-    Params.satFlipAngle = obj.Prot.PulseSequenceParams.Mat(8);
-    Params.pulseGapDur = obj.Prot.PulseSequenceParams.Mat(9);
-    Params.DummyEcho = obj.Prot.PulseSequenceParams.Mat(10);
-    Params.boosted = obj.Prot.PulseSequenceParams.Mat(11);
-    Params.satTrainPerBoost = obj.Prot.PulseSequenceParams.Mat(12);
-    Params.TR_MT = obj.Prot.PulseSequenceParams.Mat(13);
-    Params.echoSpacing = obj.Prot.PulseSequenceParams.Mat(14);
-    
-    Params.SatPulseShape = obj.options.SequenceSimulations_SatPulseShape;
-
-    [Params, outputSamplingTable] = ihMT_getSeqParams(Params);
+    [Params, outputSamplingTable] = ihMT_getSeqParams(obj);
 
 
     % Loop variables:
@@ -73,7 +73,6 @@ Raobs = 1./T1obs;
 
     tic
     for i = 1:size(b1,2) % took nearly 5 hours for matrix 25x41x33.
-        %Params.b1 = b1(i);
     
         for j = 1:size(M0b,2)
             Params.M0b = M0b(j);
