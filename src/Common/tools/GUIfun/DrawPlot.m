@@ -31,7 +31,11 @@ handles.tool.setCurrentSlice(round(size(Current{1},3)/2))
 
 % Set Pixel size
 if isfield(handles.CurrentData,'hdr')
-    handles.tool.setAspectRatio(handles.CurrentData.hdr.pixdim(2:4))
+    if isfield(handles.CurrentData.hdr, 'pixdim') && numel(handles.CurrentData.hdr.pixdim) >= 4
+        handles.tool.setAspectRatio(handles.CurrentData.hdr.pixdim(2:4))
+    else 
+        handles.tool.setAspectRatio([1 1 1])
+    end
 else
     handles.tool.setAspectRatio([1 1 1])
 end
