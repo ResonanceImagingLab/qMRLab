@@ -1,7 +1,7 @@
 classdef ihMT < AbstractModel
 
     properties (Hidden=true)
-        onlineData_url = 'https://osf.io/3s9xe/download?version=2';
+        %onlineData_url = 'https://osf.io/3s9xe/download?version=2';
         % Need to figure out what exact data needs to go here/ which images
         % Need to add atlas images--> create issure on qMRLab 
         % https://github.com/qMRLab/qMRLab/wiki/Guideline:-Uploading-sample-data
@@ -9,7 +9,8 @@ classdef ihMT < AbstractModel
 
     properties 
         %MRIinputs = {'MTw_dual', 'MTw_single_pos', 'MTw_single_neg' , 'T1map', 'S0map', 'B1map', 'Mask'};
-        MRIinputs = {'dual_reg', 'pos_reg', 'neg_reg', 'sparseMP2RAGE_T1', 'sparseMP2RAGE_M0'};
+        % Something weird going on with can't see all of the files 
+        MRIinputs = {'dual_reg', 'pos_reg', 'neg_reg', 'sparseMP2RAGE_T1', 'sparseMP2RAGE_M0', 'b1_permute', 'itkmask'};
         xnames = {};
         voxelwise = 0; % 0, if the analysis is done matricially
         % 1, if the analysis is done voxel per voxel

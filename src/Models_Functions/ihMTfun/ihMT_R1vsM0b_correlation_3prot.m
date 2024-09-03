@@ -17,8 +17,8 @@ OutputDir = obj.options.R1vsM0bMapping_OutputDirectory;
 
 
 %image names:
-%mtw_fn = {'dual_reg.mnc' 'pos_reg.mnc' 'neg_reg.mnc' 'sparseMP2RAGE_M0.mnc.gz' 'sparseMP2RAGE_T1.mnc.gz'};
-mtw_fn = {data.MTw_dual, data.MTw_single_pos, data.MTw_single_neg, data.T1map, data.S0map};
+mtw_fn = {'dual_reg.mnc' 'pos_reg.mnc' 'neg_reg.mnc' 'sparseMP2RAGE_M0.mnc.gz' 'sparseMP2RAGE_T1.mnc.gz'};
+%mtw_fn = {data.MTw_dual, data.MTw_single_pos, data.MTw_single_neg, data.T1map, data.S0map};
 
 for i = 1:size(mtw_fn,2)
     fn = fullfile(DATADIR,mtw_fn{i});
@@ -37,10 +37,11 @@ fn = fullfile(DATADIR,'itkmask.mnc');
 % mask(lfa>175) = 1;
 
 %% Some B1 issues so lets try and load that
-[~, b1] = minc_read(fullfile(DATADIR,'resampled_b1field.mnc')); 
+[hdr, b1] = minc_read(fullfile(DATADIR,'resampled_b1field.mnc')); 
 b1 = double(b1);
 b1 = limitHandler(b1, 0.5,1.4);
 b1 = permute(b1, [3 1 2]);
+minc_write('b1_permute.mnc', hdr, b1);
 b1 = ihMT_imgaussfilt3_withMask(b1, mask, 5); %light smoothing to the map
 
 %figure; imshow3Dfull(b1, [0.6 1.2],jet)
@@ -52,16 +53,6 @@ neg = comb_mtw(:,:,:,3);
 
 spApp_mp2 = comb_mtw(:,:,:,4); 
 spT1_map = comb_mtw(:,:,:,5); 
-
-
-%% Mask -> bet result touched up in itk, then threshold CSF and some dura
-% AMIE- move to just before M0b maps  
-%mask = mask1;
-% mask(spT1_map > 2500) = 0;
-% mask(spT1_map < 650) = 0;
-% mask(isnan(spT1_map)) = 0;
-% mask = bwareaopen(mask, 10000,6);
-% figure; imshow3Dfullseg(spT1_map, [300 2500],mask)
 
 
 %% Compute MTsat ihMTsat
@@ -114,8 +105,6 @@ axialStop = axialStart+3;%115;
 % check
 figure; imshow3Dfull(sat_dual(:,axialStart:axialStop,:) , [0 0.06], jet)
 
-%b1_1 = obj.Prot.PulseSequenceParams.Mat(8);
-b1_1 = 11.6; %AMIE
 tic %  ~ 2hrs to run 
 for i = 1:size(sat_dual,1) % went to 149
     
@@ -125,8 +114,8 @@ for i = 1:size(sat_dual,1) % went to 149
             if mask(i,j,k) > 0 %&& dual_s(i,j,k,3) > 0
                                 
                  [M0b_dual(i,j,k), ~,  ~]  = ihMT_fit_M0b_v2( b1(i,j,k), R1_s(i,j,k), sat_dual(i,j,k), fitValues_D);
-                 [M0b_pos(i,j,k),  ~,  ~]  = ihMT_fit_M0b_v2( b1_1*b1(i,j,k), R1_s(i,j,k), sat_pos(i,j,k), fitValues_S);               
-                 [M0b_neg(i,j,k),  ~,  ~]  = ihMT_fit_M0b_v2( b1_1*b1(i,j,k), R1_s(i,j,k), sat_neg(i,j,k), fitValues_S);
+                 [M0b_pos(i,j,k),  ~,  ~]  = ihMT_fit_M0b_v2( b1(i,j,k), R1_s(i,j,k), sat_pos(i,j,k), fitValues_S);               
+                 [M0b_neg(i,j,k),  ~,  ~]  = ihMT_fit_M0b_v2( b1(i,j,k), R1_s(i,j,k), sat_neg(i,j,k), fitValues_S);
                  
             end
         end
@@ -161,6 +150,10 @@ minc_write(hdr.file_name, hdr, M0b_neg);
 
 % use this fake mask to get rid of dura. 
 tempMask = mask;
+tempMask(spT1_map > 2500) = 0;
+tempMask(spT1_map < 650) = 0;
+tempMask(isnan(spT1_map)) = 0;
+tempMask = bwareaopen(tempMask, 10000,6);
 tempMask = imerode(tempMask, strel('sphere',2));
 figure; imshow3Dfullseg(M0b_dual, [0 0.15],tempMask)
 
