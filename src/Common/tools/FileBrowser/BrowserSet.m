@@ -257,9 +257,9 @@ classdef BrowserSet
                     end
                 end
                 if isequal(obj.FullFile, 0) || (isempty(obj.FullFile))
-                    [FileName,PathName] = uigetfile({'*.nii;*.nii.gz;*.mat';'*.img'},'Select file');
+                    [FileName,PathName] = uigetfile({'*.nii;*.nii.gz;*.mat;*.mnc;*.mnc.gz';'*.img'},'Select file');
                 else
-                    [FileName,PathName] = uigetfile({'*.nii;*.nii.gz;*.mat';'*.img'},'Select file',obj.FullFile);
+                    [FileName,PathName] = uigetfile({'*.nii;*.nii.gz;*.mat;*.mnc;*.mnc.gz';'*.img'},'Select file',obj.FullFile);
                 end
                 cd(origdir);
             else
