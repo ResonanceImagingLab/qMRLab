@@ -131,8 +131,9 @@ end
     % instance, so could be easily sped up running on its own and/or adding
     % the parfor loop. 
 
+%figure('WindowStyle', 'docked') % docked in matlab i believe 
 
-figure; imshow3Dfull(M0b_pos, [0 0.15],jet)
+figure('WindowStyle', 'docked'); imshow3Dfull(M0b_pos, [0 0.15],jet)
 figure; imshow3Dfull(M0b_neg, [0 0.15], jet)  
 figure; imshow3Dfull(M0b_dual, [0 0.15],jet)
 
