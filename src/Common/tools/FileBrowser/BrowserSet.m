@@ -185,7 +185,7 @@ classdef BrowserSet
                     tmp = File;
                 else
                     if exist(obj.FullFile,'file')==2
-                        warndlg(['file extension ' ext ' is not supported. Choose .mat, .nii, .nii.gz, .img, .tiff or .tif files'])
+                        warndlg(['file extension ' ext ' is not supported. Choose .mat, .nii, .nii.gz, .mnc, .mnc.gz, .img, .tiff or .tif files'])
                     end
                 end
             end
