@@ -10,11 +10,11 @@ classdef ihMT < AbstractModel
     properties 
         %MRIinputs = {'MTw_dual', 'MTw_single_pos', 'MTw_single_neg' , 'T1map', 'S0map', 'B1map', 'Mask'};
         % Something weird going on with can't see all of the files 
-        MRIinputs = {'dual_reg', 'pos_reg', 'neg_reg', 'sparseMP2RAGE_T1', 'sparseMP2RAGE_M0', 'b1_permute', 'itkmask'};
+        MRIinputs = {'brain_m', 'fft_brain_m', 'dual_reg', 'pos_reg', 'neg_reg', 'sparseMP2RAGE_T1', 'sparseMP2RAGE_M0', 'b1_permute', 'itkmask'};
         xnames = {};
         voxelwise = 0; % 0, if the analysis is done matricially
         % 1, if the analysis is done voxel per voxel
-        % Protocol
+        % PulseSequenceParams & Tissue Params
         Prot = struct('PulseSequenceParams', struct('Format',{{'MTC'; 'delta' ; 'flipAngle' ; 'TR' ; 'numSatPulse' ; 'TurboFactor' ; 'pulseDur' ; 'satFlipAngle' ; ...
                                      'pulseGapDur' ; 'DummyEcho' ; 'LowDutyCycle'; 'satTrainPerBoost' ; 'TR_MT'; 'echoSpacing'}}, ...
                                     'Mat', [1; 8000; 7; 1.14; 6; 80; 0.768/1000; 11.6; 0.3/1000; 2; 1; 9; 0.06; 7.66/1000]), ...
@@ -99,10 +99,11 @@ methods
         elseif obj.checkupdatedfields == 2
          
             if obj.options.SequenceSimulations_RunSequenceSimulations
-                obj.options.SequenceSimulations_AtlasDirectory = uigetdir(pwd, 'Select directory where images are');
+                %obj.options.SequenceSimulations_AtlasDirectory = uigetdir(pwd, 'Select directory where images are');
                 obj.options.SequenceSimulations_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved'); 
-    
-                ihMT_simSeq_M0b_R1obs_3prot(obj); 
+                
+                 %data = data(:);
+                ihMT_simSeq_M0b_R1obs_3prot(obj,data); 
     
             elseif obj.options.R1vsM0bMapping_RunR1vsM0bMapping
                 obj.options.R1vsM0bMapping_DataDirectory = uigetdir(pwd, 'Select directory where fit vals are');
