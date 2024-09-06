@@ -152,13 +152,13 @@ classdef BrowserSet
 
                  % Need to unzip the file to run properly for minc vs NIFTI
                 if strcmp(ext, '.gz')
-                    unzipFile = [obj.FullFile(1:end-3)]; % Remove the .gz extension
-                    gunzip(obj.FullFile, fileparts(obj.FullFile));
-                    obj.FullFile = unzipFile;
-                    [~,~,ext] = fileparts(obj.FullFile); % Update file extension after unzip
+                    % unzipFile = [obj.FullFile(1:end-3)]; % Remove the .gz extension
+                    % gunzip(obj.FullFile, fileparts(obj.FullFile));
+                    % obj.FullFile = unzipFile;
+                    [~,~,ext] = fileparts(obj.FullFile(1:end-3)); % Update file extension after unzip
                     % Delete the unzipped file
-                    delete(unzipFile);
-                    obj.FullFile = get(obj.FileBox, 'String'); % Reset obj.FullFile to original zipped file
+                    % delete(unzipFile);
+                    %obj.FullFile = get(obj.FileBox, 'String'); % Reset obj.FullFile to original zipped file
                 end
 
                 if strcmp(ext,'.mat')
