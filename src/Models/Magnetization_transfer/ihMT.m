@@ -10,7 +10,7 @@ classdef ihMT < AbstractModel
     properties 
         %MRIinputs = {'MTw_dual', 'MTw_single_pos', 'MTw_single_neg' , 'T1map', 'S0map', 'B1map', 'Mask'};
         % Something weird going on with can't see all of the files 
-        MRIinputs = {'brain_m', 'fft_brain_m', 'dual_reg', 'pos_reg', 'neg_reg', 'sparseMP2RAGE_T1', 'sparseMP2RAGE_M0', 'b1_permute', 'itkmask'};
+        MRIinputs = {'dual_reg', 'pos_reg', 'neg_reg', 'sparseMP2RAGE_T1', 'sparseMP2RAGE_M0', 'b1_permute', 'itkmask'};
         xnames = {};
         voxelwise = 0; % 0, if the analysis is done matricially
         % 1, if the analysis is done voxel per voxel
@@ -103,7 +103,7 @@ methods
                 obj.options.SequenceSimulations_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved'); 
                 
                  %data = data(:);
-                ihMT_simSeq_M0b_R1obs_3prot(obj,data); 
+                ihMT_simSeq_M0b_R1obs_3prot(obj); 
     
             elseif obj.options.R1vsM0bMapping_RunR1vsM0bMapping
                 obj.options.R1vsM0bMapping_DataDirectory = uigetdir(pwd, 'Select directory where fit vals are');
