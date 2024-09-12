@@ -380,7 +380,7 @@ function [hdr,vol] = minc_read(file_name)
         list_dimensions = {str_data.Groups.Groups(mask_dim).Datasets(:).Name};
         for num_d = 1:length(list_dimensions)
 
-            hdr.details.variables(num_d).name        = list_dimensions{num_d};
+            hdr.details.variables(num_d).name        = list_dimensions{num_d}; 
             hdr.details.variables(num_d).attributes  = {str_data.Groups.Groups(mask_dim).Datasets(num_d).Attributes(:).Name};
             hdr.details.variables(num_d).values      = {str_data.Groups.Groups(mask_dim).Datasets(num_d).Attributes(:).Value};
             hdr.details.variables(num_d).type        = {str_data.Groups.Groups(mask_dim).Datasets(num_d).Datatype.Type};
