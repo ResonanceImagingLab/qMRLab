@@ -1,12 +1,11 @@
 function ihMT_R1vsM0b_correlation_3prot(obj)
 %% Generate the M0B mapping to R1 from simulation results and acquired data
 
-%  NOTE: niak_read_vol replaced with minc_read  %
-%  NOTE: niak_write_vol replaced with minc_write %
 
 %% Load images:
 
 % Where Images are you will be using 
+% Rename to seqsimDir??
 DATADIR = obj.options.R1vsM0bMapping_DataDirectory;
 %DATADIR = '/Users/amiedemmans/Desktop/GitHub/Image_files/ihMT_images_from_chris/matlab/';
 

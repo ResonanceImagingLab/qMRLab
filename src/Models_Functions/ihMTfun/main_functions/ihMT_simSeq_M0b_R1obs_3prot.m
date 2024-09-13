@@ -6,14 +6,10 @@
 
 function ihMT_simSeq_M0b_R1obs_3prot(obj,data)
 
-
-
-%load( strcat( '/Users/amiedemmans/Desktop/GitHub/GM_WM_kspaceMatrices/','GM_seg_MNI_152_image.mat'))
 % AtlasDirectory = directory where atlas images are 
-% load(strcat(obj.options.SequenceSimulations_AtlasDirectory, '/GM_seg_MNI_152_image.mat'))
-% load(strcat(obj.options.SequenceSimulations_AtlasDirectory,'/GM_seg_MNI_152_kspace.mat'))
+load(strcat(obj.options.SequenceSimulations_AtlasDirectory, '/GM_seg_MNI_152_image.mat'))
+load(strcat(obj.options.SequenceSimulations_AtlasDirectory,'/GM_seg_MNI_152_kspace.mat'))
 
-%OutputDir = '/Users/amiedemmans/Desktop/GitHub/OptimizeIHMTimaging/b1Correction/SeqSim2';
 % OutputDir = directory where results will be saved 
 OutputDir = obj.options.SequenceSimulations_OutputDirectory;
 
@@ -40,7 +36,7 @@ Raobs = 1./T1obs;
     Params.D = obj.Prot.TissueParams.Mat(9);
 
     Params.MTC = obj.Prot.PulseSequenceParams.Mat(1);
-    Params.delta = obj.Prot.PulseSequenceParams.Mat(2);  % delta 
+    Params.delta = obj.Prot.PulseSequenceParams.Mat(2);  
     Params.flipAngle = obj.Prot.PulseSequenceParams.Mat(3);
     Params.TR = obj.Prot.PulseSequenceParams.Mat(4);
     Params.numSatPulse = obj.Prot.PulseSequenceParams.Mat(5);
@@ -60,15 +56,12 @@ Raobs = 1./T1obs;
 
 
     % Loop variables:
-    Params.M0b =  []; % going to loop over this
+    Params.M0b =  []; 
     Params.Raobs = [];
     Params.Ra = [];
-    %Params.satFlipAngle = Params.pulseDur*360*42.58; 
 
-     % gm_m = brain_m;
-     % fft_gm_m = fft_brain_m;
-      gm_m = data.brain_m;
-      fft_gm_m = data.fft_brain_m; 
+    gm_m = brain_m;
+    fft_gm_m = fft_brain_m;
 
     GRE_sigd = zeros(size(b1,2),size(M0b,2),size(Raobs,2));
     GRE_sigs = zeros(size(b1,2),size(M0b,2),size(Raobs,2));

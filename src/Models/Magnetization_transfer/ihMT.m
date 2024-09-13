@@ -99,17 +99,16 @@ methods
         elseif obj.checkupdatedfields == 2
          
             if obj.options.SequenceSimulations_RunSequenceSimulations
-                %obj.options.SequenceSimulations_AtlasDirectory = uigetdir(pwd, 'Select directory where images are');
+                obj.options.SequenceSimulations_AtlasDirectory = uigetdir(pwd, 'Select directory where images are');
                 obj.options.SequenceSimulations_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved'); 
                 
-                 %data = data(:);
                 ihMT_simSeq_M0b_R1obs_3prot(obj); 
     
             elseif obj.options.R1vsM0bMapping_RunR1vsM0bMapping
                 obj.options.R1vsM0bMapping_DataDirectory = uigetdir(pwd, 'Select directory where fit vals are');
                 obj.options.R1vsM0bMapping_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
 
-                ihMT_R1vsM0b_correlation_3prot(obj);
+                %ihMT_R1vsM0b_correlation_3prot(obj);
     
             elseif obj.options.CalculateihMTsat_RunihMTsatCalculation
                 obj.options.CalculateihMTsat_DataDirectory = uigetdir(pwd, 'Select directory where R1vsM0b vals are');
@@ -118,6 +117,12 @@ methods
 
         end 
 
+    end 
+
+    function FitResult = fit(obj,data)
+        if obj.options.R1vsM0bMapping_RunR1vsM0bMapping
+            ihMT_R1vsM0b_correlation(obj, data)
+        end 
     end 
 
 
