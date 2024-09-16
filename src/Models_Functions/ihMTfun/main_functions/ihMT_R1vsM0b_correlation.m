@@ -11,8 +11,8 @@ dual = data.dual_reg;
 pos = data.pos_reg; 
 neg = data.neg_reg; 
 
-spApp_mp2 = data.sparseMP2RAGE_M0;
-spT1_map = data.sparseMP2RAGE_T1;
+S0_map = data.sparseMP2RAGE_M0;
+T1_map = data.sparseMP2RAGE_T1;
 b1 = data.b1_permute; 
 
 % Load the map 
@@ -20,7 +20,7 @@ if isfield(data, 'mask')
     mask = data.mask; 
 else 
     mask = zeros(size(dual));
-    mask(dual>175) = 1; 
+    mask(b1>0) = 1; 
 end 
 
 %% Protocol
@@ -32,9 +32,9 @@ numExcitation = obj.Prot.PulseSequenceParams.Mat(6) + DummyEcho;
 
 %% Compute ihMTsat 
 
-sat_dual = ihMT_calcMTsatThruLookupTablewithDummyV3( dual, b1, spT1_map, mask,spApp_mp2, echoSpacing, numExcitation, TR, flipA, DummyEcho);
-sat_pos  = ihMT_calcMTsatThruLookupTablewithDummyV3( pos, b1, spT1_map, mask, spApp_mp2, echoSpacing, numExcitation, TR, flipA, DummyEcho);
-sat_neg  = ihMT_calcMTsatThruLookupTablewithDummyV3( neg, b1, spT1_map, mask, spApp_mp2, echoSpacing, numExcitation, TR, flipA, DummyEcho);
+sat_dual = ihMT_calcMTsatThruLookupTablewithDummyV3( dual, b1, T1_map, mask,S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
+sat_pos  = ihMT_calcMTsatThruLookupTablewithDummyV3( pos, b1, T1_map, mask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
+sat_neg  = ihMT_calcMTsatThruLookupTablewithDummyV3( neg, b1, T1_map, mask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
 
 % figure; imshow3Dfull(sat_dual1 , [0 0.06], jet); figure; imshow3Dfull(sat_pos1 , [0 0.05], jet);  figure; imshow3Dfull(sat_neg1 , [0 0.05], jet); 
 
@@ -44,7 +44,7 @@ fitValues_S = fitValues_S.fitValues;
 fitValues_D = load(fullfile(SeqSimDir,'fitValues_D.mat'));
 fitValues_D = fitValues_D.fitValues;
 
-R1_s = (1./spT1_map) *1000; 
+R1_s = (1./T1_map) *1000; 
 R1_s(isinf(R1_s)) = 0;  
 
 % initialize matrices
@@ -76,9 +76,6 @@ for i = 1:size(sat_dual,1) % went to 149
     disp(i/size(sat_dual,1) *100)
     toc 
 end
-[~, M0b_dual] = minc_read('M0b_dual.mnc.gz');
-[~, M0b_pos] = minc_read('M0b_pos.mnc.gz');
-[~, M0b_neg] = minc_read('M0b_neg.mnc.gz');
 
 %figure('WindowStyle', 'docked') % docked in matlab i believe 
 
@@ -99,9 +96,9 @@ minc_write(hdr.file_name, hdr, M0b_neg);
 
 % use this fake mask to get rid of dura. 
 tempMask = mask;
-tempMask(spT1_map > 2500) = 0;
-tempMask(spT1_map < 650) = 0;
-tempMask(isnan(spT1_map)) = 0;
+tempMask(T1_map > 2500) = 0;
+tempMask(T1_map < 650) = 0;
+tempMask(isnan(T1_map)) = 0;
 tempMask = bwareaopen(tempMask, 10000,6);
 tempMask = imerode(tempMask, strel('sphere',2));
 figure; imshow3Dfullseg(M0b_dual, [0 0.15],tempMask)
