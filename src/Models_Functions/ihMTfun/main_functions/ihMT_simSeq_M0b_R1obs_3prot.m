@@ -4,7 +4,7 @@
 % necessary packages. 
 
 
-function ihMT_simSeq_M0b_R1obs_3prot(obj,data)
+function ihMT_simSeq_M0b_R1obs_3prot(obj)
 
 % AtlasDirectory = directory where atlas images are 
 load(strcat(obj.options.SequenceSimulations_AtlasDirectory, '/GM_seg_MNI_152_image.mat'))

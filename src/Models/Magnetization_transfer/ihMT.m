@@ -8,16 +8,15 @@ classdef ihMT < AbstractModel
     end
 
     properties 
-        %MRIinputs = {'MTw_dual', 'MTw_single_pos', 'MTw_single_neg' , 'T1map', 'S0map', 'B1map', 'Mask'};
-        % Something weird going on with can't see all of the files 
-        MRIinputs = {'dual_reg', 'pos_reg', 'neg_reg', 'sparseMP2RAGE_T1', 'sparseMP2RAGE_M0', 'b1_permute', 'itkmask'};
+        MRIinputs = {'dual', 'pos', 'neg', 'T1w', 'M0map', 'b1', 'mask'};
         xnames = {};
         voxelwise = 0; % 0, if the analysis is done matricially
         % 1, if the analysis is done voxel per voxel
+
         % PulseSequenceParams & Tissue Params
         Prot = struct('PulseSequenceParams', struct('Format',{{'MTC'; 'delta' ; 'flipAngle' ; 'TR' ; 'numSatPulse' ; 'TurboFactor' ; 'pulseDur' ; 'satFlipAngle' ; ...
                                      'pulseGapDur' ; 'DummyEcho' ; 'LowDutyCycle'; 'satTrainPerBoost' ; 'TR_MT'; 'echoSpacing'}}, ...
-                                    'Mat', [1; 8000; 7; 1.14; 6; 80; 0.768/1000; 11.6; 0.3/1000; 2; 1; 9; 0.06; 7.66/1000]), ...
+                                    'Mat', [1; 8000; 7; 1.14; 6; 80; 0.768/1000; 136; 0.3/1000; 2; 1; 9; 0.06; 7.66/1000]), ...
                       'TissueParams', struct('Format',{{'M0a'; 'Raobs'; 'R'; 'T2a'; 'T1D'; 'R1b'; 'T2b'; 'M0b'; 'D'}}, ...
                       'Mat', [ 1; 1/1.4; 50; 50e-3; 7.5e-4; 0.25; 11.5e-6; 0.071; 0.8e-3/1e6]));
 
@@ -27,6 +26,9 @@ classdef ihMT < AbstractModel
         % CR_getSeqParams_3prot.m
 
 
+        fitValues_dual = [];
+        fitValues_single = [];
+
         buttons = {'PANEL', 'SequenceSimulations',7,...
             'AtlasDirectory', 0 ,... 
             'OutputDirectory',0,...
@@ -35,15 +37,10 @@ classdef ihMT < AbstractModel
             'FreqPattern',{'dualAlternate','dualContinuous'},...
             'SatPulseShape', {'gausshann', 'gaussian', 'fermi'},...
             'Run Sequence Simulations','pushbutton',...
-            'PANEL', 'R1vsM0b Mapping',4,...
-            'DataDirectory', 0,...
-            'OutputDirectory',0,...
+            'PANEL', 'R1vsM0b Mapping',3,...
+            'SeqSimDirectory', 0,...
             'RunR1vsM0bCorrelation',true,...
-            'Select Appropriate Directories','pushbutton',...
-            'PANEL', 'Calculate ihMTsat',3,...
-            'DataDirectory', 0,...
-            'OutputDirectory',0,...
-            'Run ihMTsat Calculation', 'pushbutton'};
+            'Select Appropriate Directories','pushbutton'};
 
         options = struct(); 
         previousOptions = struct();
@@ -65,16 +62,11 @@ methods
                 ~isequal(obj.options.SequenceSimulations_OutputDirectory, obj.previousOptions.SequenceSimulations_OutputDirectory)||...
                 ~isequal(obj.options.SequenceSimulations_FreqPattern, obj.previousOptions.SequenceSimulations_FreqPattern)||...
                 ~isequal(obj.options.SequenceSimulations_SatPulseShape, obj.previousOptions.SequenceSimulations_SatPulseShape)||...
-                ~isequal(obj.options.R1vsM0bMapping_DataDirectory, obj.previousOptions.R1vsM0bMapping_DataDirectory)||...
-                ~isequal(obj.options.R1vsM0bMapping_OutputDirectory, obj.previousOptions.R1vsM0bMapping_OutputDirectory)||...
-                ~isequal(obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation, obj.previousOptions.R1vsM0bMapping_RunR1vsM0bCorrelation)||...
-                ~isequal(obj.options.CalculateihMTsat_DataDirectory, obj.previousOptions.CalculateihMTsat_DataDirectory)||...
-                ~isequal(obj.options.CalculateihMTsat_OutputDirectory, obj.previousOptions.CalculateihMTsat_OutputDirectory))   
-
+                ~isequal(obj.options.R1vsM0bMapping_SeqSimDirectory, obj.previousOptions.R1vsM0bMapping_SeqSimDirectory)||...
+                ~isequal(obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation, obj.previousOptions.R1vsM0bMapping_RunR1vsM0bCorrelation))   
             checkfields = 1; 
         elseif (~isequal(obj.options.SequenceSimulations_RunSequenceSimulations, obj.previousOptions.SequenceSimulations_RunSequenceSimulations)||...
-                 ~isequal(obj.options.R1vsM0bMapping_SelectAppropriateDirectories, obj.previousOptions.R1vsM0bMapping_SelectAppropriateDirectories)||...
-                 ~isequal(obj.options.CalculateihMTsat_RunihMTsatCalculation, obj.previousOptions.CalculateihMTsat_RunihMTsatCalculation))
+                 ~isequal(obj.options.R1vsM0bMapping_SelectAppropriateDirectories, obj.previousOptions.R1vsM0bMapping_SelectAppropriateDirectories))
             checkfields = 2;
 
         else
@@ -106,15 +98,18 @@ methods
                 
                 ihMT_simSeq_M0b_R1obs_3prot(obj); 
     
-            elseif obj.options.R1vsM0bMapping_RunR1vsM0bMapping
-                obj.options.R1vsM0bMapping_DataDirectory = uigetdir(pwd, 'Select directory where fit vals are');
-                obj.options.R1vsM0bMapping_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
+            elseif obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation
+                disp('Select directory where SeqSim fit values are')
+                obj.options.R1vsM0bMapping_SeqSimDirectory = uigetdir(pwd);
+                %obj.options.R1vsM0bMapping_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
 
-                %ihMT_R1vsM0b_correlation_3prot(obj);
-    
-            elseif obj.options.CalculateihMTsat_RunihMTsatCalculation
-                obj.options.CalculateihMTsat_DataDirectory = uigetdir(pwd, 'Select directory where R1vsM0b vals are');
-                obj.options.CalculateihMTsat_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
+                disp('Load dual fit values')
+                [FileName_dual,PathName_dual] = uigetfile('*.mat');
+                disp('Load single fit values')
+                [FileName_single,PathName_single] = uigetfile('*.mat');
+                     
+                obj.fitValues_dual = load([PathName_dual filesep FileName_dual]);
+                obj.fitValues_single = load([PathName_single filesep FileName_single]);
             end 
 
         end 
@@ -123,6 +118,7 @@ methods
 
     function FitResult = fit(obj,data)
         if obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation % If box is checked, run correlation 
+            %fitValues_dual = obj.fitValues_dual;
             [fitValues_D, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data);
         else
             fitValues_D = fileparts(which('fitValues_D.mat'));
