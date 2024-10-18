@@ -1,8 +1,8 @@
 %% Generate_GM_WM_kspaceMatrices
 % This is mainly needed for centric-out encoding on Siemens.
 
-DATADIR = '\Users\tdemm\OneDrive\Desktop\GitHub Documents\OptimizeIHMTimaging\kspaceWeighting\Atlas_reference\mni_icbm152_nlin_sym_09a_minc2/';
-OutputDir =  '\Users\tdemm\OneDrive\Desktop\GitHub Documents\qMRLab\src\Models_Functions\ihMTfun\Atlas_functions\';
+DATADIR = '/Users/amiedemmans/Documents/GitHub/OptimizeIHMTimaging/kspaceWeighting/Atlas_reference/mni_icbm152_nlin_sym_09a_minc2/';
+OutputDir =  '/Users/amiedemmans/Documents/ihMT_images_from_Chris/atlas_images/';
 
 
 
@@ -78,7 +78,7 @@ end
 reduc = (wanted_size./size(comb_resz));
 
 %comb_mtw3=imresizen( comb_resz, wanted_size./size(comb_resz));
-comb_mtw3=imresizen( comb_resz, reduc);
+comb_mtw3=atlas_imresizen( comb_resz, reduc);
 
 [x,y,z] = size(comb_mtw3(:,:,:,1));
 
@@ -135,7 +135,7 @@ end
 reduc = wanted_size./size(comb_resz);
 
 
-comb_mtw3=imresizen( comb_resz, wanted_size./size(comb_resz));
+comb_mtw3=atlas_imresizen( comb_resz, wanted_size./size(comb_resz));
 
 [x,y,z] = size(comb_mtw3(:,:,:,1));
 
