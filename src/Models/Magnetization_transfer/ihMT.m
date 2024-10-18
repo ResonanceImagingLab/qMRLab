@@ -14,11 +14,11 @@ classdef ihMT < AbstractModel
         % 1, if the analysis is done voxel per voxel
 
         % PulseSequenceParams & Tissue Params
-        Prot = struct('PulseSequenceParams', struct('Format',{{'MTC'; 'delta' ; 'flipAngle' ; 'TR' ; 'numSatPulse' ; 'TurboFactor' ; 'pulseDur' ; 'satFlipAngle' ; ...
-                                     'pulseGapDur' ; 'DummyEcho' ; 'LowDutyCycle'; 'satTrainPerBoost' ; 'TR_MT'; 'echoSpacing'}}, ...
-                                    'Mat', [1; 8000; 7; 1.14; 6; 80; 0.768/1000; 136; 0.3/1000; 2; 1; 9; 0.06; 7.66/1000]), ...
-                      'TissueParams', struct('Format',{{'M0a'; 'Raobs'; 'R'; 'T2a'; 'T1D'; 'R1b'; 'T2b'; 'M0b'; 'D'}}, ...
-                      'Mat', [ 1; 1/1.4; 50; 50e-3; 7.5e-4; 0.25; 11.5e-6; 0.071; 0.8e-3/1e6]));
+        Prot = struct('PulseSequenceParams', struct('Format',{{'MTC'; 'delta' ; 'flipAngle' ; 'TR(ms)' ; 'numSatPulse' ; 'TurboFactor' ; 'pulseDur(ms)' ; 'satFlipAngle' ; ...
+                                     'pulseGapDur(ms)' ; 'DummyEcho' ; 'LowDutyCycle'; 'satTrainPerBoost' ; 'TR_MT(ms)'; 'echoSpacing(ms)'}}, ...
+                                    'Mat', [1; 8000; 7; 1140; 6; 80; 0.768; 136; 0.3; 2; 1; 9; 60; 7.66]), ...
+                      'TissueParams', struct('Format',{{'M0a'; 'Raobs'; 'R'; 'T2a(ms)'; 'T1D(ms)'; 'R1b'; 'T2b(μs)'; 'M0b'; 'D'}}, ...
+                      'Mat', [ 1; 1/1.4; 50; 50; 0.75; 0.25; 11.5; 0.071; 0.8e-3/1e6]));
 
         % Params.numExcitation is based on TurboFactor and Dummy Echo 
         % freqpattern ill make into dropdown in buttons probably b/c I
@@ -26,8 +26,8 @@ classdef ihMT < AbstractModel
         % CR_getSeqParams_3prot.m
 
 
-        fitValues_dual = [];
-        fitValues_single = [];
+        %fitValues_dual = [];
+        %fitValues_single = [];
 
         buttons = {'PANEL', 'SequenceSimulations',7,...
             'AtlasDirectory', 0 ,... 
@@ -43,7 +43,7 @@ classdef ihMT < AbstractModel
             'Select Appropriate Directories','pushbutton'};
 
         options = struct(); 
-        previousOptions = struct();
+        previousOptions = struct()
 
     end 
 
@@ -118,8 +118,9 @@ methods
 
     function FitResult = fit(obj,data)
         if obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation % If box is checked, run correlation 
-            %fitValues_dual = obj.fitValues_dual;
-            [fitValues_D, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data);
+            fitValues_dual = obj.fitValues_dual;
+            fitValues_single = obj.fitValues_single; 
+            [fitValues_D, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data, fitValues_dual, fitValues_single);
         else
             fitValues_D = fileparts(which('fitValues_D.mat'));
             fitValues_SP = fileparts(which('fitValues_SP.mat'));

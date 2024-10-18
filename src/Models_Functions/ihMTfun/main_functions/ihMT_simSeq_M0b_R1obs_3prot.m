@@ -28,27 +28,27 @@ Raobs = 1./T1obs;
     Params.M0a = obj.Prot.TissueParams.Mat(1);
     Params.Raobs = obj.Prot.TissueParams.Mat(2);
     Params.R = obj.Prot.TissueParams.Mat(3);
-    Params.T2a = obj.Prot.TissueParams.Mat(4);
-    Params.T1D = obj.Prot.TissueParams.Mat(5);
+    Params.T2a = obj.Prot.TissueParams.Mat(4)/1000;
+    Params.T1D = obj.Prot.TissueParams.Mat(5)/1000;
     Params.R1b = obj.Prot.TissueParams.Mat(6);
-    Params.T2b = obj.Prot.TissueParams.Mat(7);
+    Params.T2b = obj.Prot.TissueParams.Mat(7)/1e6;
     Params.M0b = obj.Prot.TissueParams.Mat(8);
     Params.D = obj.Prot.TissueParams.Mat(9);
 
     Params.MTC = obj.Prot.PulseSequenceParams.Mat(1);
     Params.delta = obj.Prot.PulseSequenceParams.Mat(2);  
     Params.flipAngle = obj.Prot.PulseSequenceParams.Mat(3);
-    Params.TR = obj.Prot.PulseSequenceParams.Mat(4);
+    Params.TR = obj.Prot.PulseSequenceParams.Mat(4)/1000;
     Params.numSatPulse = obj.Prot.PulseSequenceParams.Mat(5);
     Params.TurboFactor = obj.Prot.PulseSequenceParams.Mat(6);
-    Params.pulseDur = obj.Prot.PulseSequenceParams.Mat(7);
+    Params.pulseDur = obj.Prot.PulseSequenceParams.Mat(7)/1000;
     Params.satFlipAngle = obj.Prot.PulseSequenceParams.Mat(8);
-    Params.pulseGapDur = obj.Prot.PulseSequenceParams.Mat(9);
+    Params.pulseGapDur = obj.Prot.PulseSequenceParams.Mat(9)/1000;
     Params.DummyEcho = obj.Prot.PulseSequenceParams.Mat(10);
     Params.boosted = obj.Prot.PulseSequenceParams.Mat(11);
     Params.satTrainPerBoost = obj.Prot.PulseSequenceParams.Mat(12);
-    Params.TR_MT = obj.Prot.PulseSequenceParams.Mat(13);
-    Params.echoSpacing = obj.Prot.PulseSequenceParams.Mat(14);
+    Params.TR_MT = obj.Prot.PulseSequenceParams.Mat(13)/1000;
+    Params.echoSpacing = obj.Prot.PulseSequenceParams.Mat(14)/1000;
 
     Params.SatPulseShape = obj.options.SequenceSimulations_SatPulseShape;
 

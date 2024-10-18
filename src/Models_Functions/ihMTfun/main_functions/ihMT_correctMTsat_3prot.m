@@ -40,9 +40,9 @@ end
 
 %% Protocol 1
 flipA = obj.Prot.PulseSequenceParams.Mat(3);
-TR = obj.Prot.PulseSequenceParams.Mat(4)*1000;
+TR = obj.Prot.PulseSequenceParams.Mat(4)/1000;
 DummyEcho = obj.Prot.PulseSequenceParams.Mat(10);
-echoSpacing = obj.Prot.PulseSequenceParams.Mat(14)*1000;
+echoSpacing = obj.Prot.PulseSequenceParams.Mat(14)/1000;
 numExcitation = obj.Prot.PulseSequenceParams.Mat(6) + DummyEcho;
 
 sat_dual = ihMT_calcMTsatThruLookupTablewithDummyV3( dual, b1, T1_map, mask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);

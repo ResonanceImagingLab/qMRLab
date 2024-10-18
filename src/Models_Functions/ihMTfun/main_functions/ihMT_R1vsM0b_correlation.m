@@ -25,9 +25,9 @@ end
 
 %% Protocol
 flipA = obj.Prot.PulseSequenceParams.Mat(3);
-TR = obj.Prot.PulseSequenceParams.Mat(4)*1000;
+TR = obj.Prot.PulseSequenceParams.Mat(4)/1000;
 DummyEcho = obj.Prot.PulseSequenceParams.Mat(10);
-echoSpacing = obj.Prot.PulseSequenceParams.Mat(14)*1000;
+echoSpacing = obj.Prot.PulseSequenceParams.Mat(14)/1000;
 numExcitation = obj.Prot.PulseSequenceParams.Mat(6) + DummyEcho;
 
 %% Compute ihMTsat 
