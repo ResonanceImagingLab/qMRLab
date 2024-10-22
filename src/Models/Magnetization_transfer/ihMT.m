@@ -8,7 +8,7 @@ classdef ihMT < AbstractModel
     end
 
     properties 
-        MRIinputs = {'dual', 'pos', 'neg', 'T1w', 'M0map', 'b1', 'mask'};
+        MRIinputs = {'dual', 'pos', 'neg', 'T1map', 'M0map', 'b1', 'mask'};
         xnames = {};
         voxelwise = 0; % 0, if the analysis is done matricially
         % 1, if the analysis is done voxel per voxel
@@ -26,8 +26,8 @@ classdef ihMT < AbstractModel
         % CR_getSeqParams_3prot.m
 
 
-        %fitValues_dual = [];
-        %fitValues_single = [];
+        fitValues_dual = [];
+        fitValues_single = [];
 
         buttons = {'PANEL', 'SequenceSimulations',7,...
             'AtlasDirectory', 0 ,... 
@@ -99,8 +99,8 @@ methods
                 ihMT_simSeq_M0b_R1obs_3prot(obj); 
     
             elseif obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation
-                disp('Select directory where SeqSim fit values are')
-                obj.options.R1vsM0bMapping_SeqSimDirectory = uigetdir(pwd);
+                disp('Select directory where you want values saved')
+                 obj.options.R1vsM0bMapping_SeqSimDirectory = uigetdir(pwd);
                 %obj.options.R1vsM0bMapping_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
 
                 disp('Load dual fit values')
@@ -118,20 +118,20 @@ methods
 
     function FitResult = fit(obj,data)
         if obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation % If box is checked, run correlation 
-            fitValues_dual = obj.fitValues_dual;
-            fitValues_single = obj.fitValues_single; 
-            [fitValues_D, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data, fitValues_dual, fitValues_single);
+            %fitValues_dual = obj.fitValues_dual;
+            %fitValues_single = obj.fitValues_single; 
+            [fitValues_D, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data, obj.fitValues_dual, obj.fitValues_single);
         else
             fitValues_D = fileparts(which('fitValues_D.mat'));
             fitValues_SP = fileparts(which('fitValues_SP.mat'));
             fitValues_SN = fileparts(which('fitValues_SN.mat'));
         end 
 
-        FitResult.fitValues_D = fitValues_D;
-        FitResult.fitValues_SP = fitValues_SP;
-        FitResult.fitValues_SN = fitValues_SN;
+        % FitResult.fitValues_D = fitValues_D;
+        % FitResult.fitValues_SP = fitValues_SP;
+        % FitResult.fitValues_SN = fitValues_SN;
 
-        [sat_dual_c, sat_pos_c, sat_neg_c, ihmt_c] = ihMT_correctMTsat_3prot(obj,data);
+        [sat_dual_c, sat_pos_c, sat_neg_c, ihmt_c] = ihMT_correctMTsat_3prot(obj,data, fitValues_D, fitValues_SP, fitValues_SN);
         FitResult.sat_dual_c = sat_dual_c;
         FitResult.sat_pos_c = sat_pos_c; 
         FitResult.sat_neg_c = sat_neg_c; 

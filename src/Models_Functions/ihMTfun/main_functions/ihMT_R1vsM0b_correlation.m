@@ -1,19 +1,19 @@
-function [fitValues_D, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data)
+function [fitValues_D, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data, fitValues_dual, fitValues_single)
 
 % Sequence Simulations Results Directory 
-SeqSimDir = obj.options.R1vsM0bMapping_DataDirectory;
+%SeqSimDir = obj.options.R1vsM0bMapping_DataDirectory;
 
 % Directory where results will be saved 
-OutputDir = obj.options.R1vsM0bMapping_OutputDirectory;
+OutputDir =  obj.options.R1vsM0bMapping_SeqSimDirectory;
 
 %% Load the images 
-dual = data.dual_reg; 
-pos = data.pos_reg; 
-neg = data.neg_reg; 
+dual = data.dual; 
+pos = data.pos; 
+neg = data.neg; 
 
-S0_map = data.sparseMP2RAGE_M0;
-T1_map = data.sparseMP2RAGE_T1;
-b1 = data.b1_permute; 
+S0_map = data.M0map;
+T1_map = data.T1map;
+b1 = data.b1; 
 
 % Load the map 
 if isfield(data, 'mask')
@@ -25,9 +25,9 @@ end
 
 %% Protocol
 flipA = obj.Prot.PulseSequenceParams.Mat(3);
-TR = obj.Prot.PulseSequenceParams.Mat(4)/1000;
+TR = obj.Prot.PulseSequenceParams.Mat(4); % ms
 DummyEcho = obj.Prot.PulseSequenceParams.Mat(10);
-echoSpacing = obj.Prot.PulseSequenceParams.Mat(14)/1000;
+echoSpacing = obj.Prot.PulseSequenceParams.Mat(14); % ms 
 numExcitation = obj.Prot.PulseSequenceParams.Mat(6) + DummyEcho;
 
 %% Compute ihMTsat 
@@ -36,13 +36,13 @@ sat_dual = ihMT_calcMTsatThruLookupTablewithDummyV3( dual, b1, T1_map, mask,S0_m
 sat_pos  = ihMT_calcMTsatThruLookupTablewithDummyV3( pos, b1, T1_map, mask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
 sat_neg  = ihMT_calcMTsatThruLookupTablewithDummyV3( neg, b1, T1_map, mask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
 
-% figure; imshow3Dfull(sat_dual1 , [0 0.06], jet); figure; imshow3Dfull(sat_pos1 , [0 0.05], jet);  figure; imshow3Dfull(sat_neg1 , [0 0.05], jet); 
+% figure; imshow3Dfull(sat_dual , [0 0.06], jet); figure; imshow3Dfull(sat_pos , [0 0.05], jet);  figure; imshow3Dfull(sat_neg , [0 0.05], jet); 
 
 % load in the fit results for VFA - Optimal
-fitValues_S = load(fullfile(SeqSimDir,'fitValues_S.mat'));
-fitValues_S = fitValues_S.fitValues;
-fitValues_D = load(fullfile(SeqSimDir,'fitValues_D.mat'));
-fitValues_D = fitValues_D.fitValues;
+% fitValues_S = load(fullfile(SeqSimDir,'fitValues_S.mat'));
+fitValues_single = fitValues_single.fitValues;
+% fitValues_D = load(fullfile(SeqSimDir,'fitValues_D.mat'));
+fitValues_dual = fitValues_dual.fitValues;
 
 R1_s = (1./T1_map) *1000; 
 R1_s(isinf(R1_s)) = 0;  
@@ -66,9 +66,9 @@ for i = 1:size(sat_dual,1) % went to 149
             
             if mask(i,j,k) > 0 %&& dual_s(i,j,k,3) > 0
                                 
-                 [M0b_dual(i,j,k), ~,  ~]  = ihMT_fit_M0b_v2( b1(i,j,k), R1_s(i,j,k), sat_dual(i,j,k), fitValues_D);
-                 [M0b_pos(i,j,k),  ~,  ~]  = ihMT_fit_M0b_v2( b1(i,j,k), R1_s(i,j,k), sat_pos(i,j,k), fitValues_S);               
-                 [M0b_neg(i,j,k),  ~,  ~]  = ihMT_fit_M0b_v2( b1(i,j,k), R1_s(i,j,k), sat_neg(i,j,k), fitValues_S);
+                 [M0b_dual(i,j,k), ~,  ~]  = ihMT_fit_M0b_v2( b1(i,j,k), R1_s(i,j,k), sat_dual(i,j,k), fitValues_dual);
+                 [M0b_pos(i,j,k),  ~,  ~]  = ihMT_fit_M0b_v2( b1(i,j,k), R1_s(i,j,k), sat_pos(i,j,k), fitValues_single);               
+                 [M0b_neg(i,j,k),  ~,  ~]  = ihMT_fit_M0b_v2( b1(i,j,k), R1_s(i,j,k), sat_neg(i,j,k), fitValues_single);
                  
             end
         end
@@ -80,17 +80,17 @@ end
 %figure('WindowStyle', 'docked') % docked in matlab i believe 
 
 figure('WindowStyle', 'docked'); imshow3Dfull(M0b_pos, [0 0.15],jet)
-figure; imshow3Dfull(M0b_neg, [0 0.15], jet)  
-figure; imshow3Dfull(M0b_dual, [0 0.15],jet)
+figure('WindowStyle', 'docked'); imshow3Dfull(M0b_neg, [0 0.15], jet)  
+figure('WindowStyle', 'docked'); imshow3Dfull(M0b_dual, [0 0.15],jet)
 
 % export
-mkdir(fullfile(OutputDir,'processing'))
-hdr.file_name = fullfile(OutputDir,'processing/M0b_dual.mnc.gz'); 
-minc_write(hdr.file_name, hdr, M0b_dual); % Need to add filename for each minc_write %
-hdr.file_name = fullfile(OutputDir,'processing/M0b_pos.mnc.gz');
-minc_write(hdr.file_name, hdr, M0b_pos);
-hdr.file_name = fullfile(OutputDir,'processing/M0b_neg.mnc.gz'); 
-minc_write(hdr.file_name, hdr, M0b_neg);
+% mkdir(fullfile(OutputDir,'processing'))
+% hdr.file_name = fullfile(OutputDir,'processing/M0b_dual.mnc.gz'); 
+% minc_write(hdr.file_name, hdr, M0b_dual); % Need to add filename for each minc_write %
+% hdr.file_name = fullfile(OutputDir,'processing/M0b_pos.mnc.gz');
+% minc_write(hdr.file_name, hdr, M0b_pos);
+% hdr.file_name = fullfile(OutputDir,'processing/M0b_neg.mnc.gz'); 
+% minc_write(hdr.file_name, hdr, M0b_neg);
 
 %% With M0B maps made, correlate with R1 and update the fitValues file. 
 
@@ -106,9 +106,9 @@ figure; imshow3Dfullseg(M0b_dual, [0 0.15],tempMask)
 mkdir(fullfile(OutputDir,'figures'));
 
 % Optimized Approach
-fitValues_D  = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_dual, tempMask, fitValues_D, fullfile(OutputDir,'figures/R1vsM0b_dual.png'), fullfile(OutputDir,'fitValues_D.mat'));
-fitValues_SP = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_pos, tempMask, fitValues_S, fullfile(OutputDir,'figures/R1vsM0b_pos.png'), fullfile(OutputDir,'fitValues_SP.mat'));
-fitValues_SN = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_neg, tempMask, fitValues_S, fullfile(OutputDir,'figures/R1vsM0b_neg.png'), fullfile(OutputDir,'fitValues_SN.mat'));
+fitValues_D  = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_dual, tempMask, fitValues_dual, fullfile(OutputDir,'figures/R1vsM0b_dual.png'), fullfile(OutputDir,'fitValues_D.mat'));
+fitValues_SP = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_pos, tempMask, fitValues_single, fullfile(OutputDir,'figures/R1vsM0b_pos.png'), fullfile(OutputDir,'fitValues_SP.mat'));
+fitValues_SN = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_neg, tempMask, fitValues_single, fullfile(OutputDir,'figures/R1vsM0b_neg.png'), fullfile(OutputDir,'fitValues_SN.mat'));
 
 %% This is to be just placed in MTsat code 
 % --> will need to add if statements probably for R1_s
