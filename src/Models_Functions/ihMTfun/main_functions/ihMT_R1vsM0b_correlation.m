@@ -23,6 +23,7 @@ else
     mask(b1>0) = 1; 
 end 
 
+
 %% Protocol
 flipA = obj.Prot.PulseSequenceParams.Mat(3);
 TR = obj.Prot.PulseSequenceParams.Mat(4); % ms
@@ -52,6 +53,13 @@ M0b_dual = zeros(size(sat_dual));
 M0b_pos = zeros(size(sat_dual));
 M0b_neg = zeros(size(sat_dual));
 
+
+tempMask = mask;
+tempMask(T1_map > 2500) = 0;
+tempMask(T1_map < 650) = 0;
+tempMask(isnan(T1_map)) = 0;
+tempMask = bwareaopen(tempMask, 10000,6);
+
 % Speed up by doing only a few axial slices 
 axialStart = 126; % 65
 axialStop = axialStart+3;%115;
@@ -64,7 +72,7 @@ for i = 1:size(sat_dual,1) % went to 149
     for j = axialStart:axialStop % 1:size(sat_dual,2) % for axial slices
         for k =  1:size(sat_dual,3) % sagital slices  65
             
-            if mask(i,j,k) > 0 %&& dual_s(i,j,k,3) > 0
+            if tempMask(i,j,k) > 0 %&& dual_s(i,j,k,3) > 0
                                 
                  [M0b_dual(i,j,k), ~,  ~]  = ihMT_fit_M0b_v2( b1(i,j,k), R1_s(i,j,k), sat_dual(i,j,k), fitValues_dual);
                  [M0b_pos(i,j,k),  ~,  ~]  = ihMT_fit_M0b_v2( b1(i,j,k), R1_s(i,j,k), sat_pos(i,j,k), fitValues_single);               

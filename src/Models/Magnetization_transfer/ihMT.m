@@ -118,9 +118,9 @@ methods
 
     function FitResult = fit(obj,data)
         if obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation % If box is checked, run correlation 
-            %fitValues_dual = obj.fitValues_dual;
-            %fitValues_single = obj.fitValues_single; 
-            [fitValues_D, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data, obj.fitValues_dual, obj.fitValues_single);
+            fitValues_dual = obj.fitValues_dual;
+            fitValues_single = obj.fitValues_single; 
+            [fitValues_D, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data, fitValues_dual, fitValues_single);
         else
             fitValues_D = fileparts(which('fitValues_D.mat'));
             fitValues_SP = fileparts(which('fitValues_SP.mat'));
