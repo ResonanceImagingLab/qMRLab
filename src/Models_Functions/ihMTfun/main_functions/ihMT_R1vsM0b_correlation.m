@@ -33,9 +33,15 @@ numExcitation = obj.Prot.PulseSequenceParams.Mat(6) + DummyEcho;
 
 %% Compute ihMTsat 
 
-sat_dual = ihMT_calcMTsatThruLookupTablewithDummyV3( dual, b1, T1_map, mask,S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
-sat_pos  = ihMT_calcMTsatThruLookupTablewithDummyV3( pos, b1, T1_map, mask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
-sat_neg  = ihMT_calcMTsatThruLookupTablewithDummyV3( neg, b1, T1_map, mask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
+tempMask = mask;
+tempMask(T1_map > 2500) = 0;
+tempMask(T1_map < 650) = 0;
+tempMask(isnan(T1_map)) = 0;
+tempMask = bwareaopen(tempMask, 10000,6);
+
+sat_dual = ihMT_calcMTsatThruLookupTablewithDummyV3( dual, b1, T1_map, tempMask,S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
+sat_pos  = ihMT_calcMTsatThruLookupTablewithDummyV3( pos, b1, T1_map, tempMask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
+sat_neg  = ihMT_calcMTsatThruLookupTablewithDummyV3( neg, b1, T1_map, tempMask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
 
 % figure; imshow3Dfull(sat_dual , [0 0.06], jet); figure; imshow3Dfull(sat_pos , [0 0.05], jet);  figure; imshow3Dfull(sat_neg , [0 0.05], jet); 
 
@@ -52,13 +58,6 @@ R1_s(isinf(R1_s)) = 0;
 M0b_dual = zeros(size(sat_dual));
 M0b_pos = zeros(size(sat_dual));
 M0b_neg = zeros(size(sat_dual));
-
-
-tempMask = mask;
-tempMask(T1_map > 2500) = 0;
-tempMask(T1_map < 650) = 0;
-tempMask(isnan(T1_map)) = 0;
-tempMask = bwareaopen(tempMask, 10000,6);
 
 % Speed up by doing only a few axial slices 
 axialStart = 126; % 65
