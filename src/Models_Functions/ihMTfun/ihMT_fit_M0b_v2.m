@@ -47,7 +47,21 @@ opts = fitoptions( 'Method', 'NonlinearLeastSquares','Upper',0.5,'Lower',0.0,'St
 opts.Robust = 'Bisquare';
 
 myfittype = fittype( fit_eqn ,'dependent', {'z'}, 'independent',{'b1'},'coefficients', {'M0b'}); 
-fitpos = fit(B1_ref, msat, myfittype,opts); % insert a try+catch to report values. In the catch -> break. 
+%fitpos = fit(B1_ref, msat, myfittype,opts); % insert a try+catch to report values. In the catch -> break. 
+try
+    fitpos = fit(B1_ref, msat, myfittype,opts); % insert a try+catch to report values. In the catch -> break. 
+catch 
+    disp('B1_ref')
+    disp(B1_ref);
+    disp('msat vals');
+    disp(msat); 
+    disp('fit type');
+    disp(myfittype); 
+    disp('fit options');
+    disp(opts);
+    return
+end 
+
 fitvals = coeffvalues(fitpos);
 
 M0b = fitvals(1);
