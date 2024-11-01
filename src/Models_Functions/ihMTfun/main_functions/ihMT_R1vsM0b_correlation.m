@@ -37,7 +37,7 @@ tempMask = mask;
 tempMask(T1_map > 2500) = 0;
 tempMask(T1_map < 650) = 0;
 tempMask(isnan(T1_map)) = 0;
-tempMask = bwareaopen(tempMask, 10000,6);
+%tempMask = bwareaopen(tempMask, 10000,6);
 
 sat_dual = ihMT_calcMTsatThruLookupTablewithDummyV3( dual, b1, T1_map, tempMask,S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
 sat_pos  = ihMT_calcMTsatThruLookupTablewithDummyV3( pos, b1, T1_map, tempMask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
@@ -62,7 +62,7 @@ M0b_neg = zeros(size(sat_dual));
 % Speed up by doing only a few axial slices 
 axialStart = 126; % 65
 axialStop = axialStart+3;%115;
-figure; imshow3Dfull(sat_dual(:,axialStart:axialStop,:) , [0 0.06], jet)
+%figure; imshow3Dfull(sat_dual(:,axialStart:axialStop,:) , [0 0.06], jet)
 
 disp('Code will take ~ 2 hours to run');
 tic %  ~ 2hrs to run 
@@ -86,9 +86,9 @@ end
 
 %figure('WindowStyle', 'docked') % docked in matlab i believe 
 
-figure('WindowStyle', 'docked'); imshow3Dfull(M0b_pos, [0 0.15],jet)
-figure('WindowStyle', 'docked'); imshow3Dfull(M0b_neg, [0 0.15], jet)  
-figure('WindowStyle', 'docked'); imshow3Dfull(M0b_dual, [0 0.15],jet)
+% figure('WindowStyle', 'docked'); imshow3Dfull(M0b_pos, [0 0.15],jet)
+% figure('WindowStyle', 'docked'); imshow3Dfull(M0b_neg, [0 0.15], jet)  
+% figure('WindowStyle', 'docked'); imshow3Dfull(M0b_dual, [0 0.15],jet)
 
 % export
 % mkdir(fullfile(OutputDir,'processing'))
@@ -102,15 +102,17 @@ figure('WindowStyle', 'docked'); imshow3Dfull(M0b_dual, [0 0.15],jet)
 %% With M0B maps made, correlate with R1 and update the fitValues file. 
 
 % use this fake mask to get rid of dura. 
-tempMask = mask;
-tempMask(T1_map > 2500) = 0;
-tempMask(T1_map < 650) = 0;
-tempMask(isnan(T1_map)) = 0;
+% tempMask = mask;
+% tempMask(T1_map > 2500) = 0;
+% tempMask(T1_map < 650) = 0;
+% tempMask(isnan(T1_map)) = 0;
 tempMask = bwareaopen(tempMask, 10000,6);
 tempMask = imerode(tempMask, strel('sphere',2));
-figure; imshow3Dfullseg(M0b_dual, [0 0.15],tempMask)
+% figure; imshow3Dfullseg(M0b_dual, [0 0.15],tempMask)
 
 mkdir(fullfile(OutputDir,'figures'));
+
+%OutputDir = '/Users/amiedemmans/Documents/ihMT_Tests/Test3/';
 
 % Optimized Approach
 fitValues_D  = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_dual, tempMask, fitValues_dual, fullfile(OutputDir,'figures/R1vsM0b_dual.png'), fullfile(OutputDir,'fitValues_D.mat'));

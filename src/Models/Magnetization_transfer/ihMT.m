@@ -100,7 +100,7 @@ methods
     
             elseif obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation
                 disp('Select directory where you want values saved')
-                 obj.options.R1vsM0bMapping_SeqSimDirectory = uigetdir(pwd);
+                obj.options.R1vsM0bMapping_SeqSimDirectory = uigetdir(pwd);
                 %obj.options.R1vsM0bMapping_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
 
                 disp('Load dual fit values')
@@ -110,6 +110,8 @@ methods
                      
                 obj.fitValues_dual = load([PathName_dual filesep FileName_dual]);
                 obj.fitValues_single = load([PathName_single filesep FileName_single]);
+
+                
             end 
 
         end 
@@ -117,9 +119,12 @@ methods
     end 
 
     function FitResult = fit(obj,data)
+        %if isempty(obj.fitValues_single) && isempty(obj.fitValues_dual)
+         fitValues_dual = obj.fitValues_dual;
+         fitValues_single = obj.fitValues_single; 
+        %end 
         if obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation % If box is checked, run correlation 
-            fitValues_dual = obj.fitValues_dual;
-            fitValues_single = obj.fitValues_single; 
+           
             [fitValues_D, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data, fitValues_dual, fitValues_single);
         else
             fitValues_D = fileparts(which('fitValues_D.mat'));

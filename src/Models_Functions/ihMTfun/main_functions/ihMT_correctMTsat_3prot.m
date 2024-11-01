@@ -69,6 +69,7 @@ corr_d = MTsat_B1corr_factor_map(b1, R1_s, b1_1, fitValues_D);
 corr_p = MTsat_B1corr_factor_map(b1, R1_s, b1_1, fitValues_SP);
 corr_n = MTsat_B1corr_factor_map(b1, R1_s, b1_1, fitValues_SN);
 
+mask = tempMask;
 % Part 2, apply correction map
 sat_dual_c = (sat_dual + sat_dual.* corr_d) .* mask;
 sat_pos_c  = (sat_pos + sat_pos.* corr_p) .* mask;

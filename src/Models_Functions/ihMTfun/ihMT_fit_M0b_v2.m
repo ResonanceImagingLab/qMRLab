@@ -67,14 +67,16 @@ fitvals = coeffvalues(fitpos);
 M0b = fitvals(1);
 
 %% Calculate Residuals
+% Uncomment if you would like to calculate residuals 
+% Not including it right now to save coding time 
 % solve the equation for the 
-comb_resid = 0;
-for i = 1:size(msat,1)
-    b1 = B1_ref(i);
-    tmp = eval(fit_eqn);
-    resid = abs(tmp - msat(i));
-    comb_resid = comb_resid + resid;
-end
+% comb_resid = 0;
+% for i = 1:size(msat,1)
+%     b1 = B1_ref(i);
+%     tmp = eval(fit_eqn);
+%     resid = abs(tmp - msat(i));
+%     comb_resid = comb_resid + resid;
+% end
 
 
  
