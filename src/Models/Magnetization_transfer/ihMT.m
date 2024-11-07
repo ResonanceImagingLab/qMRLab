@@ -125,9 +125,9 @@ methods
         %end 
         if obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation % If box is checked, run correlation 
            
-            [fitValues_D, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data, fitValues_dual, fitValues_single);
+            [fitValues_Dual, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data, fitValues_dual, fitValues_single);
         else
-            fitValues_D = fileparts(which('fitValues_D.mat'));
+            fitValues_Dual = fileparts(which('fitValues_D.mat'));
             fitValues_SP = fileparts(which('fitValues_SP.mat'));
             fitValues_SN = fileparts(which('fitValues_SN.mat'));
         end 
@@ -136,7 +136,7 @@ methods
         % FitResult.fitValues_SP = fitValues_SP;
         % FitResult.fitValues_SN = fitValues_SN;
 
-        [sat_dual_c, sat_pos_c, sat_neg_c, ihmt_c] = ihMT_correctMTsat_3prot(obj,data, fitValues_D, fitValues_SP, fitValues_SN);
+        [sat_dual_c, sat_pos_c, sat_neg_c, ihmt_c] = ihMT_correctMTsat_3prot(obj,data, fitValues_Dual, fitValues_SP, fitValues_SN);
         FitResult.sat_dual_c = sat_dual_c;
         FitResult.sat_pos_c = sat_pos_c; 
         FitResult.sat_neg_c = sat_neg_c; 
