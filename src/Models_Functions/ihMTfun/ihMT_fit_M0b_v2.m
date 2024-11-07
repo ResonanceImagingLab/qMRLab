@@ -1,4 +1,4 @@
-function [M0b, maskval, comb_resid]= ihMT_fit_M0b_v2(B1_ref,Raobs, msat,fitValues)
+function [M0b, maskval]= ihMT_fit_M0b_v2(B1_ref,Raobs, msat,fitValues)
 % V2 corrects for flexibility in the model terms used to fit the simulation
 % space. 
 
@@ -26,6 +26,8 @@ function [M0b, maskval, comb_resid]= ihMT_fit_M0b_v2(B1_ref,Raobs, msat,fitValue
 % B1_ref = squeeze(b1_3p26(i,j,k,:)) % this should give us 4 data points
 % msat = msat_irl_2k(i,j,k) % test values for "z"
 
+% Don't need comb_resid for this 
+
 if ~isfield(fitValues,'numTerms')
     fitValues.numTerms = 90;
 end
@@ -35,36 +37,73 @@ maskval = 0;
 if (min(msat) == 0) || (max(isnan(msat)) > 0) % fit will be poor
     M0b = 0; 
     maskval = 1; % just generate a mask to note regions which might have a bad fit. 
-    comb_resid = 0;
     return;
 end
 
-fit_eqn = fitValues.fit_SS_eqn_sprintf;
-fit_eqn = sprintf(fit_eqn, repmat(Raobs, fitValues.numTerms,1));
+% disp('size b1_ref: ')
+% disp(size(B1_ref))
+% 
+% disp('size msat '); 
+% disp(size(msat));
 
 
-opts = fitoptions( 'Method', 'NonlinearLeastSquares','Upper',0.5,'Lower',0.0,'StartPoint',0.1);
-opts.Robust = 'Bisquare';
+% fit_eqn = fitValues.fit_SS_eqn_sprintf;
+% fit_eqn = sprintf(fit_eqn, repmat(Raobs, fitValues.numTerms,1));
 
-myfittype = fittype( fit_eqn ,'dependent', {'z'}, 'independent',{'b1'},'coefficients', {'M0b'}); 
-%fitpos = fit(B1_ref, msat, myfittype,opts); % insert a try+catch to report values. In the catch -> break. 
-try
-    fitpos = fit(B1_ref, msat, myfittype,opts); % insert a try+catch to report values. In the catch -> break. 
-catch 
-    disp('B1_ref')
-    disp(B1_ref);
-    disp('msat vals');
-    disp(msat); 
-    disp('fit type');
-    disp(myfittype); 
-    disp('fit options');
-    disp(opts);
-    return
+% Construct vandermonde matrix for matrix division: 
+V = zeros(length(B1_ref), fitValues.numTerms); 
+
+for i = 1:fitValues.numTerms
+    V(:, i) = B1_ref.^(i-1); % (i-1) to match polynomial terms
 end 
 
-fitvals = coeffvalues(fitpos);
+try
+    fitvals = V \ msat; 
+    %M0b = fitvals(1);
+    M0b = min(max(fitvals(1), 0.0), 0.5); % Set upper and lower bounds as before
+catch
+    disp('An error occurred during matrix division:');
+    disp('B1_ref:');
+    disp(B1_ref);
+    disp('msat values:');
+    disp(msat);
+    disp('Raobs');
+    disp(Raobs);
+    disp('Matrix V:');
+    disp(V);
+    return;
+end
 
-M0b = fitvals(1);
+% disp('Fit equation from sprintf: ')
+% disp(fit_eqn)
+
+
+% opts = fitoptions( 'Method', 'NonlinearLeastSquares','Upper',0.5,'Lower',0.0,'StartPoint',0.1);
+% opts.Robust = 'Bisquare';
+% 
+% myfittype = fittype( fit_eqn ,'dependent', {'z'}, 'independent',{'b1'},'coefficients', {'M0b'}); 
+% 
+% 
+% fitpos = fit(B1_ref, msat, myfittype,opts); % insert a try+catch to report values. In the catch -> break. 
+% try
+%     fitpos = fit(B1_ref, msat, myfittype,opts); % insert a try+catch to report values. In the catch -> break. 
+% catch 
+%    disp('B1_ref:');
+%    disp(B1_ref);
+%    disp('msat values:');
+%    disp(msat);
+%    disp('Fit Equation (post sprintf):');
+%    disp(fit_eqn);
+%    disp('Fit Type:');
+%    disp(myfittype);
+%    disp('Fit Options:');
+%    disp(opts);
+%    return;
+% end 
+% 
+% fitvals = coeffvalues(fitpos);
+% 
+% M0b = fitvals(1);
 
 %% Calculate Residuals
 % Uncomment if you would like to calculate residuals 
