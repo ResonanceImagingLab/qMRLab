@@ -27,6 +27,7 @@ function [M0b, maskval]= ihMT_fit_M0b_v2(B1_ref,Raobs, msat,fitValues)
 % msat = msat_irl_2k(i,j,k) % test values for "z"
 
 % Don't need comb_resid for this 
+% Re do fit_eqn with anonymous functions??
 
 if ~isfield(fitValues,'numTerms')
     fitValues.numTerms = 90;
@@ -40,39 +41,97 @@ if (min(msat) == 0) || (max(isnan(msat)) > 0) % fit will be poor
     return;
 end
 
+% May need to use non sprintf --> look into both
+% Evaluating linear text equations with matlab 
+% Look into symbolic toolbox documentation 
+
+fit_eqn = fitValues.fit_SS_eqn;
+% fit_eqn = sprintf(fit_eqn, repmat(Raobs, fitValues.numTerms,1));
+
+% Initialize degrees
+B1_degree = 0;
+Raobs_degree = 0;
+
+% Extract powers from fit_eqn
+B1_powers = regexp(fit_eqn, 'b1\.\^(\d+)', 'tokens');
+Raobs_powers = regexp(fit_eqn, 'Raobs\.\^(\d+)', 'tokens');
+
+% Extract constant from fit_eqn 
+constants =  regexp(fit_eqn, '[\+\-]?\d+\.\d+', 'match');
+constants = str2double(constants); 
+
+if ~isempty(B1_powers)
+    B1_degree = max(cellfun(@(x) str2double(x), [B1_powers{:}]));
+end
+if ~isempty(Raobs_powers)
+    Raobs_degree = max(cellfun(@(x) str2double(x), [Raobs_powers{:}]));
+end 
+
+% Construct vandermonde matrix for matrix division: 
+V = zeros(length(B1_ref), fitValues.numTerms); 
+idx = 1;
+for j = 0:B1_degree
+    for k = 0:Raobs_degree
+        % The terms of the model will correspond to powers of B1, and Raobs
+        V(:, idx) =  constants(idx) .* (B1_ref.^(j)) .* (Raobs.^(k));
+        idx = idx+1;
+    end
+end
+
+
+try
+    fitvals = V \ msat; 
+    M0b = fitvals(1);
+catch
+    % disp('An error occurred during matrix division:');
+    % disp('B1_ref:');
+    % disp(B1_ref);
+    % disp('msat values:');
+    % disp(msat);
+    % disp('Raobs');
+    % disp(Raobs);
+    % disp('Matrix V:');
+    % disp(V);
+    return;
+end  
+
+
+
+% fit_eqn = fitValues.fit_SS_eqn_sprintf;
+% fit_eqn = sprintf(fit_eqn, repmat(Raobs, fitValues.numTerms,1));
+% 
+% % Construct vandermonde matrix for matrix division: 
+% V = zeros(length(B1_ref), fitValues.numTerms); 
+% 
+% for i = 1:fitValues.numTerms
+%     V(:, i) = B1_ref.^(i-1); % A(i,j)=v(i)(N-j)
+% 
+% end 
+% 
+% try
+%     fitvals = V \ msat; 
+%     M0b = fitvals(1);
+% 
+% catch
+%     disp('An error occurred during matrix division:');
+%     disp('B1_ref:');
+%     disp(B1_ref);
+%     disp('msat values:');
+%     disp(msat);
+%     disp('Raobs');
+%     disp(Raobs);
+%     disp('Matrix V:');
+%     disp(V);
+%     return;
+% end
+
 % disp('size b1_ref: ')
 % disp(size(B1_ref))
 % 
 % disp('size msat '); 
 % disp(size(msat));
 
-
-% fit_eqn = fitValues.fit_SS_eqn_sprintf;
-% fit_eqn = sprintf(fit_eqn, repmat(Raobs, fitValues.numTerms,1));
-
-% Construct vandermonde matrix for matrix division: 
-V = zeros(length(B1_ref), fitValues.numTerms); 
-
-for i = 1:fitValues.numTerms
-    V(:, i) = B1_ref.^(i-1); % (i-1) to match polynomial terms
-end 
-
-try
-    fitvals = V \ msat; 
-    %M0b = fitvals(1);
-    M0b = min(max(fitvals(1), 0.0), 0.5); % Set upper and lower bounds as before
-catch
-    disp('An error occurred during matrix division:');
-    disp('B1_ref:');
-    disp(B1_ref);
-    disp('msat values:');
-    disp(msat);
-    disp('Raobs');
-    disp(Raobs);
-    disp('Matrix V:');
-    disp(V);
-    return;
-end
+% 
 
 % disp('Fit equation from sprintf: ')
 % disp(fit_eqn)
@@ -155,4 +214,57 @@ end
 %     ylim([-0.001 25e-3])  
     
     
-    
+%% Something I was trying 
+% fit_eqn = fitValues.fit_SS_eqn;
+% % fit_eqn = sprintf(fit_eqn, repmat(Raobs, fitValues.numTerms,1));
+% 
+% % Initialize degrees
+% M0b_degree = 0; 
+% B1_degree = 0;
+% Raobs_degree = 0;
+% 
+% % Extract powers from fit_eqn
+% M0b_powers = regexp(fit_eqn, 'M0b\.\^(\d+)', 'tokens');
+% B1_powers = regexp(fit_eqn, 'b1\.\^(\d+)', 'tokens');
+% Raobs_powers = regexp(fit_eqn, 'Raobs\.\^(\d+)', 'tokens');
+% 
+% if ~isempty(M0b_powers) 
+%     M0b_degree = max(cellfun(@(x) str2double(x), [M0b_powers{:}]));
+% end
+% if ~isempty(B1_powers)
+%     B1_degree = max(cellfun(@(x) str2double(x), [B1_powers{:}]));
+% end
+% if ~isempty(Raobs_powers)
+%     Raobs_degree = max(cellfun(@(x) str2double(x), [Raobs_powers{:}]));
+% end 
+% 
+% % Construct vandermonde matrix for matrix division: 
+% V = zeros(length(B1_ref), fitValues.numTerms); 
+% 
+% % numTerms = possible combinations of powers of M0b, B1 and R1
+% idx = 1;
+% for i = 0:M0b_degree
+%     for j = 0:B1_degree
+%         for k = 0:Raobs_degree
+%             % The terms of the model will correspond to powers of M0b, b1, and Raobs
+%             V(:, idx) = (msat.^(i)) .* (B1_ref.^(j)) .* (Raobs.^(k));
+%             idx = idx + 1;
+%         end
+%     end
+% end 
+% 
+% try
+%     fitvals = V \ msat; 
+%     M0b = fitvals(1);
+% catch
+%     disp('An error occurred during matrix division:');
+%     disp('B1_ref:');
+%     disp(B1_ref);
+%     disp('msat values:');
+%     disp(msat);
+%     disp('Raobs');
+%     disp(Raobs);
+%     disp('Matrix V:');
+%     disp(V);
+%     return;
+% end    

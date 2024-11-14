@@ -10,7 +10,7 @@ DummyEcho = 2;
 echoSpacing = 7.66; 
 numExcitation = 10;
 
-fitValues_dual = load('/Users/amiedemmans/Documents/ihMT_Tests/Test2/fitValues_D.mat');
+fitValues_dual = load('/Users/amiedemmans/Documents/ihMT_Tests/Test4/fitValues_D.mat');
 fitValues = fitValues_dual.fitValues;
 
 [~, dual] = minc_read('dual_reg.mnc'); 
@@ -31,9 +31,19 @@ Raobs(isinf(Raobs)) = 0;
 
 sat_dual = ihMT_calcMTsatThruLookupTablewithDummyV3( dual, B1_ref, T1_map, tempMask,S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
 
-% i = 1:size(sat_dual, 1);
-% j = 126:129; 
-% k = 1:size(sat_dual, 3);
+
+
+
+
+
+
+
+
+
+
+i = 1:size(sat_dual, 1);
+j = 1:size(sat_dual,2); 
+k = 1:size(sat_dual, 3);
 
 
 % i = 126:129;
@@ -41,11 +51,73 @@ sat_dual = ihMT_calcMTsatThruLookupTablewithDummyV3( dual, B1_ref, T1_map, tempM
 % k = 126:129;
 
 
-i = 64; j = 66; k = 46;
+%i = 64; j = 66; k = 46;
 
 B1_ref = B1_ref(i, j, k, :); 
 msat = sat_dual(i, j, k, :);
 Raobs = Raobs(i,j,k);
+
+fit_eqn = fitValues.fit_SS_eqn;
+% fit_eqn = sprintf(fit_eqn, repmat(Raobs, fitValues.numTerms,1));
+
+% Initialize degrees
+M0b_degree = 0; 
+B1_degree = 0;
+Raobs_degree = 0;
+
+% Extract powers from fit_eqn
+M0b_powers = regexp(fit_eqn, 'M0b\.\^(\d+)', 'tokens');
+B1_powers = regexp(fit_eqn, 'b1\.\^(\d+)', 'tokens');
+Raobs_powers = regexp(fit_eqn, 'Raobs\.\^(\d+)', 'tokens');
+
+constants =  regexp(fit_eqn, '[\+\-]?\d+\.\d+', 'match');
+constants = str2double(constants);
+
+if ~isempty(M0b_powers) 
+    M0b_degree = max(cellfun(@(x) str2double(x), [M0b_powers{:}]));
+end
+if ~isempty(B1_powers)
+    B1_degree = max(cellfun(@(x) str2double(x), [B1_powers{:}]));
+end
+if ~isempty(Raobs_powers)
+    Raobs_degree = max(cellfun(@(x) str2double(x), [Raobs_powers{:}]));
+end 
+
+% Construct vandermonde matrix for matrix division: 
+V = zeros(length(B1_ref), fitValues.numTerms); 
+
+% numTerms = possible combinations of powers of M0b, B1 and R1
+idx = 1;
+
+    for j = 0:B1_degree
+        for k = 0:Raobs_degree
+            % The terms of the model will correspond to powers of M0b, b1, and Raobs
+            V(:, idx) = (constants(idx)) .* (B1_ref.^(j)) .* (Raobs.^(k));
+            idx = idx + 1;
+        end
+    end
+
+
+try
+    fitvals = V \ msat; 
+    M0b = fitvals(1);
+catch
+    disp('An error occurred during matrix division:');
+    disp('B1_ref:');
+    disp(B1_ref);
+    disp('msat values:');
+    disp(msat);
+    disp('Raobs');
+    disp(Raobs);
+    disp('Matrix V:');
+    disp(V);
+    return;
+end  
+
+
+
+
+
 
 fit_eqn = fitValues.fit_SS_eqn_sprintf;
 fit_eqn = sprintf(fit_eqn, repmat(Raobs, fitValues.numTerms,1));
@@ -74,7 +146,19 @@ catch
 end
 
 
+V = bsxfun(@power, B1_ref(:), 0:(fitValues.numTerms - 1));
 
+% Fit options for least squares --> linear least squares also doesnt work 
+opts = fitoptions('Method', 'LinearLeastSquares', 'Upper', 0.5, 'Lower', 0.0);
+opts.Robust = 'Bisquare';
+
+% Define the fit model using the Vandermonde matrix
+myfittype = fittype('V * M0b', 'dependent', {'z'}, 'independent', {'b1'}, 'coefficients', {'M0b'});
+fitpos = fit(V, msat(:), myfittype, opts);
+fitvals = coeffvalues(fitpos);
+
+% Extract the M0b coefficient
+M0b = fitvals(1);
 
 
 

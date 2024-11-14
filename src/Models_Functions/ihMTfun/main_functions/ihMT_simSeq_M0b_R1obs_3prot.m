@@ -67,7 +67,7 @@ Raobs = 1./T1obs;
     GRE_sigs = zeros(size(b1,2),size(M0b,2),size(Raobs,2));
 
     tic
-    disp('Simulation will start in ~5-10 mins and takes ~5 hours to run')
+    disp('Simulation will start in ~5-10 mins and takes 2-3 hours to run')
     for i = 1:size(b1,2) % took nearly 5 hours for matrix 25x41x33.
     
         for j = 1:size(M0b,2)

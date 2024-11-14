@@ -93,8 +93,10 @@ methods
         elseif obj.checkupdatedfields == 2
          
             if obj.options.SequenceSimulations_RunSequenceSimulations
-                obj.options.SequenceSimulations_AtlasDirectory = uigetdir(pwd, 'Select directory where images are');
-                obj.options.SequenceSimulations_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved'); 
+                disp('Select directory with atlas images')
+                obj.options.SequenceSimulations_AtlasDirectory = uigetdir(pwd);
+                disp('Select directory to save fit values')
+                obj.options.SequenceSimulations_OutputDirectory = uigetdir(pwd); 
                 
                 ihMT_simSeq_M0b_R1obs_3prot(obj); 
     
@@ -102,7 +104,7 @@ methods
                 disp('Select directory where you want values saved')
                 obj.options.R1vsM0bMapping_SeqSimDirectory = uigetdir(pwd);
                 %obj.options.R1vsM0bMapping_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
-
+   
                 disp('Load dual fit values')
                 [FileName_dual,PathName_dual] = uigetfile('*.mat');
                 disp('Load single fit values')
@@ -110,7 +112,6 @@ methods
                      
                 obj.fitValues_dual = load([PathName_dual filesep FileName_dual]);
                 obj.fitValues_single = load([PathName_single filesep FileName_single]);
-
                 
             end 
 

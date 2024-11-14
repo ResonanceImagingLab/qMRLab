@@ -37,7 +37,6 @@ tempMask = mask;
 tempMask(T1_map > 2500) = 0;
 tempMask(T1_map < 650) = 0;
 tempMask(isnan(T1_map)) = 0;
-%tempMask = bwareaopen(tempMask, 10000,6);
 
 sat_dual = ihMT_calcMTsatThruLookupTablewithDummyV3( dual, b1, T1_map, tempMask,S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
 sat_pos  = ihMT_calcMTsatThruLookupTablewithDummyV3( pos, b1, T1_map, tempMask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
@@ -46,9 +45,7 @@ sat_neg  = ihMT_calcMTsatThruLookupTablewithDummyV3( neg, b1, T1_map, tempMask, 
 % figure; imshow3Dfull(sat_dual , [0 0.06], jet); figure; imshow3Dfull(sat_pos , [0 0.05], jet);  figure; imshow3Dfull(sat_neg , [0 0.05], jet); 
 
 % load in the fit results for VFA - Optimal
-% fitValues_S = load(fullfile(SeqSimDir,'fitValues_S.mat'));
 fitValues_single = fitValues_single.fitValues;
-% fitValues_D = load(fullfile(SeqSimDir,'fitValues_D.mat'));
 fitValues_dual = fitValues_dual.fitValues;
 
 R1_s = (1./T1_map) *1000; 
@@ -64,11 +61,11 @@ M0b_neg = zeros(size(sat_dual));
 % axialStop = axialStart+3;%115;
 %figure; imshow3Dfull(sat_dual(:,axialStart:axialStop,:) , [0 0.06], jet)
 
-disp('Code will take ~ 2 hours to run');
+%disp('Code will take ~ 2 hours to run');
 tic %  ~ 2hrs to run 
 for i = 1:size(sat_dual,1) % went to 149
     
-    for j = 1:size(sat_dual,2) % j = axialStart:axialStop % for axial slices
+    for j = 1:size(sat_dual,2) %j = axialStart:axialStop  % % for axial slices
         for k =  1:size(sat_dual,3) % sagital slices  65
             
             if tempMask(i,j,k) > 0 %&& dual_s(i,j,k,3) > 0
@@ -80,7 +77,7 @@ for i = 1:size(sat_dual,1) % went to 149
             end
         end
     end
-    %disp(i/size(sat_dual,1) *100)
+    disp(i/size(sat_dual,1) *100)
     toc 
 end
 
@@ -110,14 +107,15 @@ tempMask = bwareaopen(tempMask, 10000,6);
 tempMask = imerode(tempMask, strel('sphere',2));
 % figure; imshow3Dfullseg(M0b_dual, [0 0.15],tempMask)
 
-mkdir(fullfile(OutputDir,'figures3'));
+mkdir(fullfile(OutputDir,'figures2'));
+mkdir(fullfile(OutputDir, 'R1vsM0b_results2'))
 
-%OutputDir = '/Users/amiedemmans/Documents/ihMT_Tests/Test2/';
+%OutputDir = '/Users/amiedemmans/Documents/ihMT_Tests/Test4/';
 
 % Optimized Approach
-fitValues_Dual  = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_dual, tempMask, fitValues_dual, fullfile(OutputDir,'figures/R1vsM0b_dual.png'), fullfile(OutputDir,'fitValues_Dual.mat'));
-fitValues_SP = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_pos, tempMask, fitValues_single, fullfile(OutputDir,'figures/R1vsM0b_pos.png'), fullfile(OutputDir,'fitValues_SP.mat'));
-fitValues_SN = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_neg, tempMask, fitValues_single, fullfile(OutputDir,'figures/R1vsM0b_neg.png'), fullfile(OutputDir,'fitValues_SN.mat'));
+fitValues_Dual  = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_dual, tempMask, fitValues_dual, fullfile(OutputDir,'figures2/R1vsM0b_dual.png'), fullfile(OutputDir,'R1vsM0b_results2/fitValues_Dual.mat'));
+fitValues_SP = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_pos, tempMask, fitValues_single, fullfile(OutputDir,'figures/R1vsM0b_pos.png'), fullfile(OutputDir,'R1vsM0b_results/fitValues_SP.mat'));
+fitValues_SN = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_neg, tempMask, fitValues_single, fullfile(OutputDir,'figures/R1vsM0b_neg.png'), fullfile(OutputDir,'R1vsM0b_results/fitValues_SN.mat'));
 
 %% This is to be just placed in MTsat code 
 % --> will need to add if statements probably for R1_s
