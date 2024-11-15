@@ -36,7 +36,9 @@ sat_dual = ihMT_calcMTsatThruLookupTablewithDummyV3( dual, B1_ref, T1_map, tempM
 
 
 
-
+B1_ref = B1_ref(110, 110, 110);   % A single scalar value
+Raobs = Raobs(110, 115, 110); % A single scalar value
+msat = sat_dual(110, 115, 110); % A single scalar value
 
 
 
@@ -53,29 +55,25 @@ k = 1:size(sat_dual, 3);
 
 %i = 64; j = 66; k = 46;
 
-B1_ref = B1_ref(i, j, k, :); 
-msat = sat_dual(i, j, k, :);
-Raobs = Raobs(i,j,k);
+% B1_ref = B1_ref(i, j, k); 
+% msat = sat_dual(i, j, k);
+% Raobs = Raobs(i,j,k);
 
 fit_eqn = fitValues.fit_SS_eqn;
 % fit_eqn = sprintf(fit_eqn, repmat(Raobs, fitValues.numTerms,1));
 
 % Initialize degrees
-M0b_degree = 0; 
 B1_degree = 0;
 Raobs_degree = 0;
 
 % Extract powers from fit_eqn
-M0b_powers = regexp(fit_eqn, 'M0b\.\^(\d+)', 'tokens');
 B1_powers = regexp(fit_eqn, 'b1\.\^(\d+)', 'tokens');
 Raobs_powers = regexp(fit_eqn, 'Raobs\.\^(\d+)', 'tokens');
 
+% Extract constant from fit_eqn 
 constants =  regexp(fit_eqn, '[\+\-]?\d+\.\d+', 'match');
-constants = str2double(constants);
+constants = str2double(constants); 
 
-if ~isempty(M0b_powers) 
-    M0b_degree = max(cellfun(@(x) str2double(x), [M0b_powers{:}]));
-end
 if ~isempty(B1_powers)
     B1_degree = max(cellfun(@(x) str2double(x), [B1_powers{:}]));
 end
@@ -85,18 +83,25 @@ end
 
 % Construct vandermonde matrix for matrix division: 
 V = zeros(length(B1_ref), fitValues.numTerms); 
-
-% numTerms = possible combinations of powers of M0b, B1 and R1
 idx = 1;
-
-    for j = 0:B1_degree
-        for k = 0:Raobs_degree
-            % The terms of the model will correspond to powers of M0b, b1, and Raobs
-            V(:, idx) = (constants(idx)) .* (B1_ref.^(j)) .* (Raobs.^(k));
-            idx = idx + 1;
-        end
+for j = 0:B1_degree
+    for k = 0:Raobs_degree
+        % The terms of the model will correspond to powers of B1, and Raobs
+        V(:, idx) =  constants(idx) .* (B1_ref.^(j)) .* (Raobs.^(k));
+        idx = idx+1;
     end
+end
 
+% Vandermonde without constants
+V = zeros(length(B1_ref), fitValues.numTerms); 
+idx = 1;
+for j = 0:B1_degree
+    for k = 0:Raobs_degree
+        % The terms of the model will correspond to powers of B1, and Raobs
+        V(:, idx) =  (B1_ref.^(j)) .* (Raobs.^(k));
+        idx = idx+1;
+    end
+end
 
 try
     fitvals = V \ msat; 
@@ -119,90 +124,90 @@ end
 
 
 
-fit_eqn = fitValues.fit_SS_eqn_sprintf;
-fit_eqn = sprintf(fit_eqn, repmat(Raobs, fitValues.numTerms,1));
-
-% Use matrix division: 
-X = zeros(length(msat), fitValues.numTerms); 
-
-for i = 1:fitValues.numTerms
-    X(:, i) = B1_ref.^i;
-end 
-
-try
-    fitvals = X \ msat; 
-    M0b = fitvals(1);
-catch
-    disp('An error occurred during matrix division:');
-    disp('B1_ref:');
-    disp(B1_ref);
-    disp('msat values:');
-    disp(msat);
-    disp('Fit Equation (post sprintf):');
-    disp(fit_eqn);
-    disp('Matrix X:');
-    disp(X);
-    return;
-end
-
-
-V = bsxfun(@power, B1_ref(:), 0:(fitValues.numTerms - 1));
-
-% Fit options for least squares --> linear least squares also doesnt work 
-opts = fitoptions('Method', 'LinearLeastSquares', 'Upper', 0.5, 'Lower', 0.0);
-opts.Robust = 'Bisquare';
-
-% Define the fit model using the Vandermonde matrix
-myfittype = fittype('V * M0b', 'dependent', {'z'}, 'independent', {'b1'}, 'coefficients', {'M0b'});
-fitpos = fit(V, msat(:), myfittype, opts);
-fitvals = coeffvalues(fitpos);
-
-% Extract the M0b coefficient
-M0b = fitvals(1);
+% fit_eqn = fitValues.fit_SS_eqn_sprintf;
+% fit_eqn = sprintf(fit_eqn, repmat(Raobs, fitValues.numTerms,1));
+% 
+% % Use matrix division: 
+% X = zeros(length(msat), fitValues.numTerms); 
+% 
+% for i = 1:fitValues.numTerms
+%     X(:, i) = B1_ref.^i;
+% end 
+% 
+% try
+%     fitvals = X \ msat; 
+%     M0b = fitvals(1);
+% catch
+%     disp('An error occurred during matrix division:');
+%     disp('B1_ref:');
+%     disp(B1_ref);
+%     disp('msat values:');
+%     disp(msat);
+%     disp('Fit Equation (post sprintf):');
+%     disp(fit_eqn);
+%     disp('Matrix X:');
+%     disp(X);
+%     return;
+% end
+% 
+% 
+% V = bsxfun(@power, B1_ref(:), 0:(fitValues.numTerms - 1));
+% 
+% % Fit options for least squares --> linear least squares also doesnt work 
+% opts = fitoptions('Method', 'LinearLeastSquares', 'Upper', 0.5, 'Lower', 0.0);
+% opts.Robust = 'Bisquare';
+% 
+% % Define the fit model using the Vandermonde matrix
+% myfittype = fittype('V * M0b', 'dependent', {'z'}, 'independent', {'b1'}, 'coefficients', {'M0b'});
+% fitpos = fit(V, msat(:), myfittype, opts);
+% fitvals = coeffvalues(fitpos);
+% 
+% % Extract the M0b coefficient
+% M0b = fitvals(1);
 
 
 
 
 
 % Previous version 
-opts = fitoptions( 'Method', 'NonlinearLeastSquares','Upper',0.5,'Lower',0.0,'StartPoint',0.1);
-opts.Robust = 'Bisquare';
-
-myfittype = fittype( fit_eqn ,'dependent', {'z'}, 'independent',{'b1'},'coefficients', {'M0b'});
-
-disp('B1_ref:');
-disp(B1_ref);
-disp('Size B1_ref: ');
-disp(size(B1_ref));
-disp('msat values:');
-disp(msat);
-disp('size msat: ');
-disp(size(msat));
-disp('Fit Equation (post sprintf):');
-disp(fit_eqn);
-disp('Fit Type:');
-disp(myfittype);
-disp('Fit Options:');
-disp(opts);
-
-try
-fitpos = fit(B1_ref, msat, myfittype,opts);
-catch ME
-    % Display the error message
-    disp('An error occurred during fitting:');
-    disp(ME.message);
-    
-    % Optional: Display additional details about where the error occurred
-    disp('Error identifier:');
-    disp(ME.identifier);
-    
-    disp('Error stack trace:');
-    for k = 1:length(ME.stack)
-        disp(['In file: ', ME.stack(k).file]);
-        disp(['Function: ', ME.stack(k).name]);
-        disp(['Line: ', num2str(ME.stack(k).line)]);
-    end
-end
+% opts = fitoptions( 'Method', 'NonlinearLeastSquares','Upper',0.5,'Lower',0.0,'StartPoint',0.1);
+% opts.Robust = 'Bisquare';
+% 
+% myfittype = fittype( fit_eqn ,'dependent', {'z'}, 'independent',{'b1'},'coefficients', {'M0b'});
+% 
+% disp('B1_ref:');
+% disp(B1_ref);
+% disp('Size B1_ref: ');
+% disp(size(B1_ref));
+% disp('msat values:');
+% disp(msat);
+% disp('size msat: ');
+% disp(size(msat));
+% disp('Fit Equation (post sprintf):');
+% disp(fit_eqn);
+% disp('Fit Type:');
+% disp(myfittype);
+% disp('Fit Options:');
+% disp(opts);
+% 
+% try
+% fitpos = fit(B1_ref, msat, myfittype,opts);
+% catch ME
+%     % Display the error message
+%     disp('An error occurred during fitting:');
+%     disp(ME.message);
+% 
+%     % Optional: Display additional details about where the error occurred
+%     disp('Error identifier:');
+%     disp(ME.identifier);
+% 
+%     disp('Error stack trace:');
+%     for k = 1:length(ME.stack)
+%         disp(['In file: ', ME.stack(k).file]);
+%         disp(['Function: ', ME.stack(k).name]);
+%         disp(['Line: ', num2str(ME.stack(k).line)]);
+%     end
+% end
 
 
 
