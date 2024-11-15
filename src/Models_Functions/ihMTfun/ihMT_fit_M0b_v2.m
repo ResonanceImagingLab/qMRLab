@@ -60,41 +60,40 @@ Raobs_powers = regexp(fit_eqn, 'Raobs\.\^(\d+)', 'tokens');
 constants =  regexp(fit_eqn, '[\+\-]?\d+\.\d+', 'match');
 constants = str2double(constants); 
 
+
 if ~isempty(B1_powers)
-    B1_degree = max(cellfun(@(x) str2double(x), [B1_powers{:}]));
+    B1_degree = (cellfun(@(x) str2double(x), [B1_powers{:}]));
 end
 if ~isempty(Raobs_powers)
-    Raobs_degree = max(cellfun(@(x) str2double(x), [Raobs_powers{:}]));
+    Raobs_degree = (cellfun(@(x) str2double(x), [Raobs_powers{:}]));
 end 
 
-% Construct vandermonde matrix for matrix division: 
-V = zeros(length(B1_ref), fitValues.numTerms); 
-idx = 1;
-for j = 0:B1_degree
-    for k = 0:Raobs_degree
+V = zeros(1, 3); 
+for j = 1:90
+    
         % The terms of the model will correspond to powers of B1, and Raobs
-        V(:, idx) =  constants(idx) .* (B1_ref.^(j)) .* (Raobs.^(k));
-        idx = idx+1;
-    end
+        Value =  constants(j) * (B1_ref.^(B1_degree(j))) .* (Raobs.^(Raobs_degree(j)));
+        if j<31
+            V(3) = V(3)+Value;
+        elseif j>=31 && j<61
+            V(2) = V(2)+Value;
+        else 
+            V(1) = V(1)+Value;
+        end 
+
 end
+V(3) = V(3)-msat;
+fitV = roots(V);
+% Handle edge cases
+% Step through to see where complex value is coming from 
+fitV(~isreal(fitV))= NaN;
 
-
-try
-    fitvals = V \ msat; 
-    M0b = fitvals(1);
-catch
-    % disp('An error occurred during matrix division:');
-    % disp('B1_ref:');
-    % disp(B1_ref);
-    % disp('msat values:');
-    % disp(msat);
-    % disp('Raobs');
-    % disp(Raobs);
-    % disp('Matrix V:');
-    % disp(V);
-    return;
-end  
-
+fitV(fitV<0) = NaN;
+[~,temp] = min(abs(fitV-0.1));
+M0b = fitV(temp);
+if isnan(M0b)
+    M0b = 0; 
+end 
 
 
 % fit_eqn = fitValues.fit_SS_eqn_sprintf;

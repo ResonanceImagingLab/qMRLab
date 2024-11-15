@@ -10,7 +10,8 @@ DummyEcho = 2;
 echoSpacing = 7.66; 
 numExcitation = 10;
 
-fitValues_dual = load('/Users/amiedemmans/Documents/ihMT_Tests/Test4/fitValues_D.mat');
+%fitValues_dual = load('/Users/amiedemmans/Documents/ihMT_Tests/Test4/fitValues_D.mat');
+fitValues_dual = load('/Users/reson/Documents/ihMT/ihMT_Tests/Test4/fitValues_D.mat');
 fitValues = fitValues_dual.fitValues;
 
 [~, dual] = minc_read('dual_reg.mnc'); 
@@ -30,22 +31,42 @@ Raobs(isinf(Raobs)) = 0;
 
 
 sat_dual = ihMT_calcMTsatThruLookupTablewithDummyV3( dual, B1_ref, T1_map, tempMask,S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
+M0b_dual = zeros(size(sat_dual));
+tic %  ~ 2hrs to run 
+for i = 80 % went to 149
+    
+    for j = 1:size(sat_dual,2) %j = axialStart:axialStop  % % for axial slices
+        for k =  1:size(sat_dual,3) % sagital slices  65
+            
+            if tempMask(i,j,k) > 0 %&& dual_s(i,j,k,3) > 0
+                                
+                 [M0b_dual(i,j,k), ~]  = ihMT_fit_M0b_v2( B1_ref(i,j,k), Raobs(i,j,k), sat_dual(i,j,k), fitValues);
+                % [M0b_pos(i,j,k),  ~]  = ihMT_fit_M0b_v2( b1(i,j,k), R1_s(i,j,k), sat_pos(i,j,k), fitValues_single);               
+                % [M0b_neg(i,j,k),  ~]  = ihMT_fit_M0b_v2( b1(i,j,k), R1_s(i,j,k), sat_neg(i,j,k), fitValues_single);
+                 
+            end
+        end
+    end
+    disp(i/size(sat_dual,1) *100)
+    toc 
+end
+figure; imshow3Dfull(M0b_dual, [0,0.25]);
+x = 127;
+y = 86; 
+z = 96;
+
+
+
+B1_ref = B1_ref(z, y, x);   % A single scalar value
+Raobs = Raobs(z, y, x); % A single scalar value
+msat = sat_dual(z, y, x); % A single scalar value
 
 
 
 
-
-
-B1_ref = B1_ref(110, 110, 110);   % A single scalar value
-Raobs = Raobs(110, 115, 110); % A single scalar value
-msat = sat_dual(110, 115, 110); % A single scalar value
-
-
-
-
-i = 1:size(sat_dual, 1);
-j = 1:size(sat_dual,2); 
-k = 1:size(sat_dual, 3);
+% i = 1:size(sat_dual, 1);
+% j = 1:size(sat_dual,2); 
+% k = 1:size(sat_dual, 3);
 
 
 % i = 126:129;
@@ -75,13 +96,41 @@ constants =  regexp(fit_eqn, '[\+\-]?\d+\.\d+', 'match');
 constants = str2double(constants); 
 
 if ~isempty(B1_powers)
-    B1_degree = max(cellfun(@(x) str2double(x), [B1_powers{:}]));
+    B1_degree = (cellfun(@(x) str2double(x), [B1_powers{:}]));
 end
 if ~isempty(Raobs_powers)
-    Raobs_degree = max(cellfun(@(x) str2double(x), [Raobs_powers{:}]));
+    Raobs_degree = (cellfun(@(x) str2double(x), [Raobs_powers{:}]));
 end 
 
-% Construct vandermonde matrix for matrix division: 
+V = zeros(1, 3); 
+for j = 1:90
+    
+        % The terms of the model will correspond to powers of B1, and Raobs
+        Value =  constants(j) * (B1_ref.^(B1_degree(j))) .* (Raobs.^(Raobs_degree(j)));
+        if j<31
+            V(3) = V(3)+Value;
+        elseif j>=31 && j<61
+            V(2) = V(2)+Value;
+        else 
+            V(1) = V(1)+Value;
+        end 
+
+end
+V(3) = V(3)-msat;
+fitV = roots(V);
+
+
+fitV(fitV<0) = NaN;
+[~,temp] = min(abs(fitV-0.1));
+M0b = fitV(temp);
+if isnan(M0b)
+    M0b = 0; 
+end 
+
+
+
+
+% Construct vandermonde matrix for matrix division with constants: 
 V = zeros(length(B1_ref), fitValues.numTerms); 
 idx = 1;
 for j = 0:B1_degree
