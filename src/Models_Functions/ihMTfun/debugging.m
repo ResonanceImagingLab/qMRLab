@@ -12,7 +12,7 @@ numExcitation = 10;
 
 %fitValues_dual = load('/Users/amiedemmans/Documents/ihMT_Tests/Test4/fitValues_D.mat');
 fitValues_dual = load('/Users/reson/Documents/ihMT/ihMT_Tests/Test4/fitValues_D.mat');
-fitValues = fitValues_dual.fitValues;
+fitValues_dual = fitValues_dual.fitValues;
 fitValues_single = load('/Users/reson/Documents/ihMT/ihMT_Tests/Test4/fitValues_S.mat');
 fitValues_single = fitValues_single.fitValues;
 
