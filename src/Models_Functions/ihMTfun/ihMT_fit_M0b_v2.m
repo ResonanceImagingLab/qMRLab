@@ -86,7 +86,7 @@ V(3) = V(3)-msat;
 fitV = roots(V);
 % Handle edge cases
 % Step through to see where complex value is coming from 
-fitV(~isreal(fitV))= NaN;
+fitV(imag(fitV)~=0)= NaN;
 
 fitV(fitV<0) = NaN;
 [~,temp] = min(abs(fitV-0.1));

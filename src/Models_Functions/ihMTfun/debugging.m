@@ -13,13 +13,16 @@ numExcitation = 10;
 %fitValues_dual = load('/Users/amiedemmans/Documents/ihMT_Tests/Test4/fitValues_D.mat');
 fitValues_dual = load('/Users/reson/Documents/ihMT/ihMT_Tests/Test4/fitValues_D.mat');
 fitValues = fitValues_dual.fitValues;
+fitValues_single = load('/Users/reson/Documents/ihMT/ihMT_Tests/Test4/fitValues_S.mat');
+fitValues_single = fitValues_single.fitValues;
 
 [~, dual] = minc_read('dual_reg.mnc'); 
 [~, T1_map] = minc_read('T1map.mnc');
 [~, S0_map] = minc_read('M0map.mnc'); 
 [~, mask] = minc_read('mask.mnc'); 
-[~, B1_ref] = minc_read('b1_file.mnc');
-
+[~, b1] = minc_read('b1_file.mnc');
+[~, pos] = minc_read('pos_reg.mnc');
+[~, neg] = minc_read('neg_reg.mnc');
 
 tempMask = mask;
 tempMask(T1_map > 2500) = 0;
