@@ -150,15 +150,9 @@ classdef BrowserSet
             if ~isempty(obj.FullFile)
                 [~,~,ext] = fileparts(obj.FullFile);
 
-                % Need to unzip the file to run properly for minc vs NIFTI
+                 % Need to unzip the file to run properly for minc vs NIFTI
                 if strcmp(ext, '.gz')
-                    unzipFile = [obj.FullFile(1:end-3)]; % Remove the .gz extension
-                    gunzip(obj.FullFile, fileparts(obj.FullFile));
-                    obj.FullFile = unzipFile;
-                    [~,~,ext] = fileparts(obj.FullFile); % Update file extension after unzip
-                    % Delete the unzipped file
-                    delete(unzipFile);
-                    obj.FullFile = get(obj.FileBox, 'String');
+                    [~,~,ext] = fileparts(obj.FullFile(1:end-3)); % Update file extension after unzip
                 end
 
                 if strcmp(ext,'.mat')
@@ -185,7 +179,7 @@ classdef BrowserSet
                     tmp = File;
                 else
                     if exist(obj.FullFile,'file')==2
-                        warndlg(['file extension ' ext ' is not supported. Choose .mat, .nii, .nii.gz, .img, .tiff or .tif files'])
+                        warndlg(['file extension ' ext ' is not supported. Choose .mat, .nii, .nii.gz, .mnc, .mnc.gz, .img, .tiff or .tif files'])
                     end
                 end
             end
