@@ -16,7 +16,7 @@ T1_map = data.T1map;
 b1 = data.b1; 
 
 % Load the map 
-if isfield(data, 'mask')
+if ~isempty(data.mask)
     mask = data.mask; 
 else 
     mask = zeros(size(dual));
@@ -61,7 +61,7 @@ M0b_neg = zeros(size(sat_dual));
 % axialStop = axialStart+3;%115;
 %figure; imshow3Dfull(sat_dual(:,axialStart:axialStop,:) , [0 0.06], jet)
 
-%disp('Code will take ~ 2 hours to run');
+disp('Code will take ~ 2 hours to run');
 tic %  ~ 2hrs to run 
 for i = 1:size(sat_dual,1) % went to 149
     
@@ -107,16 +107,16 @@ tempMask = bwareaopen(tempMask, 10000,6);
 tempMask = imerode(tempMask, strel('sphere',2));
 % figure; imshow3Dfullseg(M0b_dual, [0 0.15],tempMask)
 
-mkdir(fullfile(OutputDir,'figures3'));
-mkdir(fullfile(OutputDir, 'R1vsM0b_results3'))
+mkdir(fullfile(OutputDir,'figures'));
+mkdir(fullfile(OutputDir, 'R1vsM0b_results'))
 
 %OutputDir = '/Users/amiedemmans/Documents/ihMT_Tests/Test4/';/Users/  
-OutputDir = '/Users/reson/Documents/ihMT/ihMT_Tests/Test4/';
+%OutputDir = '/Users/reson/Documents/ihMT/ihMT_Tests/Test4/';
 
 % Optimized Approach
-fitValues_Dual  = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_dual, tempMask, fitValues_dual, fullfile(OutputDir,'figures3/R1vsM0b_dual.png'), fullfile(OutputDir,'R1vsM0b_results3/fitValues_Dual.mat'));
-fitValues_SP = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_pos, tempMask, fitValues_single, fullfile(OutputDir,'figures3/R1vsM0b_pos.png'), fullfile(OutputDir,'R1vsM0b_results3/fitValues_SP.mat'));
-fitValues_SN = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_neg, tempMask, fitValues_single, fullfile(OutputDir,'figures3/R1vsM0b_neg.png'), fullfile(OutputDir,'R1vsM0b_results3/fitValues_SN.mat'));
+fitValues_Dual  = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_dual, tempMask, fitValues_dual, fullfile(OutputDir,'figures/R1vsM0b_dual.png'), fullfile(OutputDir,'R1vsM0b_results/fitValues_Dual.mat'));
+fitValues_SP = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_pos, tempMask, fitValues_single, fullfile(OutputDir,'figures/R1vsM0b_pos.png'), fullfile(OutputDir,'R1vsM0b_results/fitValues_SP.mat'));
+fitValues_SN = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_neg, tempMask, fitValues_single, fullfile(OutputDir,'figures/R1vsM0b_neg.png'), fullfile(OutputDir,'R1vsM0b_results/fitValues_SN.mat'));
 
 %% This is to be just placed in MTsat code 
 % --> will need to add if statements probably for R1_s
