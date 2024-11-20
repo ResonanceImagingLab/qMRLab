@@ -1,5 +1,56 @@
 classdef ihMT < AbstractModel
 
+    % ihMT:   inhomogenuous Magnetization Transfer
+    %
+    % Assumptions: 
+    %         B1+ corrected MT saturation maps taking into account for the
+    %         B1+ inhomogeneities effects on the excitation and saturation
+    %         pulses.
+    %
+    % Inputs:
+    %   dual               MT-weigthed data. Dual frequency preparation
+    %                      pulse.
+    %   pos                MT-weigthed data. Positive single sided frequency 
+    %                      preparation pulse.
+    %   neg                MT-weighted dats. Negative single sided frequency
+    %                      preparation pulses 
+    %   T1map              T1-weighted data.
+    %   M0map              PD-weighted data.
+    %   B1                 Normalized transmit excitation field map (B1+). B1+ is defined 
+    %                      as a  normalized multiplicative factor such that:
+    %                      FA_actual = B1+ * FA_nominal.
+    %   (mask)             Binary mask (Accelerate fitting - Optional).
+    %            
+    % Outputs:
+    %
+    % Protocol:	
+    %
+    % Options:
+    %   See:
+    %       Model.options (general options)
+    %       Model.options.Sequencesimulation (to change parameters of the sequence simulation)
+    %   
+    % Example of command line usage
+    %
+    %   For more examples: <a href="matlab: qMRusage(ihMT);">qMRusage(ihMT)</a>
+    %
+    % Author:
+    %   Christopher D. Rowley, 2023 (@christopherrowley, @TardifLab - GitHub)
+    % Adapted to qMRLab by:
+    %   Amie Demmans, 2024
+    %
+    % References:
+    %   Please cite the following if you use this module:
+    %     Rowley C.D., Campbell J.S.W., Wu Z., Leppert I.R., Rudko D.A.,
+    %     Pike G.B., Tardif C.L. (2021), A model-based framework for correcting 
+    %     B1+ inhomogeneity effects in magnetization transfer saturation and
+    %     inhomogeneous magnetization transfer saturation maps. Magn Reson
+    %     Med 86(4):2192-2207. doi:10.1002/mrm.28831
+    %   In addition to citing the package:
+    %     Karakuzu A., Boudreau M., Duval T.,Boshkovski T., Leppert I.R., Cabana J.F., 
+    %     Gagnon I., Beliveau P., Pike G.B., Cohen-Adad J., Stikov N. (2020), qMRLab: 
+    %     Quantitative MRI analysis, under one umbrella doi: 10.21105/joss.02343
+
     properties (Hidden=true)
         %onlineData_url = 'https://osf.io/3s9xe/download?version=2';
         % Need to figure out what exact data needs to go here/ which images
@@ -105,13 +156,15 @@ methods
                 obj.options.R1vsM0bMapping_SeqSimDirectory = uigetdir(pwd);
                 %obj.options.R1vsM0bMapping_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
    
-                disp('Load dual fit values')
-                [FileName_dual,PathName_dual] = uigetfile('*.mat');
-                disp('Load single fit values')
-                [FileName_single,PathName_single] = uigetfile('*.mat');
-                     
-                obj.fitValues_dual = load([PathName_dual filesep FileName_dual]);
-                obj.fitValues_single = load([PathName_single filesep FileName_single]);
+                if isempty(obj.fitValues_dual) && isempty(obj.fitValues_single)
+                    disp('Load dual fit values')
+                    [FileName_dual,PathName_dual] = uigetfile('*.mat');
+                    disp('Load single fit values')
+                    [FileName_single,PathName_single] = uigetfile('*.mat');
+                         
+                    obj.fitValues_dual = load([PathName_dual filesep FileName_dual]);
+                    obj.fitValues_single = load([PathName_single filesep FileName_single]); 
+                end
                 
             end 
 
@@ -120,13 +173,13 @@ methods
     end 
 
     function FitResult = fit(obj,data)
-        %if isempty(obj.fitValues_single) && isempty(obj.fitValues_dual)
-         fitValues_dual = obj.fitValues_dual;
-         fitValues_single = obj.fitValues_single; 
-        %end 
+
+         fitValues_Dual = obj.fitValues_dual;
+         fitValues_Single = obj.fitValues_single; 
+
         if obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation % If box is checked, run correlation 
            
-            [fitValues_Dual, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data, fitValues_dual, fitValues_single);
+            [fitValues_Dual, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data, fitValues_Dual, fitValues_Single);
         else
             fitValues_Dual = fileparts(which('fitValues_D.mat'));
             fitValues_SP = fileparts(which('fitValues_SP.mat'));
