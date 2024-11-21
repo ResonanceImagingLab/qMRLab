@@ -131,16 +131,16 @@ methods
 
             obj.previousOptions = obj.options;
 
-            Params.B0 = str2double(obj.options.SequenceSimulations_B0);
-            Params.TissueType = obj.options.SequenceSimulations_TissueType;
-            Params = ihMT_defaultCortexTissueParams(Params);
-            obj.Prot.TissueParams.Mat = [Params.M0a, Params.Raobs, Params.R, Params.T2a, ...
-                                        Params.T1D, Params.R1b, Params.T2b, ...
-                                        Params.M0b, Params.D]';
-            PulseOpt = ihMT_pulseSeqParams(obj.options);
-            obj.Prot.PulseSequenceParams.Mat = [PulseOpt.MTC, PulseOpt.delta, PulseOpt.flipAngle, PulseOpt.TR, PulseOpt.numSatPulse,...
-                                            PulseOpt.TurboFactor, PulseOpt.pulseDur, PulseOpt.satFlipAngle, PulseOpt.pulseGapDur, ...
-                                            PulseOpt.DummyEcho, PulseOpt.boosted, PulseOpt.satTrainPerBoost, PulseOpt.TR_MT, PulseOpt.echoSpacing]';
+            % Params.B0 = str2double(obj.options.SequenceSimulations_B0);
+            % Params.TissueType = obj.options.SequenceSimulations_TissueType;
+            % Params = ihMT_defaultCortexTissueParams(Params);
+            % obj.Prot.TissueParams.Mat = [Params.M0a, Params.Raobs, Params.R, Params.T2a, ...
+            %                             Params.T1D, Params.R1b, Params.T2b, ...
+            %                             Params.M0b, Params.D]';
+            % PulseOpt = ihMT_pulseSeqParams(obj.options);
+            % obj.Prot.PulseSequenceParams.Mat = [PulseOpt.MTC, PulseOpt.delta, PulseOpt.flipAngle, PulseOpt.TR, PulseOpt.numSatPulse,...
+            %                                 PulseOpt.TurboFactor, PulseOpt.pulseDur, PulseOpt.satFlipAngle, PulseOpt.pulseGapDur, ...
+            %                                 PulseOpt.DummyEcho, PulseOpt.boosted, PulseOpt.satTrainPerBoost, PulseOpt.TR_MT, PulseOpt.echoSpacing]';
         elseif obj.checkupdatedfields == 2
          
             if obj.options.SequenceSimulations_RunSequenceSimulations
@@ -176,10 +176,15 @@ methods
 
          fitValues_Dual = obj.fitValues_dual;
          fitValues_Single = obj.fitValues_single; 
+         flipA = obj.Prot.PulseSequenceParams.Mat(3);
+         TR = obj.Prot.PulseSequenceParams.Mat(4); % ms
+         DummyEcho = obj.Prot.PulseSequenceParams.Mat(10);
+         echoSpacing = obj.Prot.PulseSequenceParams.Mat(14); % ms 
+         numExcitation = obj.Prot.PulseSequenceParams.Mat(6) + DummyEcho;
 
         if obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation % If box is checked, run correlation 
            
-            [fitValues_Dual, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data, fitValues_Dual, fitValues_Single);
+            [fitValues_Dual, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data, fitValues_Dual, fitValues_Single, flipA, TR, DummyEcho, echoSpacing, numExcitation);
         else
             fitValues_Dual = fileparts(which('fitValues_D.mat'));
             fitValues_SP = fileparts(which('fitValues_SP.mat'));
