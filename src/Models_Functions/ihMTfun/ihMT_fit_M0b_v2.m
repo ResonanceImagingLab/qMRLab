@@ -41,10 +41,6 @@ if (min(msat) == 0) || (max(isnan(msat)) > 0) % fit will be poor
     return;
 end
 
-% May need to use non sprintf --> look into both
-% Evaluating linear text equations with matlab 
-% Look into symbolic toolbox documentation 
-
 fit_eqn = fitValues.fit_SS_eqn;
 % fit_eqn = sprintf(fit_eqn, repmat(Raobs, fitValues.numTerms,1));
 
@@ -84,13 +80,13 @@ for j = 1:90
 end
 V(3) = V(3)-msat;
 fitV = roots(V);
-% Handle edge cases
-% Step through to see where complex value is coming from 
-fitV(imag(fitV)~=0)= NaN;
 
+fitV(imag(fitV)~=0)= NaN;
 fitV(fitV<0) = NaN;
+
 [~,temp] = min(abs(fitV-0.1));
 M0b = fitV(temp);
+
 if isnan(M0b)
     M0b = 0; 
 end 
