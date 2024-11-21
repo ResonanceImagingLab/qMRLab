@@ -17,7 +17,7 @@ end
 
 if(~isfield(Params,'TR') || isempty(Params.TR) || ~isfinite(Params.TR))
     % Default total repitition time = MT pulse train and readout 
-    Params.TR = 1.14;       
+    Params.TR = 1140;  % ms     
 end
 
 if(~isfield(Params,'numSatPulse') || isempty(Params.numSatPulse) || ~isfinite(Params.numSatPulse))
@@ -31,22 +31,22 @@ if(~isfield(Params,'TurboFactor') || isempty(Params.TurboFactor) || ~isfinite(Pa
 end
 
 if(~isfield(Params,'pulseDur') || isempty(Params.pulseDur) || ~isfinite(Params.pulseDur))
-    % Duration of one mT pulse in seconds 
-    Params.pulseDur = 0.768/1000;       
+    % Duration of one mT pulse in ms 
+    Params.pulseDur = 0.768;       
 end
 
 if(~isfield(Params,'satFlipAngle') || isempty(Params.satFlipAngle) || ~isfinite(Params.satFlipAngle))
     % Default saturation flip angle 
-    Params.satFlipAngle = 11.6;       
+    Params.satFlipAngle = 135;   
 end
 
 if(~isfield(Params,'pulseGapDur') || isempty(Params.pulseGapDur) || ~isfinite(Params.pulseGapDur))
     % Default ms gap between MT pulses in train 
-    Params.pulseGapDur = 0.3/1000;       
+    Params.pulseGapDur = 0.3;   % ms 
 end
 
 if(~isfield(Params,'DummyEcho') || isempty(Params.DummyEcho) || ~isfinite(Params.DummyEcho))
-    % Default # of dummy echoes??
+    % Default # of dummy echoes
     Params.DummyEcho = 2;       
 end
 
@@ -62,12 +62,12 @@ end
 
 if(~isfield(Params,'TR_MT') || isempty(Params.TR_MT) || ~isfinite(Params.TR_MT))
     % Default ...
-    Params.TR_MT = 0.06;       
+    Params.TR_MT = 60; %ms       
 end
 
 if(~isfield(Params,'echoSpacing') || isempty(Params.echoSpacing) || ~isfinite(Params.echoSpacing))
     % Default ...
-    Params.echoSpacing = 7.66/1000;       
+    Params.echoSpacing = 7.66; % ms      
 end
 
 
