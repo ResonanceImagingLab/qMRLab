@@ -1,4 +1,4 @@
-function [fitValues_Dual, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data, fitValues_dual, fitValues_single)
+function [fitValues_Dual, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data, fitValues_dual, fitValues_single, flipA, TR, DummyEcho, echoSpacing, numExcitation)
 
 % Sequence Simulations Results Directory 
 %SeqSimDir = obj.options.R1vsM0bMapping_DataDirectory;
@@ -25,11 +25,18 @@ end
 
 
 %% Protocol
-flipA = obj.Prot.PulseSequenceParams.Mat(3);
-TR = obj.Prot.PulseSequenceParams.Mat(4); % ms
-DummyEcho = obj.Prot.PulseSequenceParams.Mat(10);
-echoSpacing = obj.Prot.PulseSequenceParams.Mat(14); % ms 
-numExcitation = obj.Prot.PulseSequenceParams.Mat(6) + DummyEcho;
+% flipA = obj.Prot.PulseSequenceParams.Mat(3);
+% TR = obj.Prot.PulseSequenceParams.Mat(4); % ms
+% DummyEcho = obj.Prot.PulseSequenceParams.Mat(10);
+% echoSpacing = obj.Prot.PulseSequenceParams.Mat(14); % ms 
+% numExcitation = obj.Prot.PulseSequenceParams.Mat(6) + DummyEcho;
+
+%% Debugging 
+disp(flipA); 
+disp(TR); 
+disp(DummyEcho); 
+disp(echoSpacing); 
+disp(numExcitation); 
 
 %% Compute ihMTsat 
 
@@ -42,7 +49,8 @@ sat_dual = ihMT_calcMTsatThruLookupTablewithDummyV3( dual, b1, T1_map, tempMask,
 sat_pos  = ihMT_calcMTsatThruLookupTablewithDummyV3( pos, b1, T1_map, tempMask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
 sat_neg  = ihMT_calcMTsatThruLookupTablewithDummyV3( neg, b1, T1_map, tempMask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
 
-% figure; imshow3Dfull(sat_dual , [0 0.06], jet); figure; imshow3Dfull(sat_pos , [0 0.05], jet);  figure; imshow3Dfull(sat_neg , [0 0.05], jet); 
+%figure; imshow3Dfull(sat_dual , [0 0.06], jet); 
+% figure; imshow3Dfull(sat_pos , [0 0.05], jet);  figure; imshow3Dfull(sat_neg , [0 0.05], jet); 
 
 % load in the fit results for VFA - Optimal
 fitValues_single = fitValues_single.fitValues;
@@ -50,6 +58,7 @@ fitValues_dual = fitValues_dual.fitValues;
 
 R1_s = (1./T1_map) *1000; 
 R1_s(isinf(R1_s)) = 0;  
+%figure; imshow3Dfull(R1_s)
 
 % initialize matrices
 M0b_dual = zeros(size(sat_dual));
@@ -83,7 +92,7 @@ end
 
 %figure('WindowStyle', 'docked') % docked in matlab i believe 
 
-% figure('WindowStyle', 'docked'); imshow3Dfull(M0b_pos, [0 0.15],jet)
+%figure; imshow3Dfull(M0b_pos, [0 0.15],jet)
 % figure('WindowStyle', 'docked'); imshow3Dfull(M0b_neg, [0 0.15], jet)  
 % figure('WindowStyle', 'docked'); imshow3Dfull(M0b_dual, [0 0.15],jet)
 
