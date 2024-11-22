@@ -29,21 +29,20 @@ end
 
 %% Mask -> bet result touched up in itk, then threshold CSF and some dura
 
-% mask = mask1;
-% mask(spT1_map > 2500) = 0;
-% mask(spT1_map < 500) = 0;
-% mask(isnan(spT1_map)) = 0;
+mask(spT1_map > 2500) = 0;
+mask(spT1_map < 500) = 0;
+mask(isnan(spT1_map)) = 0;
 % mask = bwareaopen(mask, 10000,6);
 % figure; imshow3Dfullseg(spT1_map, [300 2500],mask1)
 
 %% Compute MTsat ihMTsat
 
 %% Protocol 1
-flipA = obj.Prot.PulseSequenceParams.Mat(3);
-TR = obj.Prot.PulseSequenceParams.Mat(4);
-DummyEcho = obj.Prot.PulseSequenceParams.Mat(10);
-echoSpacing = obj.Prot.PulseSequenceParams.Mat(14);
-numExcitation = obj.Prot.PulseSequenceParams.Mat(6) + DummyEcho;
+% flipA = obj.Prot.PulseSequenceParams.Mat(3);
+% TR = obj.Prot.PulseSequenceParams.Mat(4);
+% DummyEcho = obj.Prot.PulseSequenceParams.Mat(10);
+% echoSpacing = obj.Prot.PulseSequenceParams.Mat(14);
+% numExcitation = obj.Prot.PulseSequenceParams.Mat(6) + DummyEcho;
 
 sat_dual = ihMT_calcMTsatThruLookupTablewithDummyV3( dual, b1, T1_map, mask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
 sat_pos  = ihMT_calcMTsatThruLookupTablewithDummyV3( pos, b1, T1_map, mask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
@@ -63,11 +62,11 @@ sat_neg  = ihMT_calcMTsatThruLookupTablewithDummyV3( neg, b1, T1_map, mask, S0_m
 %% Now use these results to B1 correct the data:
 %OutputDir = DATADIR;
 
-b1_1 = 11.4;
 
-corr_d = MTsat_B1corr_factor_map(b1, R1_s, b1_1, fitValues_D);
-corr_p = MTsat_B1corr_factor_map(b1, R1_s, b1_1, fitValues_SP);
-corr_n = MTsat_B1corr_factor_map(b1, R1_s, b1_1, fitValues_SN);
+
+corr_d = MTsat_B1corr_factor_map(b1, R1_s, 1, fitValues_D);
+corr_p = MTsat_B1corr_factor_map(b1, R1_s, 1, fitValues_SP);
+corr_n = MTsat_B1corr_factor_map(b1, R1_s, 1, fitValues_SN);
 
 mask = tempMask;
 % Part 2, apply correction map
