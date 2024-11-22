@@ -18,9 +18,11 @@ b1 = data.b1;
 % Load the map 
 if ~isempty(data.mask)
     mask = data.mask; 
+    maskFlag = 0;
 else 
     mask = zeros(size(dual));
     mask(b1>0) = 1; 
+    maskFlag = 1;
 end 
 
 
@@ -112,8 +114,16 @@ end
 % tempMask(T1_map > 2500) = 0;
 % tempMask(T1_map < 650) = 0;
 % tempMask(isnan(T1_map)) = 0;
+
+% If not using own mask, increase imerode to sphere 4 
 tempMask = bwareaopen(tempMask, 10000,6);
-tempMask = imerode(tempMask, strel('sphere',2));
+if maskFlag 
+    tempMask = imerode(tempMask, strel('sphere',4));
+else 
+    tempMask = imerode(tempMask, strel('sphere',2));
+end
+
+
 % figure; imshow3Dfullseg(M0b_dual, [0 0.15],tempMask)
 
 mkdir(fullfile(OutputDir,'figures'));
