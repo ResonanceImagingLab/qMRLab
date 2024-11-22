@@ -131,12 +131,12 @@ methods
 
             obj.previousOptions = obj.options;
 
-            % Params.B0 = str2double(obj.options.SequenceSimulations_B0);
-            % Params.TissueType = obj.options.SequenceSimulations_TissueType;
-            % Params = ihMT_defaultCortexTissueParams(Params);
-            % obj.Prot.TissueParams.Mat = [Params.M0a, Params.Raobs, Params.R, Params.T2a, ...
-            %                             Params.T1D, Params.R1b, Params.T2b, ...
-            %                             Params.M0b, Params.D]';
+            Params.B0 = str2double(obj.options.SequenceSimulations_B0);
+            Params.TissueType = obj.options.SequenceSimulations_TissueType;
+            Params = ihMT_defaultCortexTissueParams(Params);
+            obj.Prot.TissueParams.Mat = [Params.M0a, Params.Raobs, Params.R, Params.T2a, ...
+                                        Params.T1D, Params.R1b, Params.T2b, ...
+                                        Params.M0b, Params.D]';
             % PulseOpt = ihMT_pulseSeqParams(obj.options);
             % obj.Prot.PulseSequenceParams.Mat = [PulseOpt.MTC, PulseOpt.delta, PulseOpt.flipAngle, PulseOpt.TR, PulseOpt.numSatPulse,...
             %                                 PulseOpt.TurboFactor, PulseOpt.pulseDur, PulseOpt.satFlipAngle, PulseOpt.pulseGapDur, ...
@@ -186,6 +186,8 @@ methods
            
             [fitValues_Dual, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data, fitValues_Dual, fitValues_Single, flipA, TR, DummyEcho, echoSpacing, numExcitation);
         else
+            % Need to figure out how to access previous fitResults from
+            % R1vsM0b
             fitValues_Dual = fileparts(which('fitValues_D.mat'));
             fitValues_SP = fileparts(which('fitValues_SP.mat'));
             fitValues_SN = fileparts(which('fitValues_SN.mat'));
