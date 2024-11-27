@@ -4,10 +4,10 @@
 function [sat_dual_c, sat_pos_c, sat_neg_c, ihmt_c]=ihMT_correctMTsat_3prot(obj,data, fitValues_D, fitValues_SP, fitValues_SN)
 
 % Data Directory 
-DATADIR = obj.options.RunihMTsatCalculation_DataDirectory;
+%DATADIR = obj.options.RunihMTsatCalculation_DataDirectory;
 
 % Directory where results will be saved 
-OutputDir = obj.options.RunihMTsatCalculation_OutputDirectory;
+%OutputDir = obj.options.RunihMTsatCalculation_OutputDirectory;
 
 %% Load images:
 
@@ -29,9 +29,9 @@ end
 
 %% Mask -> bet result touched up in itk, then threshold CSF and some dura
 
-mask(spT1_map > 2500) = 0;
-mask(spT1_map < 500) = 0;
-mask(isnan(spT1_map)) = 0;
+mask(T1_map > 2500) = 0;
+mask(T1_map < 500) = 0;
+mask(isnan(T1_map)) = 0;
 % mask = bwareaopen(mask, 10000,6);
 % figure; imshow3Dfullseg(spT1_map, [300 2500],mask1)
 
@@ -48,7 +48,7 @@ sat_dual = ihMT_calcMTsatThruLookupTablewithDummyV3( dual, b1, T1_map, mask, S0_
 sat_pos  = ihMT_calcMTsatThruLookupTablewithDummyV3( pos, b1, T1_map, mask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
 sat_neg  = ihMT_calcMTsatThruLookupTablewithDummyV3( neg, b1, T1_map, mask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
 
-% figure; imshow3Dfull(sat_dual1 , [0 0.06], jet); figure; imshow3Dfull(sat_pos1 , [0 0.05], jet);  figure; imshow3Dfull(sat_neg1 , [0 0.05], jet); 
+% figure; imshow3Dfull(sat_dual , [0 0.06], jet); figure; imshow3Dfull(sat_pos1 , [0 0.05], jet);  figure; imshow3Dfull(sat_neg1 , [0 0.05], jet); 
 
 %% load in the fit results
 % fitValues_D = load(fullfile(OutputDir,'fitValues_D.mat'));
@@ -63,6 +63,8 @@ sat_neg  = ihMT_calcMTsatThruLookupTablewithDummyV3( neg, b1, T1_map, mask, S0_m
 %OutputDir = DATADIR;
 
 
+R1_s = (1./T1_map) *1000; 
+R1_s(isinf(R1_s)) = 0; 
 
 corr_d = MTsat_B1corr_factor_map(b1, R1_s, 1, fitValues_D);
 corr_p = MTsat_B1corr_factor_map(b1, R1_s, 1, fitValues_SP);
@@ -104,15 +106,15 @@ hold on
 line([0,175], [165,166], 'Color', 'r');
 
 
-ihmtProf1 = ihmtSlice1(165,:);
+ihmtProf1 = ihmtSlice1(165,:); % These are all zeros 
 
 % normalize:
-ihmtProf1 = ihmtProf1/ max(ihmtProf1);
+ihmtProf1 = ihmtProf1/ max(ihmtProf1);  % This produces Nan 
 
 figure
 plot(ihmtProf1,'LineWidth',2); 
 title('Line Profile (L-R)');
-xlim([15, 160])
+%xlim([15, 160])
 hold off
 xlabel('Voxel Index');
 ylabel('Relative ihMT_{sat}')

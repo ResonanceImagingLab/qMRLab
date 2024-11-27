@@ -20,7 +20,7 @@ fitValues_single = fitValues_single.fitValues;
 [~, T1_map] = minc_read('T1map.mnc');
 [~, S0_map] = minc_read('M0map.mnc'); 
 [~, mask] = minc_read('mask.mnc'); 
-[~, b1] = minc_read('b1_file.mnc');
+[~, b1] = minc_read('b1.mnc');
 [~, pos] = minc_read('pos_reg.mnc');
 [~, neg] = minc_read('neg_reg.mnc');
 

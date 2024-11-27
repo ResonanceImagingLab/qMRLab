@@ -76,9 +76,14 @@ classdef ihMT < AbstractModel
         % can't put it in Prot unless it is a number
         % CR_getSeqParams_3prot.m
 
-
+        % Sequence Simulation fitVals
         fitValues_dual = [];
         fitValues_single = [];
+
+        % R1vsM0b correlation fitVals
+        fitValues_Dual = [];
+        fitValues_SP = [];
+        fitValues_SN = [];
 
         buttons = {'PANEL', 'SequenceSimulations',7,...
             'AtlasDirectory', 0 ,... 
@@ -134,8 +139,8 @@ methods
             Params.B0 = str2double(obj.options.SequenceSimulations_B0);
             Params.TissueType = obj.options.SequenceSimulations_TissueType;
             Params = ihMT_defaultCortexTissueParams(Params);
-            obj.Prot.TissueParams.Mat = [Params.M0a, Params.Raobs, Params.R, Params.T2a, ...
-                                        Params.T1D, Params.R1b, Params.T2b, ...
+            obj.Prot.TissueParams.Mat = [Params.M0a, Params.Raobs, Params.R, Params.T2a*1000, ...
+                                        Params.T1D*1000, Params.R1b, Params.T2b*1e6, ...
                                         Params.M0b, Params.D]';
             % PulseOpt = ihMT_pulseSeqParams(obj.options);
             % obj.Prot.PulseSequenceParams.Mat = [PulseOpt.MTC, PulseOpt.delta, PulseOpt.flipAngle, PulseOpt.TR, PulseOpt.numSatPulse,...
@@ -151,12 +156,32 @@ methods
                 
                 ihMT_simSeq_M0b_R1obs_3prot(obj); 
     
-            elseif obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation
+            elseif obj.options.R1vsM0bMapping_SelectAppropriateDirectories
                 disp('Select directory where you want values saved')
                 obj.options.R1vsM0bMapping_SeqSimDirectory = uigetdir(pwd);
                 %obj.options.R1vsM0bMapping_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
    
-                if isempty(obj.fitValues_dual) && isempty(obj.fitValues_single)
+                % if obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation
+                %     disp('Load dual fit values')
+                %     [FileName_dual,PathName_dual] = uigetfile('*.mat');
+                %     disp('Load single fit values')
+                %     [FileName_single,PathName_single] = uigetfile('*.mat');
+                % 
+                %     obj.fitValues_dual = load([PathName_dual filesep FileName_dual]);
+                %     obj.fitValues_single = load([PathName_single filesep FileName_single]); 
+                % end
+                if ~obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation
+                    disp('Load fitValues_Dual.mat')
+                    [FileName_Dual, PathName_Dual] = uigetfile('*.mat');
+                    disp('Load fitValues_SP.mat'); 
+                    [FileName_SP, PathName_SP] = uigetfile('*.mat'); 
+                    disp('Load fitValues_SN.mat');
+                    [FileName_SN, PathName_SN] = uigetfile('*.mat'); 
+
+                    obj.fitValues_Dual = load([PathName_Dual filesep FileName_Dual]); 
+                    obj.fitValues_SP = load([PathName_SP filesep FileName_SP]); 
+                    obj.fitValues_SN = load([PathName_SN filesep FileName_SN]); 
+                else
                     disp('Load dual fit values')
                     [FileName_dual,PathName_dual] = uigetfile('*.mat');
                     disp('Load single fit values')
@@ -164,6 +189,7 @@ methods
                          
                     obj.fitValues_dual = load([PathName_dual filesep FileName_dual]);
                     obj.fitValues_single = load([PathName_single filesep FileName_single]); 
+
                 end
                 
             end 
@@ -173,9 +199,7 @@ methods
     end 
 
     function FitResult = fit(obj,data)
-
-         fitValues_Dual = obj.fitValues_dual;
-         fitValues_Single = obj.fitValues_single; 
+         
          flipA = obj.Prot.PulseSequenceParams.Mat(3);
          TR = obj.Prot.PulseSequenceParams.Mat(4); % ms
          DummyEcho = obj.Prot.PulseSequenceParams.Mat(10);
@@ -183,21 +207,18 @@ methods
          numExcitation = obj.Prot.PulseSequenceParams.Mat(6) + DummyEcho;
 
         if obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation % If box is checked, run correlation 
+            fitValues_dual = obj.fitValues_dual;
+            fitValues_single = obj.fitValues_single; 
            
-            [fitValues_Dual, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data, fitValues_Dual, fitValues_Single, flipA, TR, DummyEcho, echoSpacing, numExcitation);
+            [fitValues_Dual, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data, fitValues_dual, fitValues_single, flipA, TR, DummyEcho, echoSpacing, numExcitation);
+        
         else
-            % Need to figure out how to access previous fitResults from
-            % R1vsM0b
-            fitValues_Dual = fileparts(which('fitValues_D.mat'));
-            fitValues_SP = fileparts(which('fitValues_SP.mat'));
-            fitValues_SN = fileparts(which('fitValues_SN.mat'));
-        end 
+            fitValues_Dual = obj.fitValues_Dual;
+            fitValues_SP = obj.fitValues_SP;
+            fitValues_SN = obj.fitValues_SN;
+        end
 
-        % FitResult.fitValues_D = fitValues_D;
-        % FitResult.fitValues_SP = fitValues_SP;
-        % FitResult.fitValues_SN = fitValues_SN;
-
-        [sat_dual_c, sat_pos_c, sat_neg_c, ihmt_c] = ihMT_correctMTsat_3prot(obj,data, fitValues_Dual, fitValues_SP, fitValues_SN);
+        [sat_dual_c, sat_pos_c, sat_neg_c, ihmt_c] = ihMT_correctMTsat_3prot(obj,data, fitValues_Dual, fitValues_SP, fitValues_SN, flipA, TR, DummyEcho, echoSpacing, numExcitation);
         FitResult.sat_dual_c = sat_dual_c;
         FitResult.sat_pos_c = sat_pos_c; 
         FitResult.sat_neg_c = sat_neg_c; 
