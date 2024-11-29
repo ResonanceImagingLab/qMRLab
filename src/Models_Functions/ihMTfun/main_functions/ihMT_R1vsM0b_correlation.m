@@ -33,12 +33,6 @@ end
 % echoSpacing = obj.Prot.PulseSequenceParams.Mat(14); % ms 
 % numExcitation = obj.Prot.PulseSequenceParams.Mat(6) + DummyEcho;
 
-%% Debugging 
-disp(flipA); 
-disp(TR); 
-disp(DummyEcho); 
-disp(echoSpacing); 
-disp(numExcitation); 
 
 %% Compute ihMTsat 
 
