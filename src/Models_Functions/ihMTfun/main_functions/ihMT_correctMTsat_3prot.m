@@ -1,7 +1,7 @@
 %% Correct MTsat maps from 3 protocols after running:
 %   simSeq_M0B_R1obs_3prot.m  and...
 %   CR_R1vsM0B_correlation.m
-function [sat_dual_c, sat_pos_c, sat_neg_c, ihmt_c]=ihMT_correctMTsat_3prot(obj,data, fitValues_D, fitValues_SP, fitValues_SN)
+function [sat_dual_c, sat_pos_c, sat_neg_c, ihmt_c]=ihMT_correctMTsat_3prot(data, fitValues_D, fitValues_SP, fitValues_SN, flipA, TR, DummyEcho, echoSpacing, numExcitation)
 
 % Data Directory 
 %DATADIR = obj.options.RunihMTsatCalculation_DataDirectory;
@@ -20,11 +20,13 @@ T1_map = data.T1map;
 b1 = data.b1; 
 
 % Load the map 
-if isfield(data, 'mask')
+if ~isempty(data.mask)
     mask = data.mask; 
+
 else 
     mask = zeros(size(dual));
     mask(b1>0) = 1; 
+
 end 
 
 %% Mask -> bet result touched up in itk, then threshold CSF and some dura
@@ -61,7 +63,9 @@ sat_neg  = ihMT_calcMTsatThruLookupTablewithDummyV3( neg, b1, T1_map, mask, S0_m
 
 %% Now use these results to B1 correct the data:
 %OutputDir = DATADIR;
-
+fitValues_D = fitValues_D.fitValues;
+fitValues_SP = fitValues_SP.fitValues;
+fitValues_SN = fitValues_SN.fitValues;
 
 R1_s = (1./T1_map) *1000; 
 R1_s(isinf(R1_s)) = 0; 
@@ -70,7 +74,6 @@ corr_d = MTsat_B1corr_factor_map(b1, R1_s, 1, fitValues_D);
 corr_p = MTsat_B1corr_factor_map(b1, R1_s, 1, fitValues_SP);
 corr_n = MTsat_B1corr_factor_map(b1, R1_s, 1, fitValues_SN);
 
-mask = tempMask;
 % Part 2, apply correction map
 sat_dual_c = (sat_dual + sat_dual.* corr_d) .* mask;
 sat_pos_c  = (sat_pos + sat_pos.* corr_p) .* mask;
