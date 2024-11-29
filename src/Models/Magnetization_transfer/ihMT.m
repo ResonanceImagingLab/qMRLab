@@ -142,10 +142,7 @@ methods
             obj.Prot.TissueParams.Mat = [Params.M0a, Params.Raobs, Params.R, Params.T2a*1000, ...
                                         Params.T1D*1000, Params.R1b, Params.T2b*1e6, ...
                                         Params.M0b, Params.D]';
-            % PulseOpt = ihMT_pulseSeqParams(obj.options);
-            % obj.Prot.PulseSequenceParams.Mat = [PulseOpt.MTC, PulseOpt.delta, PulseOpt.flipAngle, PulseOpt.TR, PulseOpt.numSatPulse,...
-            %                                 PulseOpt.TurboFactor, PulseOpt.pulseDur, PulseOpt.satFlipAngle, PulseOpt.pulseGapDur, ...
-            %                                 PulseOpt.DummyEcho, PulseOpt.boosted, PulseOpt.satTrainPerBoost, PulseOpt.TR_MT, PulseOpt.echoSpacing]';
+
         elseif obj.checkupdatedfields == 2
          
             if obj.options.SequenceSimulations_RunSequenceSimulations
@@ -159,17 +156,7 @@ methods
             elseif obj.options.R1vsM0bMapping_SelectAppropriateDirectories
                 disp('Select directory where you want values saved')
                 obj.options.R1vsM0bMapping_SeqSimDirectory = uigetdir(pwd);
-                %obj.options.R1vsM0bMapping_OutputDirectory = uigetdir(pwd, 'Select directory where you want values saved');
-   
-                % if obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation
-                %     disp('Load dual fit values')
-                %     [FileName_dual,PathName_dual] = uigetfile('*.mat');
-                %     disp('Load single fit values')
-                %     [FileName_single,PathName_single] = uigetfile('*.mat');
-                % 
-                %     obj.fitValues_dual = load([PathName_dual filesep FileName_dual]);
-                %     obj.fitValues_single = load([PathName_single filesep FileName_single]); 
-                % end
+               
                 if ~obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation
                     disp('Load fitValues_Dual.mat')
                     [FileName_Dual, PathName_Dual] = uigetfile('*.mat');
@@ -218,7 +205,7 @@ methods
             fitValues_SN = obj.fitValues_SN;
         end
 
-        [sat_dual_c, sat_pos_c, sat_neg_c, ihmt_c] = ihMT_correctMTsat_3prot(obj,data, fitValues_Dual, fitValues_SP, fitValues_SN, flipA, TR, DummyEcho, echoSpacing, numExcitation);
+        [sat_dual_c, sat_pos_c, sat_neg_c, ihmt_c] = ihMT_correctMTsat_3prot(data, fitValues_Dual, fitValues_SP, fitValues_SN, flipA, TR, DummyEcho, echoSpacing, numExcitation);
         FitResult.sat_dual_c = sat_dual_c;
         FitResult.sat_pos_c = sat_pos_c; 
         FitResult.sat_neg_c = sat_neg_c; 
