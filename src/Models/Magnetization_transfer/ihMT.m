@@ -52,10 +52,7 @@ classdef ihMT < AbstractModel
     %     Quantitative MRI analysis, under one umbrella doi: 10.21105/joss.02343
 
     properties (Hidden=true)
-        %onlineData_url = 'https://osf.io/3s9xe/download?version=2';
-        % Need to figure out what exact data needs to go here/ which images
-        % Need to add atlas images--> create issure on qMRLab 
-        % https://github.com/qMRLab/qMRLab/wiki/Guideline:-Uploading-sample-data
+        
     end
 
     properties 
@@ -154,9 +151,7 @@ methods
                 ihMT_simSeq_M0b_R1obs_3prot(obj); 
     
             elseif obj.options.R1vsM0bMapping_SelectAppropriateDirectories
-                disp('Select directory where you want values saved')
-                obj.options.R1vsM0bMapping_SeqSimDirectory = uigetdir(pwd);
-               
+ 
                 if ~obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation
                     disp('Load fitValues_Dual.mat')
                     [FileName_Dual, PathName_Dual] = uigetfile('*.mat');
@@ -169,6 +164,8 @@ methods
                     obj.fitValues_SP = load([PathName_SP filesep FileName_SP]); 
                     obj.fitValues_SN = load([PathName_SN filesep FileName_SN]); 
                 else
+                    disp('Select directory where you want values saved')
+                    obj.options.R1vsM0bMapping_SeqSimDirectory = uigetdir(pwd);
                     disp('Load dual fit values')
                     [FileName_dual,PathName_dual] = uigetfile('*.mat');
                     disp('Load single fit values')
@@ -192,12 +189,13 @@ methods
          DummyEcho = obj.Prot.PulseSequenceParams.Mat(10);
          echoSpacing = obj.Prot.PulseSequenceParams.Mat(14); % ms 
          numExcitation = obj.Prot.PulseSequenceParams.Mat(6) + DummyEcho;
+         OutputDir =  obj.options.R1vsM0bMapping_SeqSimDirectory;
 
         if obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation % If box is checked, run correlation 
             fitValues_dual = obj.fitValues_dual;
             fitValues_single = obj.fitValues_single; 
            
-            [fitValues_Dual, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data, fitValues_dual, fitValues_single, flipA, TR, DummyEcho, echoSpacing, numExcitation);
+            [fitValues_Dual, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(data, fitValues_dual, fitValues_single, flipA, TR, DummyEcho, echoSpacing, numExcitation, OutputDir);
         
         else
             fitValues_Dual = obj.fitValues_Dual;

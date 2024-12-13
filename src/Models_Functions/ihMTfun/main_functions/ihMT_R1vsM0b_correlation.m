@@ -1,10 +1,4 @@
-function [fitValues_Dual, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(obj, data, fitValues_dual, fitValues_single, flipA, TR, DummyEcho, echoSpacing, numExcitation)
-
-% Sequence Simulations Results Directory 
-%SeqSimDir = obj.options.R1vsM0bMapping_DataDirectory;
-
-% Directory where results will be saved 
-OutputDir =  obj.options.R1vsM0bMapping_SeqSimDirectory;
+function [fitValues_Dual, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation( data, fitValues_dual, fitValues_single, flipA, TR, DummyEcho, echoSpacing, numExcitation, OutputDir)
 
 %% Load the images 
 dual = data.dual; 
@@ -25,15 +19,6 @@ else
     maskFlag = 1;
 end 
 
-
-%% Protocol
-% flipA = obj.Prot.PulseSequenceParams.Mat(3);
-% TR = obj.Prot.PulseSequenceParams.Mat(4); % ms
-% DummyEcho = obj.Prot.PulseSequenceParams.Mat(10);
-% echoSpacing = obj.Prot.PulseSequenceParams.Mat(14); % ms 
-% numExcitation = obj.Prot.PulseSequenceParams.Mat(6) + DummyEcho;
-
-
 %% Compute ihMTsat 
 
 tempMask = mask;
@@ -45,8 +30,7 @@ sat_dual = ihMT_calcMTsatThruLookupTablewithDummyV3( dual, b1, T1_map, tempMask,
 sat_pos  = ihMT_calcMTsatThruLookupTablewithDummyV3( pos, b1, T1_map, tempMask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
 sat_neg  = ihMT_calcMTsatThruLookupTablewithDummyV3( neg, b1, T1_map, tempMask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
 
-%figure; imshow3Dfull(sat_dual , [0 0.06], jet); 
-% figure; imshow3Dfull(sat_pos , [0 0.05], jet);  figure; imshow3Dfull(sat_neg , [0 0.05], jet); 
+% figure; imshow3Dfull(sat_dual , [0 0.06], jet); figure; imshow3Dfull(sat_pos1 , [0 0.05], jet);  figure; imshow3Dfull(sat_neg1 , [0 0.05], jet); 
 
 % load in the fit results for VFA - Optimal
 fitValues_single = fitValues_single.fitValues;
@@ -54,17 +38,11 @@ fitValues_dual = fitValues_dual.fitValues;
 
 R1_s = (1./T1_map) *1000; 
 R1_s(isinf(R1_s)) = 0;  
-%figure; imshow3Dfull(R1_s)
 
 % initialize matrices
 M0b_dual = zeros(size(sat_dual));
 M0b_pos = zeros(size(sat_dual));
 M0b_neg = zeros(size(sat_dual));
-
-% Speed up by doing only a few axial slices 
-% axialStart = 126; % 65
-% axialStop = axialStart+3;%115;
-%figure; imshow3Dfull(sat_dual(:,axialStart:axialStop,:) , [0 0.06], jet)
 
 disp('Code will take ~ 2 hours to run');
 tic %  ~ 2hrs to run 
@@ -86,9 +64,7 @@ for i = 1:size(sat_dual,1) % went to 149
     toc 
 end
 
-%figure('WindowStyle', 'docked') % docked in matlab i believe 
-
-%figure; imshow3Dfull(M0b_pos, [0 0.15],jet)
+%figure('WindowStyle', 'docked'); imshow3Dfull(M0b_pos, [0 0.15],jet)
 % figure('WindowStyle', 'docked'); imshow3Dfull(M0b_neg, [0 0.15], jet)  
 % figure('WindowStyle', 'docked'); imshow3Dfull(M0b_dual, [0 0.15],jet)
 
@@ -102,12 +78,6 @@ end
 % minc_write(hdr.file_name, hdr, M0b_neg);
 
 %% With M0B maps made, correlate with R1 and update the fitValues file. 
-
-% use this fake mask to get rid of dura. 
-% tempMask = mask;
-% tempMask(T1_map > 2500) = 0;
-% tempMask(T1_map < 650) = 0;
-% tempMask(isnan(T1_map)) = 0;
 
 % If not using own mask, increase imerode to sphere 4 
 tempMask = bwareaopen(tempMask, 10000,6);
@@ -123,8 +93,6 @@ end
 mkdir(fullfile(OutputDir,'figures'));
 mkdir(fullfile(OutputDir, 'R1vsM0b_results'))
 
-%OutputDir = '/Users/amiedemmans/Documents/ihMT_Tests/Test4/';/Users/  
-%OutputDir = '/Users/reson/Documents/ihMT/ihMT_Tests/Test4/';
 
 % Optimized Approach
 fitValues_Dual  = ihMT_generate_R1vsM0B_correlation( R1_s, M0b_dual, tempMask, fitValues_dual, fullfile(OutputDir,'figures/R1vsM0b_dual.png'), fullfile(OutputDir,'R1vsM0b_results/fitValues_Dual.mat'));

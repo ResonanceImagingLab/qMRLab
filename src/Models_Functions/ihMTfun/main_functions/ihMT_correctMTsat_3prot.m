@@ -3,12 +3,6 @@
 %   CR_R1vsM0B_correlation.m
 function [sat_dual_c, sat_pos_c, sat_neg_c, ihmt_c]=ihMT_correctMTsat_3prot(data, fitValues_D, fitValues_SP, fitValues_SN, flipA, TR, DummyEcho, echoSpacing, numExcitation)
 
-% Data Directory 
-%DATADIR = obj.options.RunihMTsatCalculation_DataDirectory;
-
-% Directory where results will be saved 
-%OutputDir = obj.options.RunihMTsatCalculation_OutputDirectory;
-
 %% Load images:
 
 dual = data.dual; 
@@ -34,32 +28,14 @@ end
 mask(T1_map > 2500) = 0;
 mask(T1_map < 500) = 0;
 mask(isnan(T1_map)) = 0;
-% mask = bwareaopen(mask, 10000,6);
-% figure; imshow3Dfullseg(spT1_map, [300 2500],mask1)
 
 %% Compute MTsat ihMTsat
-
-%% Protocol 1
-% flipA = obj.Prot.PulseSequenceParams.Mat(3);
-% TR = obj.Prot.PulseSequenceParams.Mat(4);
-% DummyEcho = obj.Prot.PulseSequenceParams.Mat(10);
-% echoSpacing = obj.Prot.PulseSequenceParams.Mat(14);
-% numExcitation = obj.Prot.PulseSequenceParams.Mat(6) + DummyEcho;
 
 sat_dual = ihMT_calcMTsatThruLookupTablewithDummyV3( dual, b1, T1_map, mask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
 sat_pos  = ihMT_calcMTsatThruLookupTablewithDummyV3( pos, b1, T1_map, mask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
 sat_neg  = ihMT_calcMTsatThruLookupTablewithDummyV3( neg, b1, T1_map, mask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
 
 % figure; imshow3Dfull(sat_dual , [0 0.06], jet); figure; imshow3Dfull(sat_pos1 , [0 0.05], jet);  figure; imshow3Dfull(sat_neg1 , [0 0.05], jet); 
-
-%% load in the fit results
-% fitValues_D = load(fullfile(OutputDir,'fitValues_D.mat'));
-% fitValues_D = fitValues_D.fitValues;
-% fitValues_SP = load(fullfile(OutputDir,'fitValues_SP.mat'));
-% fitValues_SP = fitValues_SP.fitValues;
-% fitValues_SN = load(fullfile(OutputDir,'fitValues_SN.mat'));
-% fitValues_SN = fitValues_SN.fitValues;
-
 
 %% Now use these results to B1 correct the data:
 %OutputDir = DATADIR;
@@ -83,13 +59,12 @@ ihmt_c      = sat_dual_c - (sat_pos_c + sat_neg_c)/2;
 ihmt_c = double(limitHandler(ihmt_c,0, 0.15));
 
 %% View results
-% Can maybe get rid of this assuming corrected image will appear in qMRLab 
 
-figure; imshow3Dfull(sat_dual_c , [0 0.06], jet); 
-figure; imshow3Dfull(sat_pos_c , [0 0.06], jet)
-figure; imshow3Dfull(sat_neg_c , [0 0.06], jet); 
-
-figure; imshow3Dfull(ihmt_c , [0 0.02], jet);
+% figure; imshow3Dfull(sat_dual_c , [0 0.06], jet); 
+% figure; imshow3Dfull(sat_pos_c , [0 0.06], jet)
+% figure; imshow3Dfull(sat_neg_c , [0 0.06], jet); 
+% 
+% figure; imshow3Dfull(ihmt_c , [0 0.02], jet);
 
 %% Other things, save if you want
 
