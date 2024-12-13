@@ -41,11 +41,11 @@ classdef ihMT < AbstractModel
     %
     % References:
     %   Please cite the following if you use this module:
-    %     Rowley C.D., Campbell J.S.W., Wu Z., Leppert I.R., Rudko D.A.,
-    %     Pike G.B., Tardif C.L. (2021), A model-based framework for correcting 
-    %     B1+ inhomogeneity effects in magnetization transfer saturation and
-    %     inhomogeneous magnetization transfer saturation maps. Magn Reson
-    %     Med 86(4):2192-2207. doi:10.1002/mrm.28831
+    %     Rowley C.D., Campbell J.S.W., Wu Z., Leppert I.R., Nelson M.C.,
+    %     Pike G.B., Tardif C.L. (2023), Optimization of acquisition parameters for 
+    %     cortical inhomogeneous magnetization transfer (ihMT) imaging using a rapid 
+    %     gradient echo readout. Magn Reson
+    %     Med 90(5):1762-1775. doi:10.1002/mrm.29754
     %   In addition to citing the package:
     %     Karakuzu A., Boudreau M., Duval T.,Boshkovski T., Leppert I.R., Cabana J.F., 
     %     Gagnon I., Beliveau P., Pike G.B., Cohen-Adad J., Stikov N. (2020), qMRLab: 
