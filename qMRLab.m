@@ -527,8 +527,7 @@ set(handles.CurrentFitId,'String','FitResults.mat');
 % Save nii maps
 for ii = 1:length(FitResults.fields)
     map = FitResults.fields{ii}; 
-    if isfield(hdr, 'type')
-        disp(1); 
+    if isfield(hdr, 'type') 
         if strcmp(hdr.type, 'minc2') 
             file = strcat(map, '.mnc.gz');
             minc_write(file, hdr, FitResults.(map)); 
@@ -539,18 +538,6 @@ for ii = 1:length(FitResults.fields)
         continue
     else
         file = strcat(map,'.nii.gz');
-        %  if ~exist('hdr','var')
-        %    save_nii(make_nii(FitResults.(map)),fullfile(outputdir,file));
-        %  else
-        % % Reset multiplicative and additive scale factors to nifti header
-        % % in case there were some in the input file's header that was used
-        % % as a template. If this isn't done, then when a tool loads the
-        % % qMRI map's nifti file, it will apply an undesired scaling.
-        % hdr.scl_slope = 1;
-        % hdr.scl_inter = 0;
-        % 
-        % nii_save(FitResults.(map),hdr,fullfile(outputdir,file));
-        %  end
     end
 
     if ~exist('hdr','var')
