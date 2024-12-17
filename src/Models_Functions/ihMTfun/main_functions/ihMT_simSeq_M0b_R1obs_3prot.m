@@ -39,7 +39,6 @@ Raobs = 1./T1obs;
     Params.delta = obj.Prot.PulseSequenceParams.Mat(2);  
     Params.flipAngle = obj.Prot.PulseSequenceParams.Mat(3);
     Params.TR = obj.Prot.PulseSequenceParams.Mat(4)/1000;
-    disp(Params.TR);
     Params.numSatPulse = obj.Prot.PulseSequenceParams.Mat(5);
     Params.TurboFactor = obj.Prot.PulseSequenceParams.Mat(6);
     Params.pulseDur = obj.Prot.PulseSequenceParams.Mat(7)/1000;
