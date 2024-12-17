@@ -1,7 +1,7 @@
 %% Correct MTsat maps from 3 protocols after running:
 %   simSeq_M0B_R1obs_3prot.m  and...
 %   CR_R1vsM0B_correlation.m
-function [sat_dual_c, sat_pos_c, sat_neg_c, ihmt_c]=ihMT_correctMTsat_3prot(data, fitValues_D, fitValues_SP, fitValues_SN, flipA, TR, DummyEcho, echoSpacing, numExcitation)
+function [sat_dual_c, sat_pos_c, sat_neg_c, ihmt_c]=ihMT_correctMTsat_3prot(data, fitValues_Dual, fitValues_SP, fitValues_SN, flipA, TR, DummyEcho, echoSpacing, numExcitation)
 
 %% Load images:
 
@@ -39,14 +39,16 @@ sat_neg  = ihMT_calcMTsatThruLookupTablewithDummyV3( neg, b1, T1_map, mask, S0_m
 
 %% Now use these results to B1 correct the data:
 %OutputDir = DATADIR;
-fitValues_D = fitValues_D.fitValues;
-fitValues_SP = fitValues_SP.fitValues;
-fitValues_SN = fitValues_SN.fitValues;
+if isfield(fitValues_Dual, 'fitValues')
+    fitValues_Dual = fitValues_Dual.fitValues;
+    fitValues_SP = fitValues_SP.fitValues;
+    fitValues_SN = fitValues_SN.fitValues;
+end
 
 R1_s = (1./T1_map) *1000; 
 R1_s(isinf(R1_s)) = 0; 
 
-corr_d = MTsat_B1corr_factor_map(b1, R1_s, 1, fitValues_D);
+corr_d = MTsat_B1corr_factor_map(b1, R1_s, 1, fitValues_Dual);
 corr_p = MTsat_B1corr_factor_map(b1, R1_s, 1, fitValues_SP);
 corr_n = MTsat_B1corr_factor_map(b1, R1_s, 1, fitValues_SN);
 
@@ -75,29 +77,29 @@ ihmt_c = double(limitHandler(ihmt_c,0, 0.15));
 % 
 % hdr.file_name = strcat(DATADIR,'matlab/b1.mnc.gz'); minc_write(hdr.file_name, hdr, b1);
 
-ihmtSlice1 = squeeze( ihmt_c(:,126,:));
-
-figure; imagesc(ihmtSlice1); axis image;
-colormap(gray)
-clim([0 0.03]) % was caxis
-hold on
-line([0,175], [165,166], 'Color', 'r');
-
-
-ihmtProf1 = ihmtSlice1(165,:); % These are all zeros 
-
-% normalize:
-ihmtProf1 = ihmtProf1/ max(ihmtProf1);  % This produces Nan 
-
-figure
-plot(ihmtProf1,'LineWidth',2); 
-title('Line Profile (L-R)');
-%xlim([15, 160])
-hold off
-xlabel('Voxel Index');
-ylabel('Relative ihMT_{sat}')
-ax = gca; ax.FontSize = 20; 
-set(gcf,'position',[10,400,1000,600])
+% ihmtSlice1 = squeeze( ihmt_c(:,126,:));
+% 
+% figure; imagesc(ihmtSlice1); axis image;
+% colormap(gray)
+% clim([0 0.03]) % was caxis
+% hold on
+% line([0,175], [165,166], 'Color', 'r');
+% 
+% 
+% ihmtProf1 = ihmtSlice1(165,:); % These are all zeros 
+% 
+% % normalize:
+% ihmtProf1 = ihmtProf1/ max(ihmtProf1);  % This produces Nan 
+% 
+% figure
+% plot(ihmtProf1,'LineWidth',2); 
+% title('Line Profile (L-R)');
+% %xlim([15, 160])
+% hold off
+% xlabel('Voxel Index');
+% ylabel('Relative ihMT_{sat}')
+% ax = gca; ax.FontSize = 20; 
+% set(gcf,'position',[10,400,1000,600])
 
 
 
