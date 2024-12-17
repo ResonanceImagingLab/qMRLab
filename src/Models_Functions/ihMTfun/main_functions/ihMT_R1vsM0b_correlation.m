@@ -1,4 +1,4 @@
-function [fitValues_Dual, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(data, fitValues_dual, fitValues_single, flipA, TR, DummyEcho, echoSpacing, numExcitation, OutputDir);
+function [fitValues_Dual, fitValues_SP, fitValues_SN] = ihMT_R1vsM0b_correlation(data, fitValues_dual, fitValues_single, flipA, TR, DummyEcho, echoSpacing, numExcitation, OutputDir)
 
 %% Load the images 
 dual = data.dual; 

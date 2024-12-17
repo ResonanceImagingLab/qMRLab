@@ -19,7 +19,7 @@ classdef ihMT < AbstractModel
     %   B1                 Normalized transmit excitation field map (B1+). B1+ is defined 
     %                      as a  normalized multiplicative factor such that:
     %                      FA_actual = B1+ * FA_nominal.
-    %   (mask)             Binary mask (Accelerate fitting - Optional).
+    %   (mask)             Binary mask.
     %            
     % Outputs:
     %
@@ -58,8 +58,7 @@ classdef ihMT < AbstractModel
     properties 
         MRIinputs = {'dual', 'pos', 'neg', 'T1map', 'M0map', 'b1', 'mask'};
         xnames = {};
-        voxelwise = 0; % 0, if the analysis is done matricially
-        % 1, if the analysis is done voxel per voxel
+        voxelwise = 0; 
 
         % PulseSequenceParams & Tissue Params
         Prot = struct('PulseSequenceParams', struct('Format',{{'MTC'; 'delta' ; 'flipAngle' ; 'TR(ms)' ; 'numSatPulse' ; 'TurboFactor' ; 'pulseDur(ms)' ; 'satFlipAngle' ; ...
@@ -67,11 +66,6 @@ classdef ihMT < AbstractModel
                                     'Mat', [1; 8000; 6; 100; 4; 8; 0.768; 135; 0.3; 2; 0; 1; 0; 7.66]), ...
                       'TissueParams', struct('Format',{{'M0a'; 'Raobs'; 'R'; 'T2a(ms)'; 'T1D(ms)'; 'R1b'; 'T2b(μs)'; 'M0b'; 'D'}}, ...
                       'Mat', [ 1; 1/1.4; 50; 50; 0.75; 0.25; 11.5; 0.071; 0.8e-3/1e6]));
-
-        % Params.numExcitation is based on TurboFactor and Dummy Echo 
-        % freqpattern ill make into dropdown in buttons probably b/c I
-        % can't put it in Prot unless it is a number
-        % CR_getSeqParams_3prot.m
 
         % Sequence Simulation fitVals
         fitValues_dual = [];
