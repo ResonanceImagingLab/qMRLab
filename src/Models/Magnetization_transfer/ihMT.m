@@ -22,6 +22,13 @@ classdef ihMT < AbstractModel
     %   (mask)             Binary mask.
     %            
     % Outputs:
+    %   sat_dual_c         Corrected MT-weighted data for dual frequency
+    %                      preparation pulse.
+    %   sat_pos_c          Corrected MT-weighted data for positive single
+    %                      sided frequency preparation pulse.
+    %   sat_neg_c          Corrected MT-weighted data for negative single
+    %                      sided frequency preparation pulse.
+    %   ihmt_c             B1-corrected ihMT image.
     %
     % Protocol:	
     %
@@ -30,9 +37,6 @@ classdef ihMT < AbstractModel
     %       Model.options (general options)
     %       Model.options.Sequencesimulation (to change parameters of the sequence simulation)
     %   
-    % Example of command line usage
-    %
-    %   For more examples: <a href="matlab: qMRusage(ihMT);">qMRusage(ihMT)</a>
     %
     % Author:
     %   Christopher D. Rowley, 2023 (@christopherrowley, @TardifLab - GitHub)
