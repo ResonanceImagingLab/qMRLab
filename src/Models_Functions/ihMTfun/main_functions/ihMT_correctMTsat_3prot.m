@@ -16,11 +16,9 @@ b1 = data.b1;
 % Load the map 
 if ~isempty(data.mask)
     mask = data.mask; 
-
 else 
     mask = zeros(size(dual));
     mask(b1>0) = 1; 
-
 end 
 
 %% Mask -> bet result touched up in itk, then threshold CSF and some dura

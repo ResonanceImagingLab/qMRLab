@@ -9,7 +9,7 @@ S0_map = data.M0map;
 T1_map = data.T1map;
 b1 = data.b1; 
 
-% Load the map 
+% Load the mask
 if ~isempty(data.mask)
     mask = data.mask; 
     maskFlag = 0;
@@ -46,10 +46,10 @@ M0b_neg = zeros(size(sat_dual));
 
 disp('Code will take ~ 3 hours to run');
 tic %  ~ 2hrs to run 
-for i = 1:size(sat_dual,1) % went to 149
+for i = 1:size(sat_dual,1) 
     
-    for j = 1:size(sat_dual,2) %j = axialStart:axialStop  % % for axial slices
-        for k =  1:size(sat_dual,3) % sagital slices  65
+    for j = 1:size(sat_dual,2)  % for axial slices
+        for k =  1:size(sat_dual,3) % sagital slices  
             
             if tempMask(i,j,k) > 0 %&& dual_s(i,j,k,3) > 0
                                 

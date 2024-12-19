@@ -1,102 +1,97 @@
 classdef ihMT < AbstractModel
+% ihMT: inhomogenuous Magnetization Transfer
+%
+% Assumptions: 
+%         B1+ corrected MT saturation maps taking into account for the
+%         B1+ inhomogeneities effects on the excitation and saturation
+%         pulses.
+%
+% Inputs:
+%   dual               MT-weigthed data. Dual frequency preparation
+%                      pulse.
+%   pos                MT-weigthed data. Positive single sided frequency 
+%                      preparation pulse.
+%   neg                MT-weighted dats. Negative single sided frequency
+%                      preparation pulses 
+%   T1map              T1-weighted data.
+%   M0map              PD-weighted data.
+%   b1                 Normalized transmit excitation field map (B1+). B1+ is defined 
+%                      as a  normalized multiplicative factor such that:
+%                      FA_actual = B1+ * FA_nominal.
+%   (mask)             Binary mask.      
+% Outputs:
+%   sat_dual_c         Corrected MT-weighted data for dual frequency
+%                      preparation pulse.
+%   sat_pos_c          Corrected MT-weighted data for positive single
+%                      sided frequency preparation pulse.
+%   sat_neg_c          Corrected MT-weighted data for negative single
+%                      sided frequency preparation pulse.
+%   ihmt_c             B1-corrected ihMT image.
+% Protocol:	
+%   PulseSequenceParams  Default pulse sequence parameters 
+%   TissueParams         Default tissue parameters 
+% Options:
+%   See:
+%       Model.options (general options)
+%       Model.options.Sequencesimulation (to change parameters of the sequence simulation)
+% Author:
+%   Christopher D. Rowley, 2023 (@christopherrowley, @TardifLab - GitHub)
+% Adapted to qMRLab by:
+%   Amie Demmans, 2024 (@amie-demmans, @ResonanceImagingLab - GitHub) 
+% References:
+%   Please cite the following if you use this module:
+%     Rowley C.D., Campbell J.S.W., Wu Z., Leppert I.R., Nelson M.C.,
+%     Pike G.B., Tardif C.L. (2023), Optimization of acquisition parameters for 
+%     cortical inhomogeneous magnetization transfer (ihMT) imaging using a rapid 
+%     gradient echo readout. Magn Reson
+%     Med 90(5):1762-1775. doi:10.1002/mrm.29754
+%   In addition to citing the package:
+%     Karakuzu A., Boudreau M., Duval T.,Boshkovski T., Leppert I.R., Cabana J.F., 
+%     Gagnon I., Beliveau P., Pike G.B., Cohen-Adad J., Stikov N. (2020), qMRLab: 
+%     Quantitative MRI analysis, under one umbrella doi: 10.21105/joss.02343
 
-    % ihMT:   inhomogenuous Magnetization Transfer
-    %
-    % Assumptions: 
-    %         B1+ corrected MT saturation maps taking into account for the
-    %         B1+ inhomogeneities effects on the excitation and saturation
-    %         pulses.
-    %
-    % Inputs:
-    %   dual               MT-weigthed data. Dual frequency preparation
-    %                      pulse.
-    %   pos                MT-weigthed data. Positive single sided frequency 
-    %                      preparation pulse.
-    %   neg                MT-weighted dats. Negative single sided frequency
-    %                      preparation pulses 
-    %   T1map              T1-weighted data.
-    %   M0map              PD-weighted data.
-    %   B1                 Normalized transmit excitation field map (B1+). B1+ is defined 
-    %                      as a  normalized multiplicative factor such that:
-    %                      FA_actual = B1+ * FA_nominal.
-    %   (mask)             Binary mask.
-    %            
-    % Outputs:
-    %   sat_dual_c         Corrected MT-weighted data for dual frequency
-    %                      preparation pulse.
-    %   sat_pos_c          Corrected MT-weighted data for positive single
-    %                      sided frequency preparation pulse.
-    %   sat_neg_c          Corrected MT-weighted data for negative single
-    %                      sided frequency preparation pulse.
-    %   ihmt_c             B1-corrected ihMT image.
-    %
-    % Protocol:	
-    %
-    % Options:
-    %   See:
-    %       Model.options (general options)
-    %       Model.options.Sequencesimulation (to change parameters of the sequence simulation)
-    %   
-    %
-    % Author:
-    %   Christopher D. Rowley, 2023 (@christopherrowley, @TardifLab - GitHub)
-    % Adapted to qMRLab by:
-    %   Amie Demmans, 2024
-    %
-    % References:
-    %   Please cite the following if you use this module:
-    %     Rowley C.D., Campbell J.S.W., Wu Z., Leppert I.R., Nelson M.C.,
-    %     Pike G.B., Tardif C.L. (2023), Optimization of acquisition parameters for 
-    %     cortical inhomogeneous magnetization transfer (ihMT) imaging using a rapid 
-    %     gradient echo readout. Magn Reson
-    %     Med 90(5):1762-1775. doi:10.1002/mrm.29754
-    %   In addition to citing the package:
-    %     Karakuzu A., Boudreau M., Duval T.,Boshkovski T., Leppert I.R., Cabana J.F., 
-    %     Gagnon I., Beliveau P., Pike G.B., Cohen-Adad J., Stikov N. (2020), qMRLab: 
-    %     Quantitative MRI analysis, under one umbrella doi: 10.21105/joss.02343
+properties (Hidden=true)
+    
+end
 
-    properties (Hidden=true)
-        
-    end
+properties 
+    MRIinputs = {'dual', 'pos', 'neg', 'T1map', 'M0map', 'b1', 'mask'};
+    xnames = {};
+    voxelwise = 0; 
 
-    properties 
-        MRIinputs = {'dual', 'pos', 'neg', 'T1map', 'M0map', 'b1', 'mask'};
-        xnames = {};
-        voxelwise = 0; 
+    % PulseSequenceParams & Tissue Params
+    Prot = struct('PulseSequenceParams', struct('Format',{{'MTC'; 'delta' ; 'flipAngle' ; 'TR(ms)' ; 'numSatPulse' ; 'TurboFactor' ; 'pulseDur(ms)' ; 'satFlipAngle' ; ...
+                                 'pulseGapDur(ms)' ; 'DummyEcho' ; 'LowDutyCycle'; 'satTrainPerBoost' ; 'TR_MT(ms)'; 'echoSpacing(ms)'}}, ...
+                                'Mat', [1; 8000; 6; 100; 4; 8; 0.768; 135; 0.3; 2; 0; 1; 0; 7.66]), ...
+                  'TissueParams', struct('Format',{{'M0a'; 'Raobs'; 'R'; 'T2a(ms)'; 'T1D(ms)'; 'R1b'; 'T2b(μs)'; 'M0b'; 'D'}}, ...
+                  'Mat', [ 1; 1/1.4; 50; 50; 0.75; 0.25; 11.5; 0.071; 0.8e-3/1e6]));
 
-        % PulseSequenceParams & Tissue Params
-        Prot = struct('PulseSequenceParams', struct('Format',{{'MTC'; 'delta' ; 'flipAngle' ; 'TR(ms)' ; 'numSatPulse' ; 'TurboFactor' ; 'pulseDur(ms)' ; 'satFlipAngle' ; ...
-                                     'pulseGapDur(ms)' ; 'DummyEcho' ; 'LowDutyCycle'; 'satTrainPerBoost' ; 'TR_MT(ms)'; 'echoSpacing(ms)'}}, ...
-                                    'Mat', [1; 8000; 6; 100; 4; 8; 0.768; 135; 0.3; 2; 0; 1; 0; 7.66]), ...
-                      'TissueParams', struct('Format',{{'M0a'; 'Raobs'; 'R'; 'T2a(ms)'; 'T1D(ms)'; 'R1b'; 'T2b(μs)'; 'M0b'; 'D'}}, ...
-                      'Mat', [ 1; 1/1.4; 50; 50; 0.75; 0.25; 11.5; 0.071; 0.8e-3/1e6]));
+    % Sequence Simulation fitVals
+    fitValues_dual = [];
+    fitValues_single = [];
 
-        % Sequence Simulation fitVals
-        fitValues_dual = [];
-        fitValues_single = [];
+    % R1vsM0b correlation fitVals
+    fitValues_Dual = [];
+    fitValues_SP = [];
+    fitValues_SN = [];
 
-        % R1vsM0b correlation fitVals
-        fitValues_Dual = [];
-        fitValues_SP = [];
-        fitValues_SN = [];
+    buttons = {'PANEL', 'SequenceSimulations',7,...
+        'AtlasDirectory', 0 ,... 
+        'OutputDirectory',0,...
+        'TissueType',{'GM','WM'}, ...
+        'B0', {'3', '7', '1.5'}, ...
+        'FreqPattern',{'dualAlternate','dualContinuous'},...
+        'SatPulseShape', {'gausshann', 'gaussian', 'fermi'},...
+        'Run Sequence Simulations','pushbutton',...
+        'PANEL', 'R1vsM0b Mapping',3,...
+        'SeqSimDirectory', 0,...
+        'RunR1vsM0bCorrelation',true,...
+        'Select Appropriate Directories','pushbutton'};
 
-        buttons = {'PANEL', 'SequenceSimulations',7,...
-            'AtlasDirectory', 0 ,... 
-            'OutputDirectory',0,...
-            'TissueType',{'GM','WM'}, ...
-            'B0', {'3', '7', '1.5'}, ...
-            'FreqPattern',{'dualAlternate','dualContinuous'},...
-            'SatPulseShape', {'gausshann', 'gaussian', 'fermi'},...
-            'Run Sequence Simulations','pushbutton',...
-            'PANEL', 'R1vsM0b Mapping',3,...
-            'SeqSimDirectory', 0,...
-            'RunR1vsM0bCorrelation',true,...
-            'Select Appropriate Directories','pushbutton'};
+    options = struct(); 
+    previousOptions = struct()
 
-        options = struct(); 
-        previousOptions = struct()
-
-    end 
+end 
 
 methods
 
