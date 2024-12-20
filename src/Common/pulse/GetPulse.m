@@ -37,7 +37,7 @@ switch shape
     case 'sincgauss'; pulse_fcn = @sincgauss_pulse;        
     case 'gaussian';  pulse_fcn = @gaussian_pulse;        
     case 'gausshann'; pulse_fcn = @gausshann_pulse;    
-    case 'fermi';     pulse_fcn = @fermi_pulse;  
+    case 'fermi';     pulse_fcn = @fermi_pulse;
 end
 
 b1     =  @(t) pulse_fcn(t,Trf,PulseOpt);

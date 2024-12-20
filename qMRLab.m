@@ -554,7 +554,6 @@ for ii = 1:length(FitResults.fields)
     end
  end
 
-
 SetAppData(FileBrowserList);
 % Show results
 handles.CurrentData = FitResults;
