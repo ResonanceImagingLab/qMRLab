@@ -15,10 +15,8 @@ classdef ihMT < AbstractModel
 %                      preparation pulses 
 %   T1map              T1-weighted data.
 %   M0map              PD-weighted data.
-%   b1                 Normalized transmit excitation field map (B1+). B1+ is defined 
-%                      as a  normalized multiplicative factor such that:
-%                      FA_actual = B1+ * FA_nominal.
-%   (mask)             Binary mask.      
+%   b1                 Normalized transmit excitation field map (B1+).
+%   (mask)             Binary mask. 
 % Outputs:
 %   sat_dual_c         Corrected MT-weighted data for dual frequency
 %                      preparation pulse.
@@ -60,7 +58,7 @@ properties
     voxelwise = 0; 
 
     % PulseSequenceParams & Tissue Params
-    Prot = struct('PulseSequenceParams', struct('Format',{{'MTC'; 'delta' ; 'flipAngle' ; 'TR(ms)' ; 'numSatPulse' ; 'TurboFactor' ; 'pulseDur(ms)' ; 'satFlipAngle' ; ...
+    Prot = struct('PulseSequenceParams', struct('Format',{{'MTC'; 'delta(Hz)' ; 'flipAngle(deg)' ; 'TR(ms)' ; 'numSatPulse' ; 'TurboFactor' ; 'pulseDur(ms)' ; 'satFlipAngle(deg)' ; ...
                                  'pulseGapDur(ms)' ; 'DummyEcho' ; 'LowDutyCycle'; 'satTrainPerBoost' ; 'TR_MT(ms)'; 'echoSpacing(ms)'}}, ...
                                 'Mat', [1; 8000; 6; 100; 4; 8; 0.768; 135; 0.3; 2; 0; 1; 0; 7.66]), ...
                   'TissueParams', struct('Format',{{'M0a'; 'Raobs'; 'R'; 'T2a(ms)'; 'T1D(ms)'; 'R1b'; 'T2b(μs)'; 'M0b'; 'D'}}, ...
@@ -86,7 +84,7 @@ properties
         'PANEL', 'R1vsM0b Mapping',3,...
         'SeqSimDirectory', 0,...
         'RunR1vsM0bCorrelation',true,...
-        'Select Appropriate Directories','pushbutton'};
+        'Load fit Value Files','pushbutton'};
 
     options = struct(); 
     previousOptions = struct()
@@ -112,7 +110,7 @@ methods
                 ~isequal(obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation, obj.previousOptions.R1vsM0bMapping_RunR1vsM0bCorrelation))   
             checkfields = 1; 
         elseif (~isequal(obj.options.SequenceSimulations_RunSequenceSimulations, obj.previousOptions.SequenceSimulations_RunSequenceSimulations)||...
-                 ~isequal(obj.options.R1vsM0bMapping_SelectAppropriateDirectories, obj.previousOptions.R1vsM0bMapping_SelectAppropriateDirectories))
+                 ~isequal(obj.options.R1vsM0bMapping_LoadfitValueFiles, obj.previousOptions.R1vsM0bMapping_LoadfitValueFiles))
             checkfields = 2;
 
         else
@@ -143,7 +141,7 @@ methods
                 
                 ihMT_simSeq_M0b_R1obs_3prot(obj); 
     
-            elseif obj.options.R1vsM0bMapping_SelectAppropriateDirectories
+            elseif obj.options.R1vsM0bMapping_LoadfitValueFiles
  
                 if ~obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation
                     disp('Load fitValues_Dual.mat')
