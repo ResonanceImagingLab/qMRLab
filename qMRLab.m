@@ -527,7 +527,7 @@ set(handles.CurrentFitId,'String','FitResults.mat');
 % Save nii maps
 for ii = 1:length(FitResults.fields)
     map = FitResults.fields{ii}; 
-    if isfield(hdr, 'type')
+    if isfield(hdr, 'type') 
         if strcmp(hdr.type, 'minc2') 
             file = strcat(map, '.mnc.gz');
             minc_write(file, hdr, FitResults.(map)); 
@@ -537,7 +537,7 @@ for ii = 1:length(FitResults.fields)
         end
         continue
     else
-        file = strcat(map,'.nii.gz');       
+        file = strcat(map,'.nii.gz');
     end
 
     if ~exist('hdr','var')
