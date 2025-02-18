@@ -45,7 +45,6 @@ if ~isfield(Params,'kr')
     Params.kr = (Params.R*Params.M0a);
 end
 
-
 if ~isfield(Params,'Ra') || isempty(Params.Ra) % allow you to specify either Ra or Raobs
     Params.Ra = Params.Raobs - ((Params.R * Params.M0b * (Params.R1b - Params.Raobs)) / (Params.R1b - Params.Raobs + Params.R));
     if isnan(Params.Ra)
@@ -61,7 +60,7 @@ if ~isfield(Params,'T1D')
     Params.T1D = 1/1000; % 1 ms, shouldn't matter for this. Setting to be able to reuse functions from ihMT
 end
 
-
+Params.pulseGapDur = 0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Build sequence, then convert to loop structure.
 % play sequence for 5 seconds, then fill sampling table.
@@ -147,7 +146,7 @@ M(:,1) = M0;
 time_vect = zeros( loops*20,1);
 M_t = repmat(M0,1, Params.N_spin);
 
-Sig_vec = zeros(num2avgOver, Params.numExcitation-Params.DummyEcho );
+Sig_vec = zeros(num2avgOver, Params.numExcitation );
 rep = 1; % to count over the number to average over
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

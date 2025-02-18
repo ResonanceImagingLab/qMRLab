@@ -45,7 +45,7 @@ if ~isfield(Params,'IncreasedGradSpoil') % if not defined,assume spoiling in rea
 end
 
 if ~isfield(Params,'Params.ModelSpinDiffusion') % if not defined, don't account for spin diffusion
-    Params.ModelSpinDiffusion = true; % binary
+    Params.ModelSpinDiffusion = false; % binary
 end
 
 

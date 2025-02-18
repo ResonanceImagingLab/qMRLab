@@ -1,5 +1,5 @@
 classdef mt_sat_b1sim < AbstractModel
-% mt_sat_b1sim: inhomogenuous Magnetization Transfer
+% mt_sat_b1sim: Magnetization Transfer saturation
 %
 % Assumptions: 
 %         B1+ corrected MT saturation maps taking into account for the
@@ -7,23 +7,13 @@ classdef mt_sat_b1sim < AbstractModel
 %         pulses.
 %
 % Inputs:
-%   dual               MT-weigthed data. Dual frequency preparation
-%                      pulse.
 %   pos                MT-weigthed data. Positive single sided frequency 
 %                      preparation pulse.
-%   neg                MT-weighted dats. Negative single sided frequency
-%                      preparation pulses 
 %   T1map              T1-weighted data.
 %   M0map              PD-weighted data.
 %   b1                 Normalized transmit excitation field map (B1+).
 %   (mask)             Binary mask. 
 % Outputs:
-%   sat_dual_c         Corrected MT-weighted data for dual frequency
-%                      preparation pulse.
-%   sat_pos_c          Corrected MT-weighted data for positive single
-%                      sided frequency preparation pulse.
-%   sat_neg_c          Corrected MT-weighted data for negative single
-%                      sided frequency preparation pulse.
 %   mt_sat_b1sim_c             B1-corrected mt_sat_b1sim image.
 % Protocol:	
 %   PulseSequenceParams  Default pulse sequence parameters 
@@ -53,7 +43,7 @@ properties (Hidden=true)
 end
 
 properties 
-    MRIinputs = {'mt-weighted', 'T1map', 'M0map', 'b1', 'mask'};
+    MRIinputs = {'MTw', 'T1map', 'S0map', 'b1', 'mask'};
     xnames = {};
     voxelwise = 0; 
 
@@ -70,7 +60,7 @@ properties
     % R1vsM0b correlation fitVals
     fitValues_SP = [];
 
-    buttons = {'PANEL', 'SequenceSimulations',7,...
+    buttons = {'PANEL', 'SequenceSimulations',5,...
         'OutputDirectory',0,...
         'TissueType',{'GM','WM'}, ...
         'B0', {'3', '7', '1.5'}, ...
@@ -98,7 +88,6 @@ methods
         if (~isequal(obj.options.SequenceSimulations_TissueType, obj.previousOptions.SequenceSimulations_TissueType) || ...
                 ~isequal(obj.options.SequenceSimulations_B0, obj.previousOptions.SequenceSimulations_B0)||...
                 ~isequal(obj.options.SequenceSimulations_OutputDirectory, obj.previousOptions.SequenceSimulations_OutputDirectory)||...
-                ~isequal(obj.options.SequenceSimulations_FreqPattern, obj.previousOptions.SequenceSimulations_FreqPattern)||...
                 ~isequal(obj.options.SequenceSimulations_SatPulseShape, obj.previousOptions.SequenceSimulations_SatPulseShape)||...
                 ~isequal(obj.options.R1vsM0bMapping_SeqSimDirectory, obj.previousOptions.R1vsM0bMapping_SeqSimDirectory)||...
                 ~isequal(obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation, obj.previousOptions.R1vsM0bMapping_RunR1vsM0bCorrelation))   

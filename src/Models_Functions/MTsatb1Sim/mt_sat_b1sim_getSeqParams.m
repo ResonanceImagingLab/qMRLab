@@ -5,6 +5,7 @@ Params = mt_sat_b1sim_calcImagingParams(Params);
 
 Params.WExcDur = 0.1/1000; % duration of water pulse
 Params.PerfectSpoiling = 1;
+Params.echoSpacing = 0;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -23,18 +24,13 @@ if ~isfield(Params,'MTC') % if not defined, no MT
     Params.MTC = 1; % assume true if running the module
 end
 
-if Params.MTC
-    % Allow different spoiling for MT
-    if Params.GradientSpoiling 
-        if ~isfield(Params,'GradientSpoilingStrength_MT')
-            Params.GradientSpoilingStrength_MT = 20; % mT/m
-        end
-    end
+if ~isfield(Params,'GradientSpoilingStrength_MT')
+    Params.GradientSpoilingStrength_MT = 20; % mT/m
+end
 
-    if ~isfield(Params,'A_g') || ~isfield(Params,'maxDephase') || ~isfield(Params,'G_t')
-        % Calculate Spoiling moment from gradient
-        Params = ihMT_calculateGradientSpoilingMoment( Params, 1 );
-    end
+if ~isfield(Params,'A_g') || ~isfield(Params,'maxDephase') || ~isfield(Params,'G_t')
+    % Calculate Spoiling moment from gradient
+    Params = ihMT_calculateGradientSpoilingMoment( Params, 1 );
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

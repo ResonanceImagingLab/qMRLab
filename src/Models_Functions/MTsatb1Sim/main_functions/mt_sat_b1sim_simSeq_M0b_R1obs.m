@@ -42,7 +42,7 @@ Raobs = 1./T1obs;
 
     Params.SatPulseShape = obj.options.SequenceSimulations_SatPulseShape;
 
-    Params = mt_sat_b1sim_getSeqParams(Params)
+    Params = mt_sat_b1sim_getSeqParams(Params);
 
 
     % Loop variables:
@@ -73,7 +73,7 @@ Raobs = 1./T1obs;
 
     %% MTsat calculation
     %reformat Aapp and R1app matrices for 3D calculation
-    Aapp = ones(size(GRE_sigd));
+    Aapp = ones(size(GRE_sigs));
     T1app = repmat(T1obs,[7,1,size(b1,2)]);
     T1app = permute(T1app,[3,1,2]);
     
