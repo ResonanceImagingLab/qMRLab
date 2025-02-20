@@ -123,7 +123,7 @@ function [hdr,vol] = minc_read(file_name)
     
     if exist('OCTAVE_VERSION','builtin')
         %% This is Octave
-        error('minc_read does not currently support Octave. Sorry dude I have to quit.')
+        error('minc_read does not currently support Octave. Sorry I have to quit.')
     else
         %% This is Matlab
         %% Test if the file is in MINC1 or MINC2 format
@@ -443,6 +443,34 @@ function [hdr,vol] = minc_read(file_name)
 
             vol = h5read(file_name,'/minc-2.0/image/0/image');
             vol = double(vol);
+
+            % Rescale slices for max and min
+            vol_rescale = vol;
+
+            for i = 1:length(hdr.details.data.image_max)
+
+                slice = vol(:,:,i);
+                volMin = min(slice(:));
+                volMax = max(slice(:));
+
+                % Get a weird response where some images don't need
+                % rescaling. Can check if the slice max already matches
+                % Rounding/scaling issues, set arbitrary threshold to 0.01
+                % If properly rescaled, it should be a greater change
+                % anyway
+                if abs(volMax - hdr.details.data.image_max(i)) < 0.01
+                    vol_rescale(:,:,i) = vol(:,:,i); % don't scale
+                else
+
+                    vol_rescale(:,:,i) = ((vol(:,:,i) - volMin) ./ ...
+                            (volMax - volMin)) .* (hdr.details.data.image_max(i) - ...
+                            hdr.details.data.image_min(i)) + hdr.details.data.image_min(i);
+                end
+
+            end
+
+            vol = vol_rescale;
+            clear slice vol_rescale volMin volMax
 
         end
     end

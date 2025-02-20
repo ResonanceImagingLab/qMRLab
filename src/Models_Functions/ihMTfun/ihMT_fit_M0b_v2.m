@@ -53,7 +53,9 @@ B1_powers = regexp(fit_eqn, 'b1\.\^(\d+)', 'tokens');
 Raobs_powers = regexp(fit_eqn, 'Raobs\.\^(\d+)', 'tokens');
 
 % Extract constant from fit_eqn 
-constants =  regexp(fit_eqn, '[\+\-]?\d+\.\d+', 'match');
+%tokens =  regexp(fit_eqn, '[\+\-]?\d+\.\d+', 'match');
+% modify to handle scientific notation
+constants = regexp(fit_eqn, '([+-]?\d*\.?\d+(?:[eE][-+]?\d+)?)(?=\*)', 'match');
 constants = str2double(constants); 
 
 
@@ -76,9 +78,10 @@ for j = 1:90
         else 
             V(1) = V(1)+Value;
         end 
-
 end
+
 V(3) = V(3)-msat;
+
 fitV = roots(V);
 
 fitV(imag(fitV)~=0)= NaN;
@@ -92,174 +95,3 @@ if isnan(M0b)
 end 
 
 
-% fit_eqn = fitValues.fit_SS_eqn_sprintf;
-% fit_eqn = sprintf(fit_eqn, repmat(Raobs, fitValues.numTerms,1));
-% 
-% % Construct vandermonde matrix for matrix division: 
-% V = zeros(length(B1_ref), fitValues.numTerms); 
-% 
-% for i = 1:fitValues.numTerms
-%     V(:, i) = B1_ref.^(i-1); % A(i,j)=v(i)(N-j)
-% 
-% end 
-% 
-% try
-%     fitvals = V \ msat; 
-%     M0b = fitvals(1);
-% 
-% catch
-%     disp('An error occurred during matrix division:');
-%     disp('B1_ref:');
-%     disp(B1_ref);
-%     disp('msat values:');
-%     disp(msat);
-%     disp('Raobs');
-%     disp(Raobs);
-%     disp('Matrix V:');
-%     disp(V);
-%     return;
-% end
-
-% disp('size b1_ref: ')
-% disp(size(B1_ref))
-% 
-% disp('size msat '); 
-% disp(size(msat));
-
-% 
-
-% disp('Fit equation from sprintf: ')
-% disp(fit_eqn)
-
-
-% opts = fitoptions( 'Method', 'NonlinearLeastSquares','Upper',0.5,'Lower',0.0,'StartPoint',0.1);
-% opts.Robust = 'Bisquare';
-% 
-% myfittype = fittype( fit_eqn ,'dependent', {'z'}, 'independent',{'b1'},'coefficients', {'M0b'}); 
-% 
-% 
-% fitpos = fit(B1_ref, msat, myfittype,opts); % insert a try+catch to report values. In the catch -> break. 
-% try
-%     fitpos = fit(B1_ref, msat, myfittype,opts); % insert a try+catch to report values. In the catch -> break. 
-% catch 
-%    disp('B1_ref:');
-%    disp(B1_ref);
-%    disp('msat values:');
-%    disp(msat);
-%    disp('Fit Equation (post sprintf):');
-%    disp(fit_eqn);
-%    disp('Fit Type:');
-%    disp(myfittype);
-%    disp('Fit Options:');
-%    disp(opts);
-%    return;
-% end 
-% 
-% fitvals = coeffvalues(fitpos);
-% 
-% M0b = fitvals(1);
-
-%% Calculate Residuals
-% Uncomment if you would like to calculate residuals 
-% Not including it right now to save coding time 
-% solve the equation for the 
-% comb_resid = 0;
-% for i = 1:size(msat,1)
-%     b1 = B1_ref(i);
-%     tmp = eval(fit_eqn);
-%     resid = abs(tmp - msat(i));
-%     comb_resid = comb_resid + resid;
-% end
-
-
- 
-%% you can plot to check the fit
-% b1_ref = 0:0.25:11;
-% msat_calc = fitpos(b1_ref);
-% figure;
-% plot(b1_ref,msat_calc,'LineWidth',2)
-% hold on
-% scatter(B1_ref, msat,40,'filled')
-%     ax = gca;
-%     ax.FontSize = 20; 
-%     xlabel('B_{1RMS} (\muT) ', 'FontSize', 20, 'FontWeight', 'bold')
-%     ylabel('MT_{sat}', 'FontSize', 20, 'FontWeight', 'bold')
-%      %   colorbar('off')
-%     legend('hide')
-%     text(6.2, 0.0015, strcat('M_{0,app}^B = ',num2str(M0b,'%.3g')), 'FontSize', 16); 
-%     ylim([-0.001 20e-3])
-
-    
-    
-   %% 2k code. 
-    
-%   b1_ref = 0:0.25:5;
-% msat_calc = fitpos(b1_ref);
-% figure;
-% plot(b1_ref,msat_calc,'LineWidth',2)
-% hold on
-% scatter(B1_ref, msat,40,'filled')
-%     ax = gca;
-%     ax.FontSize = 20; 
-%     xlabel('B_{1RMS} (\muT) ', 'FontSize', 20, 'FontWeight', 'bold')
-%     ylabel('MT_{sat}', 'FontSize', 20, 'FontWeight', 'bold')
-%      %   colorbar('off')
-%     legend('hide')
-%     text(2.2, 0.0015, strcat('M_{0,app}^B = ',num2str(M0b,'%.3g')), 'FontSize', 16); 
-%     ylim([-0.001 25e-3])  
-    
-    
-%% Something I was trying 
-% fit_eqn = fitValues.fit_SS_eqn;
-% % fit_eqn = sprintf(fit_eqn, repmat(Raobs, fitValues.numTerms,1));
-% 
-% % Initialize degrees
-% M0b_degree = 0; 
-% B1_degree = 0;
-% Raobs_degree = 0;
-% 
-% % Extract powers from fit_eqn
-% M0b_powers = regexp(fit_eqn, 'M0b\.\^(\d+)', 'tokens');
-% B1_powers = regexp(fit_eqn, 'b1\.\^(\d+)', 'tokens');
-% Raobs_powers = regexp(fit_eqn, 'Raobs\.\^(\d+)', 'tokens');
-% 
-% if ~isempty(M0b_powers) 
-%     M0b_degree = max(cellfun(@(x) str2double(x), [M0b_powers{:}]));
-% end
-% if ~isempty(B1_powers)
-%     B1_degree = max(cellfun(@(x) str2double(x), [B1_powers{:}]));
-% end
-% if ~isempty(Raobs_powers)
-%     Raobs_degree = max(cellfun(@(x) str2double(x), [Raobs_powers{:}]));
-% end 
-% 
-% % Construct vandermonde matrix for matrix division: 
-% V = zeros(length(B1_ref), fitValues.numTerms); 
-% 
-% % numTerms = possible combinations of powers of M0b, B1 and R1
-% idx = 1;
-% for i = 0:M0b_degree
-%     for j = 0:B1_degree
-%         for k = 0:Raobs_degree
-%             % The terms of the model will correspond to powers of M0b, b1, and Raobs
-%             V(:, idx) = (msat.^(i)) .* (B1_ref.^(j)) .* (Raobs.^(k));
-%             idx = idx + 1;
-%         end
-%     end
-% end 
-% 
-% try
-%     fitvals = V \ msat; 
-%     M0b = fitvals(1);
-% catch
-%     disp('An error occurred during matrix division:');
-%     disp('B1_ref:');
-%     disp(B1_ref);
-%     disp('msat values:');
-%     disp(msat);
-%     disp('Raobs');
-%     disp(Raobs);
-%     disp('Matrix V:');
-%     disp(V);
-%     return;
-% end    
