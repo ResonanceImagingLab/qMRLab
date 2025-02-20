@@ -1,10 +1,15 @@
-function fitValues_SP = mt_sat_b1sim_R1vsM0b_correlation(data, fitValues_single, flipA, TR, DummyEcho, echoSpacing, numExcitation, OutputDir)
+function fitValues_SP = mt_sat_b1sim_R1vsM0b_correlation(data, fitValues_single, flipA, TR, DummyEcho, echoSpacing, numExcitation, OutputDir, scaleS0)
 
 %% Load the images 
 mtw = data.MTw; 
 S0_map = data.S0map;
 T1_map = data.T1map;
 b1 = data.b1; 
+
+if scaleS0
+    S0_map = S0_map/2.5;
+    disp('dividing S0 map by 2.5 to account for scanner gain differences between GRE and MP2RAGE (Siemens ONLY)')
+end
 
 % Load the mask
 if ~isempty(data.mask)
@@ -25,13 +30,9 @@ tempMask(isnan(T1_map)) = 0;
 
 sat_mtw  = ihMT_calcMTsatThruLookupTablewithDummyV3( mtw, b1, T1_map, tempMask, S0_map, echoSpacing, numExcitation, TR, flipA, DummyEcho);
 
-% figure; imshow3Dfull(sat_mtw , [0 0.04], jet);
-% figure; imshow3Dfull(tempMask , [0 1], jet);
-% figure; imshow3Dfull(mtw );
-% figure; imshow3Dfull(T1_map );
-% figure; imshow3Dfull(S0_map );
-% figure; imshow3Dfull(b1, [ 0.6, 1.4] );
-% pause;
+figure; imshow3Dfull(sat_mtw , [0 0.05], jet);
+disp('Check to make sure the MTsat map values look appropriate. If not, check scaling of S_0. If they look good, press any key to continue...')
+pause;
 
 
 % load in the fit results for VFA - Optimal
@@ -43,12 +44,14 @@ R1_s(isinf(R1_s)) = 0;
 % initialize matrices
 M0b_mtw = zeros(size(sat_mtw));
 
-disp('Code will take ~ 3 hours to run');
+disp('To speed things up, we will only run the fitting on a middle block of slices');
+zSlice = round(size(sat_mtw,3)/2);
+
 tic %  ~ 2hrs to run 
 for i = 1:size(sat_mtw,1) 
     
     for j = 1:size(sat_mtw,2)  % for axial slices
-        for k =  1:size(sat_mtw,3) % sagital slices  
+        for k =  zSlice-10:zSlice+10 % sagital slices  
             
             if tempMask(i,j,k) > 0
                                 
@@ -77,7 +80,6 @@ if maskFlag
 else 
     tempMask = imerode(tempMask, strel('sphere',2));
 end
-
 
 mkdir(fullfile(OutputDir,'figures'));
 mkdir(fullfile(OutputDir, 'R1vsM0b_results'))

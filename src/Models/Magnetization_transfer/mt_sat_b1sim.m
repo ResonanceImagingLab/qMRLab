@@ -7,7 +7,7 @@ classdef mt_sat_b1sim < AbstractModel
 %         pulses.
 %
 % Inputs:
-%   pos                MT-weigthed data. Positive single sided frequency 
+%   MTw                MT-weigthed data. Single sided frequency 
 %                      preparation pulse.
 %   T1map              T1-weighted data.
 %   M0map              PD-weighted data.
@@ -66,9 +66,10 @@ properties
         'B0', {'3', '7', '1.5'}, ...
         'SatPulseShape', {'gaussian', 'gausshann', 'fermi'},...
         'Run Sequence Simulations','pushbutton',...
-        'PANEL', 'R1vsM0b Mapping',3,...
+        'PANEL', 'R1vsM0b Mapping',4,...
         'SeqSimDirectory', 0,...
         'RunR1vsM0bCorrelation',true,...
+        'ScaleS0',false,...
         'Load fit Value Files','pushbutton'};
 
     options = struct(); 
@@ -90,7 +91,8 @@ methods
                 ~isequal(obj.options.SequenceSimulations_OutputDirectory, obj.previousOptions.SequenceSimulations_OutputDirectory)||...
                 ~isequal(obj.options.SequenceSimulations_SatPulseShape, obj.previousOptions.SequenceSimulations_SatPulseShape)||...
                 ~isequal(obj.options.R1vsM0bMapping_SeqSimDirectory, obj.previousOptions.R1vsM0bMapping_SeqSimDirectory)||...
-                ~isequal(obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation, obj.previousOptions.R1vsM0bMapping_RunR1vsM0bCorrelation))   
+                ~isequal(obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation, obj.previousOptions.R1vsM0bMapping_RunR1vsM0bCorrelation)||...
+                ~isequal(obj.options.R1vsM0bMapping_ScaleS0, obj.previousOptions.R1vsM0bMapping_ScaleS0))   
             checkfields = 1; 
         elseif (~isequal(obj.options.SequenceSimulations_RunSequenceSimulations, obj.previousOptions.SequenceSimulations_RunSequenceSimulations)||...
                  ~isequal(obj.options.R1vsM0bMapping_LoadfitValueFiles, obj.previousOptions.R1vsM0bMapping_LoadfitValueFiles))
@@ -150,17 +152,23 @@ methods
          TR = obj.Prot.PulseSequenceParams.Mat(4); % ms
          OutputDir =  obj.options.R1vsM0bMapping_SeqSimDirectory;
 
+         if obj.options.R1vsM0bMapping_ScaleS0
+                scaleS0 = true;
+            else
+                scaleS0 = false;
+         end
+
         if obj.options.R1vsM0bMapping_RunR1vsM0bCorrelation % If box is checked, run correlation 
             fitValues_single = obj.fitValues_single; 
            
-            fitValues_SP = mt_sat_b1sim_R1vsM0b_correlation(data, fitValues_single, flipA, TR, 0, 0, 1, OutputDir);
+            fitValues_SP = mt_sat_b1sim_R1vsM0b_correlation(data, fitValues_single, flipA, TR, 0, 0, 1, OutputDir, scaleS0);
         
         else
             fitValues_SP = obj.fitValues_SP;     
         end
 
-        sat_pos_c = mt_sat_b1sim_correctMTsat(data, fitValues_SP, flipA, TR, 0, 0, 1);
-        FitResult.sat_pos_c = sat_pos_c; 
+        mtsat_b1corr = mt_sat_b1sim_correctMTsat(data, fitValues_SP, flipA, TR, 0, 0, 1, scaleS0);
+        FitResult.mtsat_b1corr = mtsat_b1corr; 
 
     end 
 
