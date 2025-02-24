@@ -87,7 +87,7 @@ Raobs = 1./T1obs;
                 GRE_sigd(i,j,k) = ihMT_generate_BSF_scaling_v1( temp, Params, outputSamplingTable, gm_m, fft_gm_m) ;
             end
         end
-        disp(i/size(b1,2) *100)  % print percent done...
+        disp( [num2str(i/size(b1,2) *100), "% done simulations"]);
         toc
     end
 

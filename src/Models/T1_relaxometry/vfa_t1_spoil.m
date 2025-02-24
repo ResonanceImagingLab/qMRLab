@@ -55,7 +55,7 @@ classdef vfa_t1_spoil < AbstractModel
 % Neuroimage 194, 191-210. https://doi.org/10.1016/j.neuroimage.2019.01.029
 
 properties (Hidden=true)
- onlineData_url = 'https://osf.io/7wcvh/download?version=3';  
+ %onlineData_url = 'https://osf.io/7wcvh/download?version=3';  
 end
 
 properties
@@ -73,13 +73,13 @@ properties
                     'B1_Upper(rel)'; 'DiffusionCoefficient(um2/ms)'}}, ...
                     'Mat', [ 50; 3.38; 24; 500; 2500; 80; 0.5; 1.5; 0.8])); % You can define a default protocol here.
 
-     buttons = {'PANEL', 'IncompleteSpoiling',4,...
+     buttons = {'PANEL', 'IncompleteSpoiling',3,...
     'smallAngleApprox',{'True','False'}, ...
     'ScannerVendor', {'Siemens', 'GE', 'Philips'}, ...
-    'Run Spoiling Simulations','pushbutton',...
-    'Load Spoiling Simulations Results','pushbutton'};
+    'Run Spoiling Simulations','pushbutton'};
 
 
+    hMRI_spoiling_sims = [];
     % Model options
     options= struct(); % structure filled by the buttons. Leave empty in the code
     previousOptions = struct()
@@ -100,8 +100,7 @@ methods
         if (~isequal(obj.options.IncompleteSpoiling_ScannerVendor, obj.previousOptions.IncompleteSpoiling_ScannerVendor))
             % Flag to auto update the spoiling increment
             checkfields = 1; 
-        elseif (~isequal(obj.options.IncompleteSpoiling_RunSpoilingSimulations, obj.previousOptions.IncompleteSpoiling_RunSpoilingSimulations)||...
-                 ~isequal(obj.options.IncompleteSpoiling_LoadSpoilingSimulationsResults, obj.previousOptions.IncompleteSpoiling_LoadSpoilingSimulationsResults))
+        elseif (~isequal(obj.options.IncompleteSpoiling_RunSpoilingSimulations, obj.previousOptions.IncompleteSpoiling_RunSpoilingSimulations))
             % This is current set up to run M0B_R1obs, but need to run
             % the spoling
             checkfields = 2;
@@ -120,44 +119,24 @@ methods
             % Help people based on typical vendor values. Set up so you
             % should still be able to enter custom value
             temp = obj.Prot.SpoilingCorrection.Mat;
-            if strcmp(temp(1), 'Siemens')
+            if strcmp(obj.options.IncompleteSpoiling_ScannerVendor, 'Siemens')
                 temp(1) = 50;
-            elseif strcmp(temp(1), 'GE')
+            elseif strcmp(obj.options.IncompleteSpoiling_ScannerVendor, 'GE')
                 temp(1) = 117;
-            elseif strcmp(temp(1), 'Philips')
+            elseif strcmp(obj.options.IncompleteSpoiling_ScannerVendor, 'Philips')
                 temp(1) = 150;
             end
-            
+
             obj.Prot.SpoilingCorrection.Mat = temp;
             
 
         elseif obj.checkupdatedfields == 2
          
-            if obj.options.IncompleteSpoiling_RunSpoilingSimulations
-                disp('Select directory to save simulations')
-                obj.options.IncompleteSpoiling_OutputDirectory = uigetdir(pwd); 
-                
-                vfa_t1_spoil_hmri_corr_imperf_spoil(obj); 
+            disp('Select directory to save simulations')
+            saveDir = uigetdir(pwd); 
+            
+            vfa_t1_spoil_hmri_corr_imperf_spoil(obj, saveDir); 
     
-            elseif obj.options.IncompleteSpoiling_LoadSpoilingSimulationsResults
- 
-                if ~obj.options.IncompleteSpoiling_RunSpoilingSimulations
-                    disp('Load fitValues_SN.mat');
-                    [FileName_SN, PathName_SN] = uigetfile('*.mat'); 
-                    obj.fitValues_SN = load([PathName_SN filesep FileName_SN]); 
-                else
-                    disp('Select directory where you want values saved')
-                    obj.options.IncompleteSpoiling_SeqSimDirectory = uigetdir(pwd);
-
-                    disp('Load simulation fit values')
-                    [FileName_sim,PathName_sim] = uigetfile('*.mat');
-                         
-                    obj.fitValues_sim = load([PathName_sim filesep FileName_sim]); 
-
-                end
-                
-            end 
-
         end 
     end
 
@@ -168,25 +147,22 @@ methods
 
         a1 = deg2rad(obj.Prot.VFAProtocol.Mat(1,1)); 
         a2 = deg2rad(obj.Prot.VFAProtocol.Mat(2,1));
-        TR1 = deg2rad(obj.Prot.VFAProtocol.Mat(1,2)); 
-        TR2 = deg2rad(obj.Prot.VFAProtocol.Mat(2,2)); 
-        
-        if ~isfield(data, 'Mask')
-            data.Mask = zeros(size(data.LowFlipAngle));
-            data.Mask(data.LowFlipAngle>100) =1;
-        end
+        TR1 = obj.Prot.VFAProtocol.Mat(1,2); 
+        TR2 = obj.Prot.VFAProtocol.Mat(2,2);        
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        % Apply spoiling correction:
-        param.prot_name  = strcat('vfa_t2_', num2str(T2(3)));    % Used in output
+        if isempty(obj.hMRI_spoiling_sims)
+            disp('Load hMRI_spoiling_sims.mat');
+            [FileName_hMRI, PathName_hMRI] = uigetfile('*.mat'); 
+            obj.hMRI_spoiling_sims = load([PathName_hMRI filesep FileName_hMRI]); 
+        end
         
         % I have wrote to a mat file
-        simCoeffs = load(fullfile(param.outdir,[strrep(param.prot_name,' ',''),'_ABcoeff.mat']) );
+        simCoeffs = obj.hMRI_spoiling_sims.hMRI_spoiling_sims(1:2,:);
 
-        [T1corr, R1corr, S0corr] = vfa_t1_spol_calcMaps(data, a1, a2, TR1, TR2,...
+        [T1corr, R1corr, S0corr] = vfa_t1_spoil_calcMaps(data, a1, a2, TR1, TR2,...
                                                 smallFlipApprox, simCoeffs);
           
-
         FitResult.T1corr = T1corr;
         FitResult.S0corr = S0corr;
         FitResult.R1corr = R1corr;

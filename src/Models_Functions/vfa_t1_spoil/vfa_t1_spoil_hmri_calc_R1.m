@@ -1,4 +1,4 @@
-function R1=hmri_calc_R1(PDw,T1w,small_angle_approx)
+function R1=vfa_t1_spoil_hmri_calc_R1(PDw,T1w,small_angle_approx)
 %hmri_calc_R1 Calculate R1 map from PDw and T1w data.
 % 
 % Input:
