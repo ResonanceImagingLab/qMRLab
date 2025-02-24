@@ -226,12 +226,18 @@ methods
         
         if ~isempty(data.B1map)
 
-            [T1corrected, MP2RAGEcorr] = T1B1correctpackageTFL(data.B1map,MP2RAGEimg,[],MP2RAGE,[],invEFF);
+            % [T1corrected, MP2RAGEcorr] = T1B1correctpackageTFL(data.B1map,MP2RAGEimg,[],MP2RAGE,[],invEFF);
+            B1.img = data.B1map;
+            INV2mag.img = data.INV2mag;
+            % CR modify for corrected S0 map:
+            [ T1corrected, MP2RAGEcorr, S0corr] = ...
+                T1B1correctpackageTFL_withM0( B1, MP2RAGEimg, INV2mag, MP2RAGE, [], 0.96);
             
             FitResult.T1 = T1corrected.img;
             FitResult.R1=1./FitResult.T1;
             FitResult.R1(isnan(FitResult.R1))=0;
             FitResult.MP2RAGEcor = MP2RAGEcorr.img;
+            FitResult.S0cor = S0corr.img;
 
         else
 
@@ -249,6 +255,9 @@ methods
 
             if isfield(FitResult,'MP2RAGEcor')
                 FitResult.MP2RAGEcor(~data.Mask) = 0;
+            end
+            if isfield(FitResult,'S0cor')
+                FitResult.S0cor(~data.Mask) = 0;
             end
         end
         
