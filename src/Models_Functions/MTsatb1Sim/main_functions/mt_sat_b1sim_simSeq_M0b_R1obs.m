@@ -16,7 +16,20 @@ M0b = 0:0.03:0.18;
 T1obs = horzcat(0.6:0.075:2,2.1:0.4:3); %600ms to 4500ms to cover WM to CSF. 
 Raobs = 1./T1obs;
 
-%for z = 1:length(turboF)
+ww = 0; % Waitbar counter
+h = [];
+stop = 0;
+% Create waitbar
+if (~exist('wait','var') || isempty(wait))
+    wait = 1;   % waitbar is on by default
+end
+
+if (wait)
+    h = waitbar(0,'','Name','Simulating data','CreateCancelBtn',...
+        'if ~strcmp(get(gcbf,''Name''),''canceling...''), setappdata(gcbf,''canceling'',1); set(gcbf,''Name'',''canceling...''); else delete(gcbf); end');
+    setappdata(h,'canceling',0)
+    setappdata(0,'Cancel',0);
+end
 
 % Took about 2.5 hours to run 
     tic
@@ -30,7 +43,6 @@ Raobs = 1./T1obs;
     Params.T2b = obj.Prot.TissueParams.Mat(6)/1e6;
     Params.M0b = obj.Prot.TissueParams.Mat(7);
 
-
     Params.MTC = obj.Prot.PulseSequenceParams.Mat(1);
     Params.delta = obj.Prot.PulseSequenceParams.Mat(2);  
     Params.flipAngle = obj.Prot.PulseSequenceParams.Mat(3);
@@ -39,11 +51,9 @@ Raobs = 1./T1obs;
     Params.pulseDur = obj.Prot.PulseSequenceParams.Mat(6)/1000;
     Params.satFlipAngle = obj.Prot.PulseSequenceParams.Mat(7);
 
-
     Params.SatPulseShape = obj.options.SequenceSimulations_SatPulseShape;
 
     Params = mt_sat_b1sim_getSeqParams(Params);
-
 
     % Loop variables:
     Params.M0b =  []; 
@@ -53,8 +63,14 @@ Raobs = 1./T1obs;
     GRE_sigs = zeros(size(b1,2),size(M0b,2),size(Raobs,2));
 
     tic
-    disp('Simulation will start in ~5-10 mins and takes 2-3 hours to run')
+    disp('Simulation starting, may take 2-3 hours to run')
     for i = 1:size(b1,2) % took nearly 5 hours for matrix 25x41x33.
+
+        if (wait)
+            % Update waitbar
+            ww = ww+1;
+            waitbar(ww/size(b1,2), h, sprintf('Simulating with B1+ = %d;', b1(i)));
+        end
     
         for j = 1:size(M0b,2)
             Params.M0b = M0b(j);
@@ -64,12 +80,28 @@ Raobs = 1./T1obs;
                 
                 GRE_sigs(i,j,k) = mt_sat_b1sim_blochSimFlashSequence_v2(Params,'freqPattern','single', 'satFlipAngle', b1(i)*Params.satFlipAngle);       
 
+                if (wait)
+                    % Allows user to cancel
+                    if getappdata(h,'canceling')
+                        stop = 1;
+                        setappdata(0,'Cancel',1);
+                        break;
+                    end
+                end
+            end
+            if (stop)
+                delete(h);
+                error('Simulations Cancelled');
             end
         end
-        disp(i/size(b1,2) *100)  % print percent done...
-        toc
     end
+    
+    disp('Simulations Finished. Total time: ')
+    toc
+    disp('Now Calculating Values...')
 
+    % Delete waitbar
+    delete(h);
 
     %% MTsat calculation
     %reformat Aapp and R1app matrices for 3D calculation
