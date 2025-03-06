@@ -69,7 +69,7 @@ end
         if (wait)
             % Update waitbar
             ww = ww+1;
-            waitbar(ww/size(b1,2), h, sprintf('Simulating with B1+ = %d;', b1(i)));
+            waitbar(ww/size(b1,2), h, sprintf('Simulating with B1+ = %.2f', b1(i)));
         end
     
         for j = 1:size(M0b,2)

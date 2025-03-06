@@ -47,8 +47,30 @@ M0b_mtw = zeros(size(sat_mtw));
 disp('To speed things up, we will only run the fitting on a middle block of slices');
 zSlice = round(size(sat_mtw,3)/2);
 
+ww = 0; % Waitbar counter
+h = [];
+stop = 0;
+% Create waitbar
+if (~exist('wait','var') || isempty(wait))
+    wait = 1;   % waitbar is on by default
+end
+
+if (wait)
+    h = waitbar(0,'','Name','Simulating data','CreateCancelBtn',...
+        'if ~strcmp(get(gcbf,''Name''),''canceling...''), setappdata(gcbf,''canceling'',1); set(gcbf,''Name'',''canceling...''); else delete(gcbf); end');
+    setappdata(h,'canceling',0)
+    setappdata(0,'Cancel',0);
+end
+
+denom = size(sat_mtw,1);
 tic %  ~ 2hrs to run 
-for i = 1:size(sat_mtw,1) 
+for i = 1:denom 
+
+    if (wait)
+        % Update waitbar
+        ww = ww+1;
+        waitbar(ww/size(sat_mtw,1), h, sprintf(' %.1f percent complete', i/denom*100) );
+    end
     
     for j = 1:size(sat_mtw,2)  % for axial slices
         for k =  zSlice-10:zSlice+10 % sagital slices  
@@ -58,11 +80,29 @@ for i = 1:size(sat_mtw,1)
                  [M0b_mtw(i,j,k),  ~]  = ihMT_fit_M0b_v2( b1(i,j,k), R1_s(i,j,k), sat_mtw(i,j,k), fitValues_single);               
                  
             end
+            if (wait)
+                % Allows user to cancel
+                if getappdata(h,'canceling')
+                    stop = 1;
+                    setappdata(0,'Cancel',1);
+                    break;
+                end
+            end
         end
-    end
-    disp(i/size(sat_mtw,1) *100)
-    toc 
+
+        if (stop)
+                delete(h);
+                error('Simulations Cancelled');
+        end
+
+    end 
 end
+disp('Fitting Finished. Total time: ')
+toc
+disp('Now Calculating Values...')
+% Delete waitbar
+delete(h);
+
 
 %figure('WindowStyle', 'docked'); imshow3Dfull(M0b_mtw, [0 0.15],jet)
 
