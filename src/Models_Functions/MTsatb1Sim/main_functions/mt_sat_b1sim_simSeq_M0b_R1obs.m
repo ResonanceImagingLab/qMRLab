@@ -50,8 +50,17 @@ end
     Params.numSatPulse = obj.Prot.PulseSequenceParams.Mat(5);
     Params.pulseDur = obj.Prot.PulseSequenceParams.Mat(6)/1000;
     Params.satFlipAngle = obj.Prot.PulseSequenceParams.Mat(7);
-
+    Params.PulseOpt.TBW = obj.Prot.PulseSequenceParams.Mat(8);
+    Params.PulseOpt.bw = obj.Prot.PulseSequenceParams.Mat(9);
     Params.SatPulseShape = obj.options.SequenceSimulations_SatPulseShape;
+
+    % Fix defaults set to 0. Let qMRLab decide:
+    if Params.PulseOpt.TBW == 0
+        Params.PulseOpt.TBW = [];
+    end
+    if Params.PulseOpt.bw == 0
+        Params.PulseOpt.bw = [];
+    end
 
     Params = mt_sat_b1sim_getSeqParams(Params);
 
